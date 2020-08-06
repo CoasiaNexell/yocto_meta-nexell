@@ -11,7 +11,7 @@ PR = "r0"
 
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/nx_init;protocol=https;branch=master"
+SRC_URI = "git://github.com/CoasiaNexell/nx_init;protocol=https;branch=master"
 
 S = "${WORKDIR}/git"
 

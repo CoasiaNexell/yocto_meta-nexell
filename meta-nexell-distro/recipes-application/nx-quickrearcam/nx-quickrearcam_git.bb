@@ -11,7 +11,7 @@ PR = "r0"
 
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_apps_NxQuickRearCam;protocol=https;branch=master"
+SRC_URI = "git://github.com/CoasiaNexell/linux_apps_NxQuickRearCam;protocol=https;branch=master"
 
 DEPENDS = "nx-drm-allocator nx-v4l2 nx-scaler nx-video-api libdrm"
 

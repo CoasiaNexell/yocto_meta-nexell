@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://README.md;md5=871e3be979e189da85a03fe6ba47bbe2"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "04e84323aaaa30b992002c26c4e16a15809b5c7e"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/secure_optee_optee-build;protocol=https;branch=nexell \
+SRC_URI = "git://github.com/CoasiaNexell/secure_optee_optee-build;protocol=https;branch=nexell \
            file://0001-optee-build-customize-for-yocto.patch \
           "
 

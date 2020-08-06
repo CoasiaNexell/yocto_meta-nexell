@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "5fcce5d5800a60957141f1d963edfd199480bfcb"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/secure_optee_optee-linuxdriver;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/secure_optee_optee-linuxdriver;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
 

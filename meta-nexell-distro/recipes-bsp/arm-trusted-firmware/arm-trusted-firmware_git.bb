@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://license.md;md5=829bdeb34c1d9044f393d5a16c068371"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/secure_arm-trusted-firmware;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/secure_arm-trusted-firmware;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
 

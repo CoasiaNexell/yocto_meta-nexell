@@ -3,7 +3,7 @@ DESCRIPTION = "iso7816"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_apps_iso7816_test;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/linux_apps_iso7816_test;protocol=https;branch=nexell"
 SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"

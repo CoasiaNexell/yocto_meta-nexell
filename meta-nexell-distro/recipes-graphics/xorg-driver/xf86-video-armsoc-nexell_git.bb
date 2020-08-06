@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=10ce5de3b111315ea652a5f74ec0c602"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_xf86-video-armsoc;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/linux_library_xf86-video-armsoc;protocol=https;branch=nexell"
 SRC_URI_append = " \
         file://20-armsoc.conf \
         file://90-armsoc.conf \

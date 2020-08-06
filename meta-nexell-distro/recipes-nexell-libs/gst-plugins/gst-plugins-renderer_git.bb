@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://Makefile.am;md5=17ed5b4c1158fe2f827528f761c39970"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_gst-plugins-renderer;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/linux_library_gst-plugins-renderer;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
 

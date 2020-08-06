@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://pyrope_bl2.lds;md5=c81ae199c8ac9bc25a4389a9c6b387b6"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/bl2_s5p4418;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/bl2_s5p4418;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
 

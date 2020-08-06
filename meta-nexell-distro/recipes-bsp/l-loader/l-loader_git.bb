@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=e8c1458438ead3c34974bc0be3a03ed6"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/secure_l-loader;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/secure_l-loader;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
 

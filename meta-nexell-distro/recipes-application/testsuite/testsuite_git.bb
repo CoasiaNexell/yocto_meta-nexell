@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://Makefile;md5=d5743c4d7fa2b466a875bac2c6176aa1"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_apps_testsuite;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/linux_apps_testsuite;protocol=https;branch=nexell"
 
 DEPENDS = "nx-drm-allocator nx-renderer nx-scaler nx-gst-meta nx-v4l2 libdrm-nx libv4l jpeg"
 

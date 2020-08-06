@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://Makefile.am;md5=16672d7f6b1e95223937ee9eaf04e0c4"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_nx-renderer;protocol=https;branch=nexell"
+SRC_URI = "git://github.com/CoasiaNexell/linux_library_nx-renderer;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
 
