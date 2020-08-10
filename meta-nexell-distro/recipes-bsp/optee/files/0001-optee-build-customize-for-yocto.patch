@@ -1,15 +1,24 @@
-From eacf7f328981721a8e413b8eaec59bf14b2625d9 Mon Sep 17 00:00:00 2001
-From: choonghyun-Jeon <suker@nexell.co.kr>
-Date: Fri, 12 Aug 2016 14:31:11 +0900
-Subject: [PATCH] optee build customize for yocto
+From e47f5e728cef7a1b4032f590942f853e49a28121 Mon Sep 17 00:00:00 2001
+From: "chungho.shin" <chungho.shin@coasianexell.com>
+Date: Mon, 10 Aug 2020 15:28:42 +0900
+Subject: [PATCH 1/1] [Yocto s5p6818] OPTEE Build Makefile modification
 
-Change-Id: Ie271e4609514a631549ec8e1d02b3ba222f957cf
+This patch is for the OPTEE Build Makefile modification.
+
+When building Android Pie, the build structure was changed from
+the existing script method to the lunch & make method.
+There was a history of changing the path of the optee Make File
+by multi-thread build.
+so when Yocto Build, you have to apply this fix.
+
+Signed-off-by: chungho.shin <chungho.shin@coasianexell.com>
+Change-Id: I0bbe96ffd313ad1a8b27766783e67853089dffe9
 ---
- Makefile | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ Makefile | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 2ec5c87..657c72d 100755
+index 305fe46..200aa91 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -9,6 +9,9 @@ PLAT_UART_BASE ?= 0xC00A3000
@@ -22,7 +31,7 @@ index 2ec5c87..657c72d 100755
  ifeq ($(V),1)
    Q :=
    ECHO := @:
-@@ -119,8 +122,8 @@ build-bl33:: $(aarch64-linux-gnu-gcc)
+@@ -128,8 +131,8 @@ build-bl33:: $(aarch64-linux-gnu-gcc)
  build-bl33 $(BL33)::
  	$(ECHO) '  BUILD   $@'
  	$(Q)set -e ; cd u-boot-artik7 ; \
@@ -33,7 +42,16 @@ index 2ec5c87..657c72d 100755
  	$(Q)touch ${BL33}
  
  clean-bl33:
-@@ -265,7 +268,7 @@ clean-lloader:
+@@ -157,7 +160,7 @@ BL32 = secos/out/kernel-install/secos.bin
+ else
+ BL32 = optee_os/out/arm-plat-s5p6818/core/tee.bin
+ endif
+-BL33 = ../u-boot/u-boot-2016.01/u-boot.bin
++#BL33 = ../u-boot/u-boot-2016.01/u-boot.bin
+ FIP = $(ATF)/fip.bin
+ FIPloader = $(ATF)/fip-loader.bin
+ FIPsecure = $(ATF)/fip-secure.bin
+@@ -303,7 +306,7 @@ clean-lloader:
  # each time it is run
  
  LINUX = linux/arch/arm64/boot/Image
@@ -42,7 +60,7 @@ index 2ec5c87..657c72d 100755
  DTB2 = linux/arch/arm64/boot/dts/$(DTB)
  # Config fragments to merge with the default kernel configuration
  KCONFIGS += linux/arch/arm64/configs/s5p6818_drone_defconfig
-@@ -365,9 +368,9 @@ endif
+@@ -413,9 +416,9 @@ endif
  
  .PHONY: build-singleimage
  build-singleimage:: $(singleimage-deps)
@@ -55,5 +73,5 @@ index 2ec5c87..657c72d 100755
  clean-singleimage:
  	$(ECHO) "  CLEAN  $@"
 -- 
-2.7.4
+2.17.1
 
