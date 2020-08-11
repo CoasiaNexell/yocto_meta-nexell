@@ -6,7 +6,7 @@ require recipes-kernel/linux/linux-yocto.inc
 # EXTERNALSRC_BUILD = "${WORKDIR}/build"
 # EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 inherit externalsrc
-EXTERNALSRC = "${BSP_ROOT_DIR}/kernel-4.14"
+EXTERNALSRC = "${BSP_VENDOR_DIR}/kernel/kernel-4.14"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""
 

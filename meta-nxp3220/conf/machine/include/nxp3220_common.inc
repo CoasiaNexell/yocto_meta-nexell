@@ -70,22 +70,22 @@ FLASH_DEVICE_SIZE ?= ""
 # -Set swupdate output image name, default nxp3220-1.0.swu
 #  SWU_UPDATE_SWU_IMAGE = "nxp3220-1.0.swu"
 # -Set sw-description file
-#  SWU_SWDESCRIPTION = "${BSP_ROOT_DIR}/tools/files/sw-description"
+#  SWU_SWDESCRIPTION = "${BSP_TOOLS_DIR}/files/sw-description"
 # -Set script files in sw-description
-#  SWU_SCRIPT_FILES = "${BSP_ROOT_DIR}/tools/files/swu-script.sh"
+#  SWU_SCRIPT_FILES = "${BSP_TOOLS_DIR}/files/swu-script.sh"
 #
 # -Install versions to /etc/hwrevision, /etc/sw-versions:
 #  SWU_HW_REVISION_TARGET = "nxp3220 2.0"
-#  SWU_SW_VERSION_FILE = "${BSP_ROOT_DIR}/tools/files/sw-version_n.x"
+#  SWU_SW_VERSION_FILE = "${BSP_TOOLS_DIR}/files/sw-version_n.x"
 #
 # Signing options for image:
 # -Enable signing with password
 #  SWU_SIGN_ENABLE = "true"  <- sha256 with no password
 #  SWU_SIGN_PASSWORD = "nxp3220" <- aes256 with password
 # -Set private key file to signing swuimage
-#  SWU_SIGN_PRIVATE_KEY = "${BSP_ROOT_DIR}/tools/files/swu.private.key"
+#  SWU_SIGN_PRIVATE_KEY = "${BSP_TOOLS_DIR}/files/swu.private.key"
 # -Install public key file to /etc/swu.public.key
-#  SWU_SIGN_PUBLIC_KEY = "${BSP_ROOT_DIR}/tools/files/swu.public.key"
+#  SWU_SIGN_PUBLIC_KEY = "${BSP_TOOLS_DIR}/files/swu.public.key"
 #
 # Replace services with 'recipes-bbappend/swupdate/files/swupdate, ...'
 #  SWU_DAEMON_SERVICES_REPLACE = "true"
@@ -118,13 +118,13 @@ SWU_DAEMON_SERVICES_REPLACE ?= "true"
 SWU_RECOVERY_ROOTFS_IMAGE ?= "nexell-recoveryimg-${MACHINE_ARCH}.cpio.gz.u-boot"
 
 SWU_UPDATE_SWU_IMAGE ?= "nxp3220-image-2.0.swu"
-SWU_SWDESCRIPTION ?= "${BSP_ROOT_DIR}/tools/files/swu-sw-description_emmc"
-SWU_SCRIPT_FILES ?= "${BSP_ROOT_DIR}/tools/files/swu-script-preinstall.sh ${BSP_ROOT_DIR}/tools/files/swu-script-postinstall.sh"
+SWU_SWDESCRIPTION ?= "${BSP_TOOLS_DIR}/files/swu-sw-description_emmc"
+SWU_SCRIPT_FILES ?= "${BSP_TOOLS_DIR}/files/swu-script-preinstall.sh ${BSP_TOOLS_DIR}/files/swu-script-postinstall.sh"
 SWU_HW_REVISION_TARGET ?= "nxp3220 2.0"
-SWU_SW_VERSION_FILE ?= "${BSP_ROOT_DIR}/tools/files/swu-sw-versions_2.0"
+SWU_SW_VERSION_FILE ?= "${BSP_TOOLS_DIR}/files/swu-sw-versions_2.0"
 SWU_SIGN_PASSWORD ?= "nxp3220"
-SWU_SIGN_PRIVATE_KEY ?= "${BSP_ROOT_DIR}/tools/files/swu.private.key"
-SWU_SIGN_PUBLIC_KEY ?= "${BSP_ROOT_DIR}/tools/files/swu.public.key"
+SWU_SIGN_PRIVATE_KEY ?= "${BSP_TOOLS_DIR}/files/swu.private.key"
+SWU_SIGN_PUBLIC_KEY ?= "${BSP_TOOLS_DIR}/files/swu.public.key"
 
 SWU_SERVICE_SWUPDATE_RECOVERY ?= "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /swu/*.swu -v -l6"
 SWU_SERVICE_PROGRESS_RECOVERY ?= "/usr/bin/swupdate-progress -r -w"

@@ -1,6 +1,6 @@
 ### Nexell - For Yocto build with using local source
 
-EXTERNALSRC = "${BSP_ROOT_DIR}/library/libdrm"
+EXTERNALSRC = "${BSP_VENDOR_DIR}/library/libdrm"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""
 

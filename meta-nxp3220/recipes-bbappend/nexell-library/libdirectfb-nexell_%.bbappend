@@ -1,6 +1,6 @@
 ### Nexell - For Yocto build with using local source
 
-EXTERNALSRC = "${BSP_ROOT_DIR}/library/libdirectfb-nexell"
+EXTERNALSRC = "${BSP_VENDOR_DIR}/library/libdirectfb-nexell"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 
 S = "${WORKDIR}/${EXTERNALSRC}"
