@@ -75,7 +75,7 @@ function split_args()
 
 function path_setup()
 {
-    BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../../build/build-${MACHINE_NAME}-${IMAGE_TYPE}`
+    BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../../../build/build-${MACHINE_NAME}-${IMAGE_TYPE}`
     RESULT_PATH=${BUILD_PATH}/../../out/${RESULT_DIR}
     TMP_DEPLOY_PATH=${BUILD_PATH}/tmp/deploy/images/${MACHINE_NAME}
 }
