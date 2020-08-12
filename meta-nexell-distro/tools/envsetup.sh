@@ -82,16 +82,17 @@ function path_setup()
 {
     META_NEXELL_PATH=`readlink -ev ${TOOLS_PATH}/..`
 
-    if ! [ -d ${META_NEXELL_PATH}/../../build ]; then
-        mkdir -p ${META_NEXELL_PATH}/../../build
+    if ! [ -d ${META_NEXELL_PATH}/../../../build ]; then
+        mkdir -p ${META_NEXELL_PATH}/../../../build
     fi
 
-    if ! [ -d ${META_NEXELL_PATH}/../../build/build-${MACHINE_NAME}-${IMAGE_TYPE} ]; then
+    if ! [ -d ${META_NEXELL_PATH}/../../../build/build-${MACHINE_NAME}-${IMAGE_TYPE} ]; then
         echo "Warning, please check -  source poky/oe-init-build-env build/build-<machine_name>-<image_type>"
         exit
     else
-        NEXELL_BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../../build/build-${MACHINE_NAME}-${IMAGE_TYPE}`
+        NEXELL_BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../../../build/build-${MACHINE_NAME}-${IMAGE_TYPE}`
     fi
+
 }
 
 function customize_conf_files()

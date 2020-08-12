@@ -8,16 +8,16 @@ BBFILES ?= ""
 BSPPATH := "${@os.path.abspath(os.path.dirname(d.getVar('FILE', True)) + '/../../..')}"
 
 BBLAYERS ?= " \
-  ${BSPPATH}/poky/meta \
-  ${BSPPATH}/poky/meta-poky \
-  ${BSPPATH}/poky/meta-yocto-bsp \
-  ${BSPPATH}/meta-nexell/meta-nexell-distro \
-  ${BSPPATH}/meta-qt5 \
-  ${BSPPATH}/meta-openembedded/meta-multimedia \
-  ${BSPPATH}/meta-openembedded/meta-oe \
-  ${BSPPATH}/meta-openembedded/meta-python \
-  ${BSPPATH}/meta-openembedded/meta-networking \
-  ${BSPPATH}/openembedded-core/meta \
+  ${BSPPATH}/layers/poky/meta \
+  ${BSPPATH}/layers/poky/meta-poky \
+  ${BSPPATH}/layers/poky/meta-yocto-bsp \
+  ${BSPPATH}/layers/meta-nexell/meta-nexell-distro \
+  ${BSPPATH}/layers/meta-qt5 \
+  ${BSPPATH}/layers/meta-openembedded/meta-multimedia \
+  ${BSPPATH}/layers/meta-openembedded/meta-oe \
+  ${BSPPATH}/layers/meta-openembedded/meta-python \
+  ${BSPPATH}/layers/meta-openembedded/meta-networking \
+  ${BSPPATH}/layers/openembedded-core/meta \
   "
 
 BBLAYERS_NON_REMOVABLE ?= " \
