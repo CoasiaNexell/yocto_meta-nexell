@@ -1,16 +1,9 @@
-### Nexell - For Yocto build with using local source, Below lines are auto generated codes
+### Nexell - For Yocto build with using local source
 
-S = "${WORKDIR}/git"
-PV = "1.0+EXTERNAL_SRC"
+EXTERNALSRC = "${BSP_VENDOR_DIR}/library/nx-renderer"
+EXTERNALSRC_BUILD = "${EXTERNALSRC}"
+EXTERNALSRC_SYMLINKS = ""
 
-do_myp() {
-    rm -rf ${S}
-    mv ${WORKDIR}${_SRC_PATH_BY_GEN_} ${S}
-    rm -rf ${WORKDIR}/home
-}
-addtask myp before do_configure after do_unpack
+S = "${WORKDIR}/${EXTERNALSRC}"
 
-
-SRC_URI="file://${_SRC_PATH_BY_GEN_}"
-
-_SRC_PATH_BY_GEN_?="/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/library/nx-renderer"
+SRC_URI = "file://${EXTERNALSRC}"

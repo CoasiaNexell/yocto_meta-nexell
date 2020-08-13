@@ -11,31 +11,3 @@ SRC_URI = "file://${EXTERNALSRC}"
 do_configure_prepend() {
     echo "" > ${S}/.config
 }
-
-
-
-
-
-#Override for local source using evironment
-
-LINUX_VERSION = "4.4.83"
-PV = "4.4.83"
-
-_SRC_PATH_BY_GEN_="/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/kernel/./kernel-4.4.x"
-_MOV_PATH_BY_GEN_="/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/./kernel-4.4.x"
-
-#Override for local source using evironment
-
-LINUX_VERSION = "4.4.83"
-PV = "4.4.83"
-
-_SRC_PATH_BY_GEN_="/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/kernel/./kernel-4.4.x"
-_MOV_PATH_BY_GEN_="/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/./kernel-4.4.x"
-
-#Override for local source using evironment
-
-LINUX_VERSION = "4.4.83"
-PV = "4.4.83"
-
-_SRC_PATH_BY_GEN_="/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/kernel/./kernel-4.4.x"
-_MOV_PATH_BY_GEN_="/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/./kernel-4.4.x"
