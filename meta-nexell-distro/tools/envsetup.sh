@@ -24,6 +24,15 @@ BOARD_POSTFIX=
 META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
 
+BSP_TOP_DIR="$(realpath "$(dirname "$(realpath "$0")")/../../../..")"
+BSP_VENDOR_DIR="${BSP_TOP_DIR}/vendor/nexell"
+BSP_TOOLS_DIR="${BSP_TOP_DIR}/tools"
+declare -A BUILD_LOCAL_CONF_CONFIGURE=(
+    ["BSP_VENDOR_DIR"]="$BSP_VENDOR_DIR"
+    ["BSP_TOOLS_DIR"]="$BSP_TOOLS_DIR"
+    ["BSP_TARGET_MACHINE"]=""
+)
+
 function check_usage()
 {
     if [ $argc -lt 2 ]
@@ -42,12 +51,14 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt -1 false true"
 }
 
+
 function split_args()
 {
     BOARD_SOCNAME=${MACHINE_NAME%-*-*}
     BOARD_NAME=${MACHINE_NAME#*-}
     BOARD_PREFIX=${BOARD_NAME%-*}
     BOARD_POSTFIX=${BOARD_NAME#*-}
+    BUILD_LOCAL_CONF_CONFIGURE["BSP_TARGET_MACHINE"]="${MACHINE_NAME}"
 }
 
 function target_validation_check()
@@ -95,6 +106,7 @@ function path_setup()
 
 }
 
+
 function customize_conf_files()
 {
     cp ${META_NEXELL_PATH}/conf/local.conf.sample    ${NEXELL_BUILD_PATH}/conf/local.conf
@@ -110,6 +122,12 @@ function customize_conf_files()
     if [ "${NUMBER_THREADS}" != "-1" ]; then
         echo "BB_NUMBER_THREADS = \"${NUMBER_THREADS}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     fi
+
+    for i in "${!BUILD_LOCAL_CONF_CONFIGURE[@]}"; do
+        key="$i"
+        rep="\"${BUILD_LOCAL_CONF_CONFIGURE[$i]//\//\\/}\""
+        sed -i "s/^$key =.*/$key = $rep/" ${NEXELL_BUILD_PATH}/conf/local.conf
+    done
 }
 
 function ready_extra_image()

@@ -235,3 +235,8 @@ PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
 # track the version of this file when it was generated. This can safely be ignored if
 # this doesn't mean anything to you.
 CONF_VERSION = "1"
+
+# BSP top dir for EXTERNALSRC
+BSP_VENDOR_DIR = ""
+BSP_TOOLS_DIR = ""
+BSP_TARGET_MACHINE = ""
