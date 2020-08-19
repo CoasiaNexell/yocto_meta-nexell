@@ -40,10 +40,3 @@ PATH_OPTEE_TEST := "${BSP_VENDOR_DIR}/secure/optee/optee_test"
 PATH_U-BOOT := "${BSP_VENDOR_DIR}/u-boot/u-boot-2016.01"
 
 PATH_KERNEL_SRC := "${BSP_VENDOR_DIR}/kernel/kernel-4.4.x"
-PATH_KERNEL_SRC := "${BSP_VENDOR_DIR}/kernel/kernel-4.4.x"
-PATH_KERNEL_SRC := "${BSP_VENDOR_DIR}/kernel/kernel-4.4.x"
-
-
-PATH_KERNEL_SRC := "/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/kernel/./kernel-4.4.x"
-PATH_KERNEL_SRC := "/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/kernel/./kernel-4.4.x"
-PATH_KERNEL_SRC := "/home/mcjino/hdd2/yocto/internal/yocto_sumo_dev/vendor/nexell/kernel/./kernel-4.4.x"
