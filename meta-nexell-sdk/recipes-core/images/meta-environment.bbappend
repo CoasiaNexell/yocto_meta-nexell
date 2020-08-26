@@ -12,6 +12,16 @@ create_sdk_files() {
     echo "export CFLAGS+=\"${TARGET_CC_ARCH} --sysroot=\$SDKTARGETSYSROOT \"" >> ${SDK_OUTPUT}/${SDKPATH}/environment-setup-${REAL_MULTIMACH_TARGET_SYS}
 }
 
+create_sdk_files_append () {
+    script=${SDK_OUTPUT}/${SDKPATH}/environment-setup-${REAL_MULTIMACH_TARGET_SYS}
+
+    echo "" >> $script
+    echo "# Append environment for ${MACHINE}" >> $script
+    echo "export LDFLAGS+=\" --sysroot=\$SDKTARGETSYSROOT \"" >> $script
+    echo "export CFLAGS+=\"${TARGET_CC_ARCH} --sysroot=\$SDKTARGETSYSROOT \"" >> $script
+    echo "export OECORE_SOCNAME=${MACHINE}" >> $script
+}
+
 # STAGING_KERNEL_DIR => kernel source path
 # SDPATH => /opt/poky/2.5.1
 # REAL_MULTIMACH_TARGET_SYS => cortexa9hf-neon-poky-linux-gnueabi
