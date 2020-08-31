@@ -869,5 +869,5 @@ if [ "${POST_PROCESS_ENABLE}" == "true" ]; then
 post_process
 else
 useage
-if
+fi
 #make_modules
