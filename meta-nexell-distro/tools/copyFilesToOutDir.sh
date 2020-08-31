@@ -120,6 +120,11 @@ function copy_bin_files()
     cp ${TMP_DEPLOY_PATH}/default_envs.txt ${RESULT_PATH}
 }
 
+function copy_img_files()
+{
+    cp ${TMP_DEPLOY_PATH}/*.img ${RESULT_PATH}
+}
+
 function copy_kernel_image()
 {
     echo -e "\033[40;33m  >>>>   copy_kernel_image        \033[0m"
@@ -234,6 +239,9 @@ split_args
 path_setup
 cleanup_dirs
 copy_bin_files
+if [ "${POST_PROCESS_ENABLE}" != "true" ]; then
+copy_img_files
+fi
 copy_kernel_image
 copy_dtb_file
 copy_ramdisk_image
@@ -242,4 +250,8 @@ if [ ${BUILD_ALL} == "true" ];then
 fi
 copy_partmap_file
 
+if [ "${POST_PROCESS_ENABLE}" != "true" ]; then
+touch ${RESULT_PATH}/YOCTO.${RESULT_DIR}.INFO.DoNotChange
+else
 post_process
+fi

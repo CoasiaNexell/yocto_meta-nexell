@@ -417,7 +417,7 @@ function make_sparse_rootfs_img()
 
     if [ "${BOARD_NAME}" == "convergence-daudio" ]; then
         rm -rf svmdata
-        cp -af ../../../apps/svm_daemon/data/ ./svmdata
+        cp -af ${BSP_ROOT_DIR}/vendor/nexell/apps/svm_daemon/data/ ./svmdata
         ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l 33554432 -b 4K -a user svmdata.img ./svmdata
     fi
 
@@ -836,6 +836,23 @@ function make_modules() {
     ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -b 4096 -L modules -l ${MODULES_PATITION_SIZE} modules.img modules
 }
 
+function useage() {
+    echo -e "\n\033[0;34m ------------------------------------------------------------------------------------------ \033[0m\n"
+    echo -e "\033[0;33m # FASTBOOT Download # \033[0m"
+    echo -e "\033[0;33m    <FULL>                    \033[0m"
+    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh \033[0m"
+    echo -e "\033[0;33m    <Kernel Only>             \033[0m"
+    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh -t kernel \033[0m"
+    echo -e "\033[0;33m    <rootfs Only>             \033[0m"
+    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh -t rootfs \033[0m"
+    echo -e "\033[0;33m    <More detail...>           \033[0m"
+    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh -h        \033[0m\n"
+
+    echo -e "\033[0;33m # USB BOOT # \033[0m"
+    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-uboot-by-usb-download.sh \033[0m\n"
+    echo -e "\033[0;34m -------------------------------------------------------------------------------------------- \033[0m\n"
+}
+
 echo -e "\n\033[0;34m ------------------------------------------------------------------ \033[0m"
 echo -e "\033[0;36m                      Convert images Running                        \033[0m"
 echo -e "\033[0;34m ------------------------------------------------------------------ \033[0m"
@@ -848,5 +865,9 @@ mkparams
 mkbootimg
 mem_addr_setup
 make_sparse_rootfs_img
+if [ "${POST_PROCESS_ENABLE}" == "true" ]; then
 post_process
+else
+useage
+if
 #make_modules

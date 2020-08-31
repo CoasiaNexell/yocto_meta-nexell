@@ -22,10 +22,22 @@ do_compile () {
 }
 
 inherit deploy
+inherit nexell-mkimage
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/out/pyrope-bl2.bin ${DEPLOY_DIR_IMAGE}
+
+    # generate secure binary
+    ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
+            -t 3rdboot \
+            -i ${DEPLOY_DIR_IMAGE}/${BL2_BIN} \
+            -o ${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} \
+            -l ${BL2_EMMC_LOAD_ADDR} \
+            -e ${BL2_EMMC_JUMP_ADDR} \
+            ${BL2_EXTRA_OPTS}
+
+    dd if=${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} of=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} seek=0 bs=1
 }
 
 addtask deploy after do_install

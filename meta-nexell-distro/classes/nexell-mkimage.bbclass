@@ -1,3 +1,5 @@
+inherit nexell-secure
+
 # to make images
 
 DEPENDS += "${@bb.utils.contains('IMAGE_FSTYPES', 'ext4', 'android-tools-native', '', d)}"
@@ -344,4 +346,39 @@ make_ubi_image() {
 	mkfs.ubifs -r $root -o $ubi_fs -m $page_size -e $LEB -c $max_block_count -F
 
 	ubinize -o $ubi_image -m $page_size -p $block_size -s $sub_page_size $ubi_ini
+}
+
+make_2ndboot_image() {
+    echo "================================================="
+    echo "make_2ndboot_for_emmc"
+    echo "-------------------------------------------------"
+    echo "soc_name : '$1'"
+    echo "in_img : '$2'"
+    echo "out_img : '$3'"
+    echo "aes_key : '$4'"
+    echo "hash_name : '$5'"
+    echo "================================================="
+
+    local soc_name=$1 in_img=$2 out_img=$3 aes_key=$4 hash_name=$5
+
+    if [ -z ${aes_key} ]; then
+        aes_key='""'
+    fi
+
+    if [ -z ${hash_name} ]; then
+        hash_name='""'
+    fi
+
+    if [ ${soc_name} = "s5p6818" ]; then
+        if [ ${NEXELL_SECURE_BOOT} = "true" ]; then
+            do_gen_hash_rsa ${in_img} ${hash_name} ${aes_key}
+            dd if=${in_img}.pub of=${in_img} ibs=256 count=1 obs=512 seek=1 conv=notrunc
+	        return
+            do_aes_encrypt ${out_img} ${in_img} ${aes_key}
+        else
+            cp ${in_img} ${out_img}
+        fi
+    else
+        echo "SECURE BOOT is not support in ${soc_name}"
+    fi
 }

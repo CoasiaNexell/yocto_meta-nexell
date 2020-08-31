@@ -2,6 +2,8 @@ inherit linux-nexell-base
 
 SOC_FAMILY = "Nexell"
 
+NEXELL_BOARD_SOCNAME ?= "${BSP_TARGET_SOCNAME}"
+
 IMAGE_FSTYPES ?= "tar.bz2 ext4"
 INITRAMFS_IMAGE ?= "nexell-ramdisk"
 
@@ -23,3 +25,15 @@ PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-nexell"
 # default type is pressure sensitive touch screen
 # If yoc need another type, override 'NEXELL_TOUCH_CLASS' in machine/conf/<board_name>
 NEXELL_TOUCH_CLASS = "PRESSES"
+
+# nexell device id
+NEXELL_DEVID_USB ?= "0"
+NEXELL_DEVID_SPI ?= "1"
+NEXELL_DEVID_NAND ?= "2"
+NEXELL_DEVID_SDMMC ?= "3"
+NEXELL_DEVID_SDFS ?= "4"
+NEXELL_DEVID_UART ?= "5"
+
+# nexell device port number
+NEXELL_PORT_EMMC ?= "2"
+NEXELL_PORT_SD ?= "0"
