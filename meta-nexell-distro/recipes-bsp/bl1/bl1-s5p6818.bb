@@ -33,10 +33,13 @@ do_deploy () {
 
     # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${aes_key} | 5:${hash_name}
     make_2ndboot_image ${NEXELL_BOARD_SOCNAME} \
-        ${DEPLOY_DIR_IMAGE}/${BL1_EMMCBOOT} \
+        ${S}/out/${BL1_EMMCBOOT} \
         ${DEPLOY_DIR_IMAGE}/${BL1_SECURE_EMMCBOOT} \
         ${NEXELL_PRIVATE_KEY} \
         ""
+
+    # copy image to output dir
+    copy_file_to_output ${S}/out/${BL1_EMMCBOOT}
 }
 
 addtask deploy after do_install

@@ -155,43 +155,43 @@ do_deploy () {
 
     if [ ${NEXELL_BOARD_SOCNAME} = "s5p6818" ];then
         # make image for emmc
-        ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/fip-loader.bin \
-            -o ${DEPLOY_DIR_IMAGE}/fip-loader-emmc.img \
-            -l ${MEM_LOAD_ADDR} \
-            -e ${MEM_JUMP_ADDR} \
-            -k ${NEXELL_DEVID_SDMMC} \
-            ${NEXELL_EMMC_EXTRA_OPTS}
+        # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr} | 6:${extra_opts} | 7:${dev_id}
+        make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/optee_build/result/fip-loader.bin \
+            ${DEPLOY_DIR_IMAGE}/fip-loader-emmc.img \
+            ${MEM_LOAD_ADDR} \
+            ${MEM_JUMP_ADDR} \
+            '${NEXELL_EMMC_EXTRA_OPTS}' \
+            ${NEXELL_DEVID_SDMMC}
 
         # make image for sd
-        ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/fip-loader.bin \
-            -o ${DEPLOY_DIR_IMAGE}/fip-loader-sd.img \
-            -l ${MEM_LOAD_ADDR} \
-            -e ${MEM_JUMP_ADDR} \
-            -k ${NEXELL_DEVID_SD} \
-            ${NEXELL_SD_EXTRA_OPTS}
+        # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr} | 6:${extra_opts} | 7:${dev_id}
+        make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/optee_build/result/fip-loader.bin \
+            ${DEPLOY_DIR_IMAGE}/fip-loader-sd.img \
+            ${MEM_LOAD_ADDR} \
+            ${MEM_JUMP_ADDR} \
+            '${NEXELL_EMMC_EXTRA_OPTS}' \
+            ${NEXELL_DEVID_SD}
 
         # make image for secure
-        ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/fip-secure.bin \
-            -o ${DEPLOY_DIR_IMAGE}/fip-secure.img \
-            -l ${MEM_SECURE_LOAD_ADDR} \
-            -e ${MEM_SECURE_JUMP_ADDR}
+        # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr}
+        make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/optee_build/result/fip-secure.bin \
+            ${DEPLOY_DIR_IMAGE}/fip-secure.img \
+            ${MEM_SECURE_LOAD_ADDR} \
+            ${MEM_SECURE_JUMP_ADDR}
 
         # get size of image
         local fip_sec_size=`stat --printf="%s" ${DEPLOY_DIR_IMAGE}/fip-secure.img`
 
         # make image for non-secure
-        ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/fip-nonsecure.bin \
-            -o ${DEPLOY_DIR_IMAGE}/fip-nonsecure.img \
-            -l ${MEM_NON_SECURE_LOAD_ADDR} \
-            -e ${MEM_NON_SECURE_JUMP_ADDR}
+        # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr}
+        make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/optee_build/result/fip-nonsecure.bin \
+            ${DEPLOY_DIR_IMAGE}/fip-nonsecure.img \
+            ${MEM_NON_SECURE_LOAD_ADDR} \
+            ${MEM_NON_SECURE_JUMP_ADDR}
 
         # get size of image
         local fip_nonsec_size=`stat --printf="%s" ${DEPLOY_DIR_IMAGE}/fip-nonsecure.img`
@@ -200,14 +200,14 @@ do_deploy () {
         local usb_extra_opts="-u -m ${MEM_SECURE_LOAD_ADDR} -z ${fip_sec_size} -m ${MEM_NON_SECURE_LOAD_ADDR} -z ${fip_nonsec_size}"
 
         # make image for usb
-        ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/fip-nonsecure.bin \
-            -o ${DEPLOY_DIR_IMAGE}/fip-nonsecure.img \
-            -l ${MEM_NON_SECURE_LOAD_ADDR} \
-            -e ${MEM_NON_SECURE_JUMP_ADDR} \
-            -k ${NEXELL_DEVID_USB} \
-            ${usb_extra_opts}
+        # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr} | 6:${extra_opts} | 7:${dev_id}
+        make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/optee_build/result/fip-nonsecure.bin \
+            ${DEPLOY_DIR_IMAGE}/fip-nonsecure.img \
+            ${MEM_NON_SECURE_LOAD_ADDR} \
+            ${MEM_NON_SECURE_JUMP_ADDR} \
+            "${usb_extra_opts}" \
+            ${NEXELL_DEVID_USB}
     fi
 }
 

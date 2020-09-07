@@ -30,3 +30,13 @@ postprocess_sdl_function() {
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_sdl_function;"
+
+image_postprocess_sdl_wayland_function() {
+
+    make_sparse_rootfs_img "sdl-wayland" \
+		    ${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.ext4 \
+			${NEXELL_USER_PARTITION_SIZE} \
+			${DEPLOY_DIR_IMAGE}
+}
+
+IMAGE_POSTPROCESS_COMMAND += "image_postprocess_sdl_wayland_function;"

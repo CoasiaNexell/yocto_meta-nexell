@@ -1,4 +1,27 @@
 
+do_secure_bingen() {
+    echo "================================================="
+    echo "do_secure_bingen"
+    echo "================================================="
+    echo "soc_name = '$1'"
+    echo "img_type = '$2'"
+    echo "in_img = '$3'"
+    echo "out_img = '$4'"
+    echo "load_addr = '$5'"
+    echo "jump_addr = '$6'"
+    echo "extra_opts = '$7'"
+    echo "dev_id = '$8'"
+    echo "================================================="
+    local soc_name=$1 img_type=$2 in_img=$3 out_img=$4
+    local load_addr=$5 jump_addr=$6 extra_opts="$7" dev_id=$8
+
+    if [ -z $dev_id ]; then
+        ${NEXELL_SECURE_BINGEN} -c $soc_name -t $img_type -i $in_img -o $out_img -l $load_addr -e $jump_addr $extra_opts
+    else
+        ${NEXELL_SECURE_BINGEN} -c $soc_name -t $img_type -i $in_img -o $out_img -l $load_addr -e $jump_addr -k $dev_id $extra_opts
+    fi
+}
+
 do_aes_encrypt() {
     echo "================================================="
     echo "do_aes_encrypt"

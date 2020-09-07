@@ -26,18 +26,23 @@ inherit nexell-mkimage
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
-    install -m 0644 ${S}/out/pyrope-bl2.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/${BL2_BIN} ${DEPLOY_DIR_IMAGE}
 
-    # generate secure binary
-    ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/${BL2_BIN} \
-            -o ${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} \
-            -l ${BL2_EMMC_LOAD_ADDR} \
-            -e ${BL2_EMMC_JUMP_ADDR} \
-            ${BL2_EXTRA_OPTS}
+    # make secure image
+    # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr} | 6:${extra_opts}
+    make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/out/${BL2_BIN} \
+            ${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} \
+            ${BL2_EMMC_LOAD_ADDR} \
+            ${BL2_EMMC_JUMP_ADDR} \
+            '${BL2_EXTRA_OPTS}'
 
-    dd if=${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} of=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} seek=0 bs=1
+    # make fip image
+    # 1:${in_img} |  2:${out_img} | 3:${seek_val} | 4:${bs_val}
+    make_fip_image ${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} \
+        ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} \
+        "0" \
+        "1"
 }
 
 addtask deploy after do_install

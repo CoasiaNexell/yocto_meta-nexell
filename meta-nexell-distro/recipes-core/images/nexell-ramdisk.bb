@@ -1,4 +1,4 @@
-#inherit post-process-ramdisk
+inherit post-process-ramdisk
 
 SPALSH = "psplash-nexell"
 

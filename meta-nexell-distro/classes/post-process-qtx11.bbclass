@@ -41,3 +41,13 @@ python postprocess_qtx11_function2() {
 }
 
 ROOTFS_POSTPROCESS_COMMAND += " postprocess_qtx11_function; postprocess_qtx11_function2;"
+
+image_postprocess_qtx11_function() {
+
+    make_sparse_rootfs_img "qtx11" \
+		    ${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.ext4 \
+			${NEXELL_USER_PARTITION_SIZE} \
+			${DEPLOY_DIR_IMAGE}
+}
+
+IMAGE_POSTPROCESS_COMMAND += "image_postprocess_qtx11_function;"

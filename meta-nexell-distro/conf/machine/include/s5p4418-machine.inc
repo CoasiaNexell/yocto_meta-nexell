@@ -7,6 +7,7 @@ include nexell-tools.inc
 include nexell-mem-${NEXELL_MEM_SIZE}.inc
 
 # 32bit machine = 32/arm, 64bit machine = 64/arm64
+ARM_ARCH = "arm"
 ARCH_TYPE_NUM = "32"
 ARCH_TYPE = "arm32"
 
@@ -70,8 +71,24 @@ FIP_LOADER_USB_IMG ?= 'fip-loader-usb.img'
 # Nexell Kernel Configuration
 # ------------------------------------------------------------
 KBUILD_DEFCONFIG ?= "s5p4418_${NEXELL_BOARD_NAME}_defconfig"
+NEXELL_KERNEL_IMAGE_NAME ?= "zImage"
+# boot partition size : 32MB
+NEXELL_BOOT_PARTITION_SIZE ?= "33554432"
 
 # ------------------------------------------------------------
 # NSIH header address
 # ------------------------------------------------------------
 NSIH_LOAD_START_ADDRESS ?= "63c00000"
+
+# ------------------------------------------------------------
+# Nexell Environment Image Configuration
+# ------------------------------------------------------------
+NEXELL_ENV_PARTITION_SIZE ?= "16384"
+NEXELL_ENV_BIN ?= "params.bin"
+NEXELL_DEFAULT_ENVS ?= "default_envs.txt"
+
+# ------------------------------------------------------------
+# Nexell User Partition Configuration
+# ------------------------------------------------------------
+NEXELL_USER_PARTITION_SIZE ?= "6G"
+NEXELL_USER_PARTITION_SIZE_UBUNTU ?= "2G"

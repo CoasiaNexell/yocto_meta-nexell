@@ -48,3 +48,18 @@ postprocess_qt_function() {
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_qt_function;"
+
+inherit nexell-mkimage
+
+
+image_postprocess_qt_function() {
+
+	make_sparse_rootfs_img "qt" \
+			${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.ext4 \
+			${NEXELL_USER_PARTITION_SIZE} \
+			${DEPLOY_DIR_IMAGE}
+
+	copy_fusing_tools ${BSP_OUTPUT_DIR_PATH}
+}
+
+IMAGE_POSTPROCESS_COMMAND += "image_postprocess_qt_function;"

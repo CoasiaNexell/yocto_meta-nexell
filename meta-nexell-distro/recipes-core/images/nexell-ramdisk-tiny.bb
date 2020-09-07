@@ -1,3 +1,5 @@
+inherit post-process-ramdisk
+
 # Base code : meta/recipes-core/images/core-image-tiny-initramfs.bb
 
 PACKAGE_INSTALL = "initramfs-boot busybox bash base-files udev ${ROOTFS_BOOTSTRAP_INSTALL}"

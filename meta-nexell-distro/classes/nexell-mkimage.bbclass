@@ -1,7 +1,9 @@
 inherit nexell-secure
 
 # to make images
-
+# =================================================
+# for nxp3220
+# =================================================
 DEPENDS += "${@bb.utils.contains('IMAGE_FSTYPES', 'ext4', 'android-tools-native', '', d)}"
 DEPENDS += "${@bb.utils.contains('IMAGE_FSTYPES', 'multiubi2', 'mtd-utils-native', '', d)}"
 
@@ -348,16 +350,158 @@ make_ubi_image() {
 	ubinize -o $ubi_image -m $page_size -p $block_size -s $sub_page_size $ubi_ini
 }
 
+# =================================================
+# for s5p4418/s5p6818
+# =================================================
+make_output_dir() {
+    if [ ! -d ${BSP_OUTPUT_DIR_PATH} ];then
+        mkdir -p ${BSP_OUTPUT_DIR_PATH}/tools
+        chmod 777 ${BSP_OUTPUT_DIR_PATH}
+		chmod 777 ${BSP_OUTPUT_DIR_PATH}/tools
+    fi
+}
+
+copy_file_to_output() {
+	local in_file=$1
+
+	make_output_dir
+
+	if [ -f ${in_file} ]; then
+        cp -af ${in_file} ${BSP_OUTPUT_DIR_PATH}
+    fi
+}
+
+copy_board_partmap() {
+    local out_dir=$1
+    if [ ${BSP_TARGET_IMAGE_TYPE} = "ubuntu" ]; then
+        cp -af ${NEXELL_BOARD_PARTMAP_PATH}/partmap_emmc_${BSP_TARGET_MACHINE}-ubuntu.txt ${out_dir}/partmap_emmc.txt
+    else
+        cp -af ${NEXELL_BOARD_PARTMAP_PATH}/partmap_emmc_${BSP_TARGET_MACHINE}.txt ${out_dir}/partmap_emmc.txt
+    fi
+}
+
+copy_kernel_image() {
+	echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m copy_kernel_image \033[0m"
+    echo "\033[40;33m -------------------------------------------------  \033[0m"
+	echo "\033[40;33m src_path : '$1' \033[0m"
+    echo "\033[40;33m dst_path : '$2' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+    local src_path=$1 dst_path=$2
+
+    copy_file_to_output ${src_path}/boot.img
+
+    if [ ${BSP_TARGET_IMAGE_TYPE} = "ubuntu" ];then
+        if [ -d ${TOPDIR}/tmp/work/linux-kernel-selftests ]; then
+            cp -a ${TOPDIR}/tmp/work/selftests ${TOPDIR}/tmp/work/extra-rootfs-support/usr/bin/
+        fi
+    fi
+}
+
+copy_rootfs_image() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m copy_rootfs_image \033[0m"
+    echo "\033[40;33m -------------------------------------------------  \033[0m"
+	echo "\033[40;33m src_path : '$1' \033[0m"
+    echo "\033[40;33m dst_path : '$2' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+	local src_path=$1 dst_path=$2
+
+    if [ ${BSP_TARGET_IMAGE_TYPE} = "ubuntu" ];then
+        rm -rf ${dst_path}/*.ext4
+        rm -rf ${dst_path}/rootfs.img
+
+        echo "\033[40;33m  >>>>   download ubuntu image        \033[0m"
+        wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION}${UBUNTU_ROOTFS} -P ${dst_path}
+        mv ${RESULT_PATH}/${UBUNTU_ROOTFS} ${dst_path}/rootfs.tar.gz
+
+        echo "\033[40;33m  >>>>   copy_extra-rootfs-support to result dir        \033[0m"
+        sudo cp -a ${TOPDIR}/tmp/work/extra-rootfs-support ${dst_path}
+
+        # s5p6818 binary use armhf version, so kselftest used armhf version too.
+        # kselftest do not build. using prebuilt binary
+        if [ ${NEXELL_BOARD_SOCNAME} = "s5p6818" ]; then
+            echo "\033[40;33m  >>>>   extract kselftests        \033[0m"
+            sudo rm -rf ${dst_path}/extra-rootfs-support/usr/bin/kselftests
+            sudo rm -rf ${dst_path}/kselftests.*
+            wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_KSELFTESTS} -P ${dst_path}
+            sudo tar --overwrite -xvzf ${dst_path}/kselftests.tar.gz -C ${dst_path}/extra-rootfs-support/usr/bin/
+
+            echo -e "\033[40;33m  >>>>   extract testsuites        \033[0m"
+            sudo rm -rf ${dst_path}/testsuite.*
+            wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_NX_TESTSUITE} -P ${dst_path}
+            sudo tar --overwrite -xvzf ${dst_path}/testsuite.tar.gz -C ${dst_path}/extra-rootfs-support/usr/
+
+            echo -e "\033[40;33m  >>>>   extract nexell libraries   \033[0m"
+            sudo rm -rf ${dst_path}/nxlibs.*
+            wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_NX_LIBS} -P ${dst_path}
+            sudo tar --overwrite -xvzf ${dst_path}/nxlibs.tar.gz -C ${dst_path}/extra-rootfs-support/usr/
+        fi
+    else
+        if [ -f ${src_path}/${IMAGE_BASENAME}-${MACHINE}.tar.bz2 ]; then
+            cp ${src_path}/${IMAGE_BASENAME}-${MACHINE}.tar.bz2 ${dst_path}
+        fi
+        if [ -f ${src_path}/${IMAGE_BASENAME}-${MACHINE}.ext4 ]; then
+            cp ${src_path}/${IMAGE_BASENAME}-${MACHINE}.ext4 ${dst_path}
+        fi
+    fi
+
+    cp ${NEXELL_FUSING_TOOLS_PATH}/partition.txt ${dst_path}
+}
+
+copy_fusing_tools() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m copy_fusing_tools \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+	echo "\033[40;33m out_dir : '$1' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local out_dir=$1
+    # step1 : copy scripts & tools
+    #if [ ! -d ${out_dir}/tools ];then
+        # flashing tool copy
+        mkdir -p ${out_dir}/tools
+
+        if [ ${BSP_TARGET_SOCNAME} = "nxp3220" ];then
+            echo "to do"
+        else
+            cp -af ${NEXELL_FUSING_TOOLS_PATH}/standalone-fastboot-download.sh ${out_dir}/tools
+            cp -af ${NEXELL_FUSING_TOOLS_PATH}/standalone-uboot-by-usb-download.sh ${out_dir}/tools
+            cp -af ${NEXELL_FUSING_TOOLS_PATH}/usb-downloader ${out_dir}/tools
+        fi
+    #fi
+
+    # step2 : copy bl1 image & partition info files
+    copy_board_partmap ${out_dir}/tools
+
+    if [ ${BSP_TARGET_SOCNAME} = "nxp3220" ];then
+        echo "to do"
+    else
+        if ls ${out_dir}/bl1-*.bin 1> /dev/null 2>&1; then
+            cp -af ${out_dir}/bl1-*.bin ${out_dir}/tools
+        else
+            echo "bl1-*.bin do not exists"
+        fi
+        if [ -f ${out_dir}/partmap_emmc.txt ]; then
+            cp -af ${out_dir}/partmap_emmc.txt ${out_dir}/tools
+        fi
+        if [ -f ${out_dir}/partition.txt ]; then
+            cp -af ${out_dir}/partition.txt ${out_dir}/tools
+        fi
+    fi
+
+    touch ${out_dir}/YOCTO.${BSP_OUTPUT_DIR_NAME}.INFO.DoNotChange
+}
+
 make_2ndboot_image() {
-    echo "================================================="
-    echo "make_2ndboot_for_emmc"
-    echo "-------------------------------------------------"
-    echo "soc_name : '$1'"
-    echo "in_img : '$2'"
-    echo "out_img : '$3'"
-    echo "aes_key : '$4'"
-    echo "hash_name : '$5'"
-    echo "================================================="
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m make_2ndboot_for_emmc \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+    echo "\033[40;33m soc_name : '$1' \033[0m"
+    echo "\033[40;33m in_img : '$2' \033[0m"
+    echo "\033[40;33m out_img : '$3' \033[0m"
+    echo "\033[40;33m aes_key : '$4' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
 
     local soc_name=$1 in_img=$2 out_img=$3 aes_key=$4 hash_name=$5
 
@@ -373,7 +517,7 @@ make_2ndboot_image() {
         if [ ${NEXELL_SECURE_BOOT} = "true" ]; then
             do_gen_hash_rsa ${in_img} ${hash_name} ${aes_key}
             dd if=${in_img}.pub of=${in_img} ibs=256 count=1 obs=512 seek=1 conv=notrunc
-	        return
+            return
             do_aes_encrypt ${out_img} ${in_img} ${aes_key}
         else
             cp ${in_img} ${out_img}
@@ -381,4 +525,168 @@ make_2ndboot_image() {
     else
         echo "SECURE BOOT is not support in ${soc_name}"
     fi
+
+    # copy 2ndboot image to output directory
+    copy_file_to_output ${out_img}
+}
+
+make_3rdboot_image() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m make_3rdboot_image \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+    echo "\033[40;33m soc_name : '$1' \033[0m"
+    echo "\033[40;33m in_img : '$2' \033[0m"
+    echo "\033[40;33m out_img : '$3' \033[0m"
+    echo "\033[40;33m load_addr : '$4' \033[0m"
+    echo "\033[40;33m jump_addr : '$5' \033[0m"
+    echo "\033[40;33m extra_opts : '$6' \033[0m"
+    echo "\033[40;33m dev_id : '$7' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local soc_name=$1
+    local in_img=$2
+    local out_img=$3
+    local load_addr=$4
+    local jump_addr=$5
+    local extra_opts="$6"
+    local dev_id=$7
+
+    do_secure_bingen $soc_name \
+            "3rdboot" \
+            $in_img \
+            $out_img \
+            $load_addr \
+            $jump_addr \
+            "$extra_opts" \
+            $dev_id
+
+    # copy 3ndboot image to output directory
+    copy_file_to_output ${out_img}
+}
+
+make_ramdisk_image() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m make_ramdisk_image \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+    echo "\033[40;33m arm_arch : '$1' \033[0m"
+    echo "\033[40;33m in_img : '$2' \033[0m"
+    echo "\033[40;33m out_path : '$3' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local arm_arch=$1 in_img=$2 out_path=$3
+
+    mkdir -p ${out_path}/boot
+    rm -rf ${out_path}/boot/uInitrd
+
+	${NEXELL_TOOL_MKIMAGE} -A ${arm_arch} -O linux -T ramdisk \
+            -C none -a 0 -e 0 -n uInitrd -d ${in_img} \
+            ${out_path}/boot/uInitrd
+}
+
+make_environment_image() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m make_environment_image \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+    echo "\033[40;33m partition_size : '$1' \033[0m"
+    echo "\033[40;33m out_img : '$2' \033[0m"
+    echo "\033[40;33m envs_file : '$3' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local partition_size=$1 out_img=$2 envs_file=$3
+
+    ${NEXELL_TOOL_MKENVIMAGE} -s ${partition_size} -o ${out_img} ${envs_file}
+
+    # copy environment image to output directory
+    copy_file_to_output ${out_img}
+    copy_file_to_output ${envs_file}
+}
+
+make_bootimg() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m make_bootimg \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+    echo "\033[40;33m src_path : '$1' \033[0m"
+    echo "\033[40;33m dst_path : '$2' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local src_path=$1 dst_path=$2
+
+    # remove old files
+    mkdir -p ${dst_path}/boot
+    rm -rf ${dst_path}/boot/*.dtb
+    rm -rf ${dst_path}/boot/${NEXELL_KERNEL_IMAGE_NAME}
+
+    # copy dtb files
+    find ${src_path} -name "*.dtb" -type f -exec cp {} ${dst_path}/boot \;
+
+    # copy kernel image
+    cp -aL ${src_path}/${NEXELL_KERNEL_IMAGE_NAME} ${dst_path}/boot
+    cp ${NEXELL_BOOTLOGO_PATH}/logo.bmp ${dst_path}/boot/
+
+    # make boot.img
+    ${NEXELL_TOOL_MAKE_EXT4FS} -s -l ${NEXELL_BOOT_PARTITION_SIZE} ${dst_path}/boot.img ${dst_path}/boot/
+
+    # copy to result directory
+	copy_kernel_image ${dst_path} ${BSP_OUTPUT_DIR_PATH}
+}
+
+make_sparse_rootfs_img() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m make_sparse_rootfs_img \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+    echo "\033[40;33m img_type : '$1' \033[0m"
+    echo "\033[40;33m in_ext4_img : '$2' \033[0m"
+    echo "\033[40;33m partition_size : '$3' \033[0m"
+    echo "\033[40;33m dst_path : '$4' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local img_type=$1 in_ext4_img=$2 partition_size=$3 dst_path=$4
+
+    if [ ${img_type} = "ubuntu" ]; then
+        ${NEXELL_TOOL_MKROOTFS_IMAGE} \
+                ${dst_path} \
+                ${in_ext4_img} \
+                4096 \
+                ${dst_path}/extra-rootfs-support
+    fi
+
+    ${NEXELL_TOOL_EXT2SIMG} ${in_ext4_img} ${dst_path}/rootfs.img
+
+    rm -rf ${dst_path}/userdata
+    mkdir -p ${dst_path}/userdata
+
+    ${NEXELL_TOOL_MAKE_EXT4FS} -s -l ${partition_size} -b 4K -a user ${dst_path}/userdata.img ${dst_path}/userdata
+    echo "userdata partition size : ${partition_size}byte"
+
+    if [ ${BSP_TARGET_BOARD_NAME} = "convergence-daudio" ]; then
+        rm -rf ${dst_path}/svmdata
+        cp -af ${BSP_ROOT_DIR}/vendor/nexell/apps/svm_daemon/data/ ${dst_path}/svmdata
+        ${NEXELL_TOOL_MAKE_EXT4FS} -s -l 33554432 -b 4K -a user ${dst_path}/svmdata.img ${dst_path}/svmdata
+
+        # copy image to output directory
+        copy_file_to_output ${dst_path}/svmdata.img
+    fi
+
+    # copy image to output directory
+    copy_file_to_output ${dst_path}/rootfs.img
+    copy_file_to_output ${dst_path}/userdata.img
+
+    copy_rootfs_image ${dst_path} ${BSP_OUTPUT_DIR_PATH}
+}
+
+make_fip_image() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m make_fip_image \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+    echo "\033[40;33m in_img : '$1' \033[0m"
+    echo "\033[40;33m out_img : '$2' \033[0m"
+    echo "\033[40;33m seek_val : '$3' \033[0m"
+    echo "\033[40;33m bs_val : '$4' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local in_img=$1 out_img=$2 seek_val=$3 bs_val=$4
+    dd if=${in_img} of=${out_img} seek=${seek_val} bs=${bs_val}
+
+    # copy image to output directory
+    copy_file_to_output ${out_img}
 }

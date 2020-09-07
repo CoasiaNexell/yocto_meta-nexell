@@ -16,16 +16,21 @@ do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/out/${DISPATCHER_BIN} ${DEPLOY_DIR_IMAGE}
 
-    # generate secure binary
-    ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/${DISPATCHER_BIN} \
-            -o ${DEPLOY_DIR_IMAGE}/${DISPATCHER_EMMCBOOT} \
-            -l ${DISPATCHER_EMMC_LOAD_ADDR} \
-            -e ${DISPATCHER_EMMC_JUMP_ADDR} \
-            ${DISPATCHER_EXTRA_OPTS}
+    # make secure image
+    # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr} | 6:${extra_opts} | 7:${dev_id}
+    make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/out/${DISPATCHER_BIN} \
+            ${DEPLOY_DIR_IMAGE}/${DISPATCHER_EMMCBOOT} \
+            ${DISPATCHER_EMMC_LOAD_ADDR} \
+            ${DISPATCHER_EMMC_JUMP_ADDR} \
+            '${DISPATCHER_EXTRA_OPTS}'
 
-    dd if=${DEPLOY_DIR_IMAGE}/${DISPATCHER_EMMCBOOT} of=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} seek=${DISPATCHER_FIP_NONSECURE_USB_BIN_OFFSET} bs=1
+    # make fip image
+    # 1:${in_img} |  2:${out_img} | 3:${seek_val} | 4:${bs_val}
+    make_fip_image ${DEPLOY_DIR_IMAGE}/${DISPATCHER_EMMCBOOT} \
+        ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} \
+        ${DISPATCHER_FIP_NONSECURE_USB_BIN_OFFSET} \
+        "1"
 }
 
 addtask deploy after do_install

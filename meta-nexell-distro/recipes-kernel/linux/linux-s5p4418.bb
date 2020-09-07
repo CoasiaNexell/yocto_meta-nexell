@@ -12,3 +12,9 @@ do_kernelpostprocess() {
 }
 
 addtask kernelpostprocess before do_deploy after do_install
+
+# make boot.img
+inherit nexell-mkimage
+do_deploy_append() {
+    make_bootimg ${D}/${KERNEL_IMAGEDEST} ${DEPLOY_DIR_IMAGE}
+}

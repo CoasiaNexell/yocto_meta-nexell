@@ -13,6 +13,7 @@ NEXELL_SYSLOG ?= "n"
 QEMU_TARGETS_append = " aarch64"
 
 # 32bit machine = 32/arm, 64bit machine = 64/arm64
+ARM_ARCH = "arm64"
 ARCH_TYPE_NUM = "64"
 ARCH_TYPE = "arm64"
 
@@ -30,11 +31,15 @@ BL1_SECURE_EMMCBOOT ?= 'bl1-emmcboot.img'
 # Nexell U-Boot Configuration
 # ------------------------------------------------------------
 UBOOT_DEFCONFIG ?= "s5p6818_${NEXELL_BOARD_NAME}_defconfig"
+UBOOT_BIN ?= 'u-boot.bin'
 
 # ------------------------------------------------------------
 # Nexell Kernel Configuration
 # ------------------------------------------------------------
 KBUILD_DEFCONFIG ?= "s5p6818_${NEXELL_BOARD_NAME}_defconfig"
+NEXELL_KERNEL_IMAGE_NAME ?= "Image"
+# boot partition size : 64MB
+NEXELL_BOOT_PARTITION_SIZE ?= "67108864"
 
 # ------------------------------------------------------------
 # Nexell optee Configuration, only s5p6818
@@ -51,3 +56,16 @@ NEXELL_EMMC_EXTRA_OPTS ?='-m 0x60200 -b ${NEXELL_DEVID_SDMMC} -p ${NEXELL_PORT_E
 NEXELL_SD_EXTRA_OPTS ?='-m 0x60200 -b ${NEXELL_DEVID_SDMMC} -p ${NEXELL_PORT_SD} -m 0x1E0200 -b ${NEXELL_DEVID_SDMMC} -p ${NEXELL_PORT_SD}'
 # NEXELL_USB_EXTRA_OPTS is defined in optee-build_git.bb file, because of it need to calculate size of image.
 #NEXELL_USB_EXTRA_OPTS ?='-u -m ${MEM_SECURE_LOAD_ADDR} -z ${FIP_SEC_SIZE} -m ${MEM_SECURE_LOAD_ADDR} -z ${FIP_NONSEC_SIZE}'
+
+# ------------------------------------------------------------
+# Nexell Environment Image Configuration
+# ------------------------------------------------------------
+NEXELL_ENV_PARTITION_SIZE ?= "16384"
+NEXELL_ENV_BIN ?= "params.bin"
+NEXELL_DEFAULT_ENVS ?= "default_envs.txt"
+
+# ------------------------------------------------------------
+# Nexell User Partition Configuration
+# ------------------------------------------------------------
+NEXELL_USER_PARTITION_SIZE ?= "6G"
+NEXELL_USER_PARTITION_SIZE_UBUNTU ?= "2G"

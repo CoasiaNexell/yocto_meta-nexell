@@ -19,23 +19,28 @@ do_install() {
     cp default_envs.txt default_envs.txt.orig
 }
 
-inherit deploy
 inherit nexell-mkimage
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
-    install -m 0644 ${S}/u-boot.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/${UBOOT_BIN} ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/default_envs.txt ${DEPLOY_DIR_IMAGE}
 
     if [ ${NEXELL_BOARD_SOCNAME} != "s5p6818" ]; then
-        ${NEXELL_SECURE_BINGEN} -c ${NEXELL_BOARD_SOCNAME} \
-            -t 3rdboot \
-            -i ${DEPLOY_DIR_IMAGE}/${UBOOT_BIN} \
-            -o ${DEPLOY_DIR_IMAGE}/${UBOOT_EMMCBOOT} \
-            -l ${UBOOT_EMMC_LOAD_ADDR} \
-            -e ${UBOOT_EMMC_JUMP_ADDR}
+        # make emmc boot image
+        # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr}
+        make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
+            ${S}/${UBOOT_BIN} \
+            ${DEPLOY_DIR_IMAGE}/${UBOOT_EMMCBOOT} \
+            ${UBOOT_EMMC_LOAD_ADDR} \
+            ${UBOOT_EMMC_JUMP_ADDR}
 
-        dd if=${DEPLOY_DIR_IMAGE}/${UBOOT_EMMCBOOT} of=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} seek=${UBBOT_FIP_NONSECURE_USB_BIN_OFFSET} bs=1
+        # make fip image
+        # 1:${in_img} |  2:${out_img} | 3:${seek_val} | 4:${bs_val}
+        make_fip_image ${DEPLOY_DIR_IMAGE}/${UBOOT_EMMCBOOT} \
+            ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} \
+            ${UBBOT_FIP_NONSECURE_USB_BIN_OFFSET} \
+            "1"
 
         # ===========================================
         # For usb download, create usb download image
@@ -52,10 +57,15 @@ do_deploy () {
         cp ${DEPLOY_DIR_IMAGE}/"nsih-usbdownload.bin" ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
         dd if=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} >> ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
 
-
-        #local temp=""
-        #temp+="abc"
+        # copy image to results path
+        copy_file_to_output ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
     fi
+
+    # make env image
+    # 1:${partition_size} |  2:${out_img} | 3:${envs_file}
+    make_environment_image ${NEXELL_ENV_PARTITION_SIZE} \
+            ${DEPLOY_DIR_IMAGE}/params.bin \
+            ${DEPLOY_DIR_IMAGE}/default_envs.txt
 }
 
 addtask deploy after do_install
