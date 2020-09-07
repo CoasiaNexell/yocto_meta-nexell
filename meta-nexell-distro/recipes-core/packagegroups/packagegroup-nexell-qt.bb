@@ -244,6 +244,8 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', '${QT5_9_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.10', '${QT5_10_ESSENTIAL_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.11', '${QT5_11_ESSENTIAL_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.14', '${QT5_14_ESSENTIAL_IMAGES}', '', d)}  \
     ${NEXELL_LIBS} \
     ${NEXELL_APPS} \
     ${UTILS_INSTALL} \

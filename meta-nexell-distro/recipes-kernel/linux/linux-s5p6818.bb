@@ -8,7 +8,7 @@ KCONFIG_MODE="--alldefconfig"
 #PATH_KERNEL_BUILD = "${@env_setup(d,"kernel-build-artifacts")}"
 
 DEPENDS += "optee-build"
-LINUX_VERSION_EXTENSION ?= "-s5p6818
+LINUX_VERSION_EXTENSION ?= "-s5p6818"
 
 #For optee-linuxdriver
 do_kernelpostprocess() {

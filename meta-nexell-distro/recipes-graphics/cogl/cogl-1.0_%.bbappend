@@ -3,7 +3,7 @@ NX_WAYLAND_EGL_2 = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali-wayland
 NX_WAYLAND_QT = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali-qt', 'nexell-drm-mali-qt', '', d)}"
 
 
-DEPENDS_append = " libffi
+DEPENDS_append = " libffi"
 
 RDEPENDS_libcogl-path += " ${NX_WAYLAND_EGL_1} \
                            ${NX_WAYLAND_EGL_2} \

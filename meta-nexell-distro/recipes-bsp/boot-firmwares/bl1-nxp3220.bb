@@ -7,6 +7,7 @@ inherit deploy
 inherit externalsrc
 inherit nexell-bingen
 
+BL1_SOURCE = "${BSP_VENDOR_DIR}/bl1/bl1-nxp3220-binary"
 EXTERNALSRC = "${BL1_SOURCE}"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""

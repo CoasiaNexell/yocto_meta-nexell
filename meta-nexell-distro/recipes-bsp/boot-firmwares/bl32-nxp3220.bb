@@ -7,6 +7,7 @@ inherit deploy
 inherit externalsrc
 inherit nexell-bingen
 
+BL32_SOURCE = "${BSP_VENDOR_DIR}/secure/bl32-nxp3220"
 EXTERNALSRC = "${BL32_SOURCE}"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""
