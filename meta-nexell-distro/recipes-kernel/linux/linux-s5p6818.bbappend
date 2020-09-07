@@ -6,7 +6,7 @@ EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 S = "${WORKDIR}/${EXTERNALSRC}"
 
 SRC_URI = "file://${EXTERNALSRC}"
-SRC_URI_append = " file://0001-Yocto-unaccess-changed.patch
+SRC_URI_append = " file://0001-Yocto-unaccess-changed.patch"
 
 do_patch() {
     :
