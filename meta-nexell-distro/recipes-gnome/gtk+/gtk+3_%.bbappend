@@ -72,3 +72,6 @@ RDEPENDS_gtk3-immodule-ti-er += \
                    ${NX_WAYLAND_EGL_2} \
                    ${NX_WAYLAND_QT} \
                  "
+
+
+REPLACES_${PN} = "libwayland-egl.so"

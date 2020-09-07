@@ -20,11 +20,8 @@ CFLAGS_remove_arm = "-g"
 do_install() {
 	install -d ${D}${sysconfdir}
 	install -d ${D}${bindir}
-	install -d ${D}${systemd_system_unitdir}/multi-user.target.wants
 
 	install -m 0755 ${S}${sysconfdir}/* ${D}${sysconfdir}/
-	install -m 0644 ${S}${systemd_system_unitdir}/nxupdate.service ${D}${systemd_system_unitdir}/
-	cp -aR ${S}${systemd_system_unitdir}/multi-user.target.wants/nxupdate.service ${D}${systemd_system_unitdir}/multi-user.target.wants/
 
 	install -m 0755 ${S}/nx_update ${D}${bindir}/
 }

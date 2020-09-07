@@ -10,12 +10,15 @@ S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
+BL1_TOOLCHAIN = "${BSP_VENDOR_DIR}/toolchain/arm-eabi-4.8/bin/arm-eabi-"
+
+
 EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
 
 do_compile () {
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} ${BL1_BUILD_CONFIG} QUICKBOOT=${QUICKBOOT_ENABLE} -j 1
+	oe_runmake CROSS_COMPILE=${BL1_TOOLCHAIN} ${BL1_BUILD_CONFIG} QUICKBOOT=${QUICKBOOT_ENABLE} -j 1
 }
 
 inherit deploy

@@ -17,7 +17,6 @@ BBLAYERS ?= " \
   ${BSPPATH}/layers/meta-openembedded/meta-oe \
   ${BSPPATH}/layers/meta-openembedded/meta-python \
   ${BSPPATH}/layers/meta-openembedded/meta-networking \
-  ${BSPPATH}/layers/openembedded-core/meta \
   "
 
 BBLAYERS_NON_REMOVABLE ?= " \

@@ -16,6 +16,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit autotools
 
 DEPENDS = "mesa libdrm nx-v4l2 nx-renderer nexell-drm-mali-qt"
+PRIVATE_LIBS  += "libMali.so"
 
 EXTRA_OECONF = " \
 	'--prefix=${STAGING_DIR_HOST} AR_FLAGS="crU"' \
@@ -52,3 +53,5 @@ do_install() {
 INSANE_SKIP_${PN} = "dev-so invalid-packageconfig file-rdeps"
 FILES_${PN} = "${libdir} ${includedir}"
 FILES_${PN}-dev = "${includedir}"
+
+REPLACES_${PN} = "libwayland-egl.so"

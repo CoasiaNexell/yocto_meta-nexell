@@ -17,18 +17,16 @@ S = "${WORKDIR}/git"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit pkgconfig
-DEPENDS = "gcc-linaro-4.9-2014.11-x86-64-arm-linux-gnueabihf \
-           gcc-linaro-4.9-2015.05-x86-64-aarch64-linux-gnu \
-           arm-trusted-firmware l-loader optee-os optee-client optee-test u-boot-nexell bl1-${OPTEE_BUILD_TARGET_SOCNAME}"
+DEPENDS = "arm-trusted-firmware l-loader optee-os optee-client optee-test u-boot-nexell bl1-${OPTEE_BUILD_TARGET_SOCNAME}"
 
-TOOLCHAIN_32 = "${RECIPE_SYSROOT}${datadir}/gcc-linaro-4.9-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-"
-TOOLCHAIN_32_BIN_PATH = "${RECIPE_SYSROOT}${datadir}/gcc-linaro-4.9-arm-linux-gnueabihf/bin"
-TOOLCHAIN_32_LIB_PATH = "${RECIPE_SYSROOT}${datadir}/gcc-linaro-4.9-arm-linux-gnueabihf/lib"
+TOOLCHAIN_32 = "${BSP_VENDOR_DIR}/toolchain/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-"
+TOOLCHAIN_32_BIN_PATH = "${BSP_VENDOR_DIR}/toolchain/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin"
+TOOLCHAIN_32_LIB_PATH = "${BSP_VENDOR_DIR}/toolchain/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/lib"
 TOOLCHAIN_32_LIB_FLAGS = "-L${TOOLCHAIN_32_LIB_PATH}"
 
-TOOLCHAIN_64 = "${RECIPE_SYSROOT}${datadir}/${TOOLCHAIN_AARCH64_PREBUILT}/bin/aarch64-linux-gnu-"
-TOOLCHAIN_64_BIN_PATH = "${RECIPE_SYSROOT}${datadir}/${TOOLCHAIN_AARCH64_PREBUILT}/bin"
-TOOLCHAIN_64_LIB_PATH = "${RECIPE_SYSROOT}${datadir}/${TOOLCHAIN_AARCH64_PREBUILT}/lib"
+TOOLCHAIN_64 = "${BSP_VENDOR_DIR}/toolchain/gcc-linaro-4.9-2015.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-"
+TOOLCHAIN_64_BIN_PATH = "${BSP_VENDOR_DIR}/toolchain/gcc-linaro-4.9-2015.05-x86_64_aarch64-linux-gnu/bin"
+TOOLCHAIN_64_LIB_PATH = "${BSP_VENDOR_DIR}/toolchain/gcc-linaro-4.9-2015.05-x86_64_aarch64-linux-gnu/lib"
 TOOLCHAIN_64_LIB_FLAGS = "-L${TOOLCHAIN_64_LIB_PATH}"
 
 PATH_OPTEE_BUILD ?= "${@env_setup(d,"optee-build")}"
@@ -106,8 +104,14 @@ do_make_symlink() {
     fi
 }
 
+TARGET_CPPFLAGS = ""
+TARGET_CFLAGS = ""
+TARGET_CXXFLAGS = ""
+TARGET_LDFLAGS = ""
+SECURITY_LDFLAGS_pn-optee-build = " "
+
 do_compile() {
-    export PATH=${TOOLCHAIN_32_BIN_PATH}:$PATH
+	export PATH=${TOOLCHAIN_32_BIN_PATH}:/usr/bin/:$PATH
     export LDFLAGS=""
 
     oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} QUICKBOOT=${QUICKBOOT_ENABLE} clean
@@ -121,27 +125,13 @@ do_compile() {
     oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-secure QUICKBOOT=${QUICKBOOT_ENABLE} -j8
     oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-nonsecure QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-optee-client QUICKBOOT=${QUICKBOOT_ENABLE}
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" QUICKBOOT=${QUICKBOOT_ENABLE} build-optee-test
     oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-singleimage QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 }
 
 do_install() {
-    mkdir -p ${D}/usr/bin
-    mkdir -p ${D}/usr/lib
-    rm -rf ${D}/lib/optee_armtz
-    mkdir -p ${D}/lib/optee_armtz
-
-    install -d ${D}/usr/bin
-    install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/bin/tee-supplicant ${D}/usr/bin
-#   install -m 0755 ${PATH_OPTEE_TEST}/out/xtest/xtest ${D}/usr/bin
-
-    install -d ${D}/usr/lib
-    install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/lib/* ${D}/usr/lib
-
-    cd ${PATH_OPTEE_TEST}/out/ta
-#   find . -name "*.ta" -exec cp {} ${D}/lib/optee_armtz \;
-#   chmod 444 ${D}/lib/optee_armtz/*.ta
+	rm -rf ${D}/lib/optee_armtz
+	mkdir -p ${D}/lib/optee_armtz
+	install -m 0755 ${S}/optee_build/result/fip-loader.bin ${D}/lib/optee_armtz
 }
 
 inherit deploy

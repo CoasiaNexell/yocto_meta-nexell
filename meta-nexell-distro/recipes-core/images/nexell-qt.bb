@@ -59,7 +59,6 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init support-nx-quickrearcam', 'nx-quickrearcam', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init support-svm-daemon', 'svm-daemon', '', d)} \
 	user-fonts \
-	nexell-bootanim \
 	nexell-nxreboot \
 	nexell-qt5-touchsetup \
 "

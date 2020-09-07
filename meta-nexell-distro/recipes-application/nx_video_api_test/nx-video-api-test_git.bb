@@ -13,9 +13,13 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS = "ffmpeg nx-v4l2 nx-video-api nx-drm-allocator libdrm-nx"
+DEPENDS = "ffmpeg nx-v4l2 nx-video-api nx-drm-allocator libdrm-nx libav"
 
 inherit autotools pkgconfig
+
+CFLAGS_append = "  -Wno-deprecated-declarations "
+CXXFLAGS_append = "  -Wno-deprecated-declarations "
+
 
 EXTRA_OECONF = " \
      '--prefix=${STAGING_DIR_HOST}' \

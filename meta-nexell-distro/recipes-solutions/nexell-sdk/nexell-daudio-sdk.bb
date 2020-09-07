@@ -29,7 +29,8 @@ DEPENDS = " \
 
 inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
 		   bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'nexell-sdk-qt5.8.x-env', \
-           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', 'nexell-sdk-qt5.9.x-env', '', d), d), d) }
+           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', 'nexell-sdk-qt5.9.x-env', \
+           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.14', 'nexell-sdk-qt5.14.x-env', '', d), d), d), d) }
 
 PV = "1.4.0"
 PR = "r0"
@@ -48,6 +49,8 @@ D_SDK_INC += " -I${STAGING_INCDIR}/libxml2 -I${STAGING_INCDIR}/drm"
 
 CFLAGS_prepend = "${D_SDK_INC}"
 CXXFLAGS_prepend = "${D_SDK_INC}"
+CFLAGS_append = "  -Wno-format-security "
+CXXFLAGS_append = "  -Wno-format-security "
 
 do_install() {
 	echo "Installing daudio SDK..."

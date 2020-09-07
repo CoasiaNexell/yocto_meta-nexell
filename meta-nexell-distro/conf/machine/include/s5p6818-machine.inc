@@ -10,7 +10,6 @@ NEXELL_KERNEL_VER ?= "4"
 NEXELL_DEV_PORTNUM ?= "2"
 NEXELL_SYSLOG ?= "n"
 
-QEMU_TARGETS_append = " aarch64"
 
 # 32bit machine = 32/arm, 64bit machine = 64/arm64
 ARM_ARCH = "arm64"
@@ -48,9 +47,8 @@ OPTEE_PLAT_DRAM_SIZE ?= "2048"
 OPTEE_PLAT_UART_BASE ?= "0xC00A3000"
 OPTEE_BUILD_TARGET_SOCNAME ?= "${NEXELL_BOARD_SOCNAME}"
 OPTEE_BUILD_TARGET_MACHINE ?= "${NEXELL_BOARD_SOCNAME}-${BSP_TARGET_BOARD_NAME}"
-IMAGE_INSTALL_append = " optee-linuxdriver optee-build"
+IMAGE_INSTALL_append = " optee-build"
 
-TOOLCHAIN_AARCH64_PREBUILT = "gcc-linaro-4.9-2015.05-x86_64_aarch64-linux-gnu"
 
 NEXELL_EMMC_EXTRA_OPTS ?='-m 0x60200 -b ${NEXELL_DEVID_SDMMC} -p ${NEXELL_PORT_EMMC} -m 0x1E0200 -b ${NEXELL_DEVID_SDMMC} -p ${NEXELL_PORT_EMMC}'
 NEXELL_SD_EXTRA_OPTS ?='-m 0x60200 -b ${NEXELL_DEVID_SDMMC} -p ${NEXELL_PORT_SD} -m 0x1E0200 -b ${NEXELL_DEVID_SDMMC} -p ${NEXELL_PORT_SD}'
@@ -67,5 +65,5 @@ NEXELL_DEFAULT_ENVS ?= "default_envs.txt"
 # ------------------------------------------------------------
 # Nexell User Partition Configuration
 # ------------------------------------------------------------
-NEXELL_USER_PARTITION_SIZE ?= "6G"
+NEXELL_USER_PARTITION_SIZE ?= "4G"
 NEXELL_USER_PARTITION_SIZE_UBUNTU ?= "2G"

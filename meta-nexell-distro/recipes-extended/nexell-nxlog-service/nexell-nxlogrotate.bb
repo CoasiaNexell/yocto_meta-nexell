@@ -13,6 +13,9 @@ SRC_URI = " \
 	file://nxlogrotate \
 "
 
+CFLAGS_append_arm = " -Wno-format-security"
+CXXFLAGS_append_arm = " -Wno-format-security"
+
 S = "${WORKDIR}/nxlogrotate"
 
 CFLAGS_remove_arm = "-g"
@@ -21,9 +24,6 @@ CXXFLAGS_remove_arm = "-g"
 do_install() {
 	install -d ${D}${systemd_system_unitdir}/multi-user.target.wants
 	install -d ${D}${sbindir}
-
-	install -m 0644 ${S}${systemd_system_unitdir}/nxlogrotate.service ${D}${systemd_system_unitdir}/
-	cp -aR ${S}${systemd_system_unitdir}/multi-user.target.wants/nxlogrotate.service ${D}${systemd_system_unitdir}/multi-user.target.wants/
 
 	install -m 0755 ${S}/nxlogrotate ${D}${sbindir}/
 }

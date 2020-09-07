@@ -19,6 +19,10 @@ S = "${WORKDIR}"
 PV = "NEXELL"
 PR = "0.1"
 
+CFLAGS_append_arm = " -Wno-format-security"
+CXXFLAGS_append_arm = " -Wno-format-security"
+
+
 QT_BOOTLAUNCHER_PLATFORM = \
 	"${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'eglfs', \
 	    bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-linuxfb', 'linuxfb', \

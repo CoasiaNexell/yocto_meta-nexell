@@ -22,7 +22,6 @@ GSTREAMER10 = " \
 
 QT_WAYLAND = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland qtwayland-plugins', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland qtwayland-examples', '', d)} \
 "
 
 QT5_ESSENTIAL_IMAGES = " \
@@ -128,6 +127,51 @@ QT5_10_ESSENTIAL_IMAGES = " \
     qtvirtualkeyboard-qmlplugins \
     liberation-fonts \
 "
+
+QT5_11_ESSENTIAL_IMAGES = " \
+    qtscript \
+    liberation-fonts \
+    qtbase-examples \
+    qtsystems-examples \
+    qtmultimedia-examples \
+    qtscript-examples \
+    qtquickcontrols-examples \
+    qt3d-examples \
+    cinematicexperience \
+       qtdeclarative \
+       qtdeclarative-qmlplugins \
+       qtdeclarative-tools \
+       qtdeclarative-examples \
+    qtlocation-plugins \
+    qtlocation-qmlplugins \
+    qtmultimedia-plugins \
+    qtmultimedia-qmlplugins \
+    qt3d-qmlplugins \
+    qtwebkit-qmlplugins \
+    qtquickcontrols-qmlplugins \
+    qtquickcontrols2-qmlplugins \
+    qtgraphicaleffects-qmlplugins \
+"
+
+QT5_14_ESSENTIAL_IMAGES = " \
+    qtscript \
+    liberation-fonts \
+    qtbase-examples \
+    cinematicexperience \
+       qtdeclarative \
+       qtdeclarative-qmlplugins \
+       qtdeclarative-tools \
+    qtlocation-plugins \
+    qtlocation-qmlplugins \
+    qtmultimedia-plugins \
+    qtmultimedia-qmlplugins \
+    qt3d-qmlplugins \
+    qtwebkit-qmlplugins \
+    qtquickcontrols-qmlplugins \
+    qtquickcontrols2-qmlplugins \
+    qtgraphicaleffects-qmlplugins \
+"
+
 
 QT_ALSA_LIB_IMAGE_INSTALL = " \
 "

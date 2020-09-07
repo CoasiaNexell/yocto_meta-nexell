@@ -18,7 +18,7 @@ SRC_URI = " \
 S = "${WORKDIR}/bootanimation"
 
 CFLAGS_remove_arm = "-O2 -g"
-CFLAGS_append = " -O3 -fPIC"
+CFLAGS_append = " -O3 -fPIC -Wno-format-security"
 CFLAGS_prepend = "-I${STAGING_INCDIR}"
 LDFLAGS_append = " -static"
 LDFLAGS_prepend = "-L${STAGING_LIBDIR} "

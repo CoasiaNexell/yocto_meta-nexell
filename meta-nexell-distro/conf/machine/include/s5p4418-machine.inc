@@ -90,5 +90,5 @@ NEXELL_DEFAULT_ENVS ?= "default_envs.txt"
 # ------------------------------------------------------------
 # Nexell User Partition Configuration
 # ------------------------------------------------------------
-NEXELL_USER_PARTITION_SIZE ?= "6G"
+NEXELL_USER_PARTITION_SIZE ?= "4G"
 NEXELL_USER_PARTITION_SIZE_UBUNTU ?= "2G"
