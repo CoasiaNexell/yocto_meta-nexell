@@ -5,6 +5,8 @@ KCONFIG_MODE="--alldefconfig"
 ARM_ARCH = "arm"
 DEPENDS += "u-boot-nexell bl1-s5p4418 bl2-s5p4418 dispatcher-s5p4418"
 
+LINUX_VERSION_EXTENSION ?= "-s5p4418"
+
 do_kernelpostprocess() {
     echo "${KBUILD_OUTPUT}" > ${BASE_WORKDIR}/KBUILD_OUTPUT_PATH.txt
     echo "${KBUILD_DEFCONFIG}" > ${BASE_WORKDIR}/KBUILD_DEFCONFIG.txt
