@@ -62,8 +62,4 @@ NEXELL_ENV_PARTITION_SIZE ?= "16384"
 NEXELL_ENV_BIN ?= "params.bin"
 NEXELL_DEFAULT_ENVS ?= "default_envs.txt"
 
-# ------------------------------------------------------------
-# Nexell User Partition Configuration
-# ------------------------------------------------------------
-NEXELL_USER_PARTITION_SIZE ?= "4G"
-NEXELL_USER_PARTITION_SIZE_UBUNTU ?= "2G"
+
