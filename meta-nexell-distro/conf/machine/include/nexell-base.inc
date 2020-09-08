@@ -41,16 +41,4 @@ NEXELL_PORT_SD ?= "0"
 BSP_OUTPUT_DIR_NAME ?= "result-${BSP_TARGET_MACHINE}-${BSP_TARGET_IMAGE_TYPE}"
 BSP_OUTPUT_DIR_PATH ?= "${BSP_ROOT_DIR}/out/${BSP_OUTPUT_DIR_NAME}"
 
-# for ubuntu
-NEXELL_RELEASE_SERVER_ADDRESS ?= "http://192.168.1.25:8070"
-UBUNTU_CONSOLE_VERSION_TRUSTY ?= "ubuntu-rootfs-console-trusty.tar.gz"
-UBUNTU_CONSOLE_VERSION_XENIAL ?= "ubuntu-rootfs-console-xenial.tar.gz"
-UBUNTU_DESKTOP_VERSION_TRUSTY ?= "ubuntu-rootfs-desktop.tar.gz"
-UBUNTU_DESKTOP_LXDE_VERSION ?= "ubuntu-rootfs-desktop-lxde.tar.gz"
-UBUNTU_ROOTFS="${UBUNTU_CONSOLE_VERSION_TRUSTY}"
 
-UBUNTU_KSELFTESTS ?= "kselftests.tar.gz"
-UBUNTU_NX_TESTSUITE ?= "testsuite.tar.gz"
-UBUNTU_NX_LIBS ?= "nxlibs.tar.gz"
-
-UBUNTU_IMAGE_LOCATION="/${BSP_TARGET_SOCNAME}/ubuntu/rootfs/"
