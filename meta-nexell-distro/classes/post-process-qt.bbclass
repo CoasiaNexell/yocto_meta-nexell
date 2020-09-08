@@ -55,7 +55,8 @@ inherit nexell-mkimage
 image_postprocess_qt_function() {
 
 	make_sparse_rootfs_img "qt" \
-			${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.ext4 \
+			${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.tar.bz2 \
+			${NEXELL_ROOT_PARTITION_SIZE} \
 			${NEXELL_USER_PARTITION_SIZE} \
 			${DEPLOY_DIR_IMAGE}
 

@@ -635,28 +635,27 @@ make_sparse_rootfs_img() {
     echo "\033[40;33m make_sparse_rootfs_img \033[0m"
     echo "\033[40;33m ------------------------------------------------- \033[0m"
     echo "\033[40;33m img_type : '$1' \033[0m"
-    echo "\033[40;33m in_ext4_img : '$2' \033[0m"
-    echo "\033[40;33m partition_size : '$3' \033[0m"
-    echo "\033[40;33m dst_path : '$4' \033[0m"
+    echo "\033[40;33m in_root_img : '$2' \033[0m"
+    echo "\033[40;33m root_partition_size : '$3' \033[0m"
+    echo "\033[40;33m user_partition_size : '$4' \033[0m"
+    echo "\033[40;33m dst_path : '$5' \033[0m"
     echo "\033[40;33m ================================================= \033[0m"
 
-    local img_type=$1 in_ext4_img=$2 partition_size=$3 dst_path=$4
+    local img_type=$1 in_root_img=$2 root_partition_size=$3 user_partition_size=$4 dst_path=$5
 
-    if [ ${img_type} = "ubuntu" ]; then
-        ${NEXELL_TOOL_MKROOTFS_IMAGE} \
-                ${dst_path} \
-                ${in_ext4_img} \
-                4096 \
-                ${dst_path}/extra-rootfs-support
-    fi
+    #${NEXELL_TOOL_EXT2SIMG} ${in_ext4_img} ${dst_path}/rootfs.img
 
-    ${NEXELL_TOOL_EXT2SIMG} ${in_ext4_img} ${dst_path}/rootfs.img
+	rm -rf ${dst_path}/root
+	mkdir -p ${dst_path}/root
+	tar xjf ${in_root_img} -C ${dst_path}/root
+
+	${NEXELL_TOOL_MAKE_EXT4FS} -s -l ${root_partition_size}  ${dst_path}/rootfs.img ${dst_path}/root
 
     rm -rf ${dst_path}/userdata
     mkdir -p ${dst_path}/userdata
 
-    ${NEXELL_TOOL_MAKE_EXT4FS} -s -l ${partition_size} -b 4K -a user ${dst_path}/userdata.img ${dst_path}/userdata
-    echo "userdata partition size : ${partition_size}byte"
+    ${NEXELL_TOOL_MAKE_EXT4FS} -s -l ${user_partition_size} -b 4K -a user ${dst_path}/userdata.img ${dst_path}/userdata
+    echo "userdata partition size : ${user_partition_size}byte"
 
     if [ ${BSP_TARGET_BOARD_NAME} = "convergence-daudio" ]; then
         rm -rf ${dst_path}/svmdata
