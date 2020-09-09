@@ -67,5 +67,6 @@ FILES_${PN} += "${bindir} ${libdir} ${libdir}/nexell ${includedir}/KHR"
 
 RREPLACES_${PN} = "libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm libgles2-mesa libgles1-mesa libgles2-mesa"
 RPROVIDES_${PN} = "libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm libgles2-mesa libgles1-mesa libgles2-mesa "
+RPROVIDES_${PN} += " libGLESv2.so libEGL.so libgbm.so libwayland-egl.so libGLESv1_CM.so"
 RPROVIDES_${PN} += " libGLESv1_CM.so()(64bit) libgbm.so()(64bit) libGLESv2.so()(64bit) libgbm.so()(64bit) libOpenCL.so()(64bit) libwayland-egl.so()(64bit)"
 RCONFLICTS_${PN} = "libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm libgles2-mesa libgles1-mesa libgles2-mesa"
