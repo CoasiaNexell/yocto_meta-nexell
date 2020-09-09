@@ -22,6 +22,7 @@ do_install() {
 inherit nexell-mkimage
 
 do_deploy () {
+    export PATH=$PATH:/usr/bin
     install -d ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/${UBOOT_BIN} ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/default_envs.txt ${DEPLOY_DIR_IMAGE}
