@@ -5,8 +5,12 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://README;md5=754608f69d5791d96a0a96281ae48814"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
-SRC_URI = "git://github.com/CoasiaNexell/bl1_s5p6818;protocol=https;branch=nexell"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/bl1/bl1-s5p6818"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -18,12 +22,20 @@ EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
 
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
+
 do_compile () {
 	oe_runmake CROSS_COMPILE=${BL1_TOOLCHAIN} ${BL1_BUILD_CONFIG} ${SECURE-BL1} -j 1
 }
 
 inherit deploy
 inherit nexell-mkimage
+
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
