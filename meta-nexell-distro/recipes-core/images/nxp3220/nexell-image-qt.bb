@@ -53,7 +53,7 @@ MULTIMEDIA_INSTALL = " \
 
 PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-tslib \
-    packagegroup-nxp3220-qt5.6 \
+    packagegroup-nxp3220-qt5.14 \
     packagegroup-nxp3220-gstreamer \
     packagegroup-nxp3220-libs \
     packagegroup-nxp3220-apps \

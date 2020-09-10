@@ -19,6 +19,8 @@ SECURE_BL32_IVECTOR = "${WORKDIR}/secure-bl1-ivector.txt"
 EXTRA_OEMAKE = "CROSS_COMPILE=${TARGET_PREFIX}"
 PARALLEL_MAKE = "-j 1"
 
+SSTATE_DUPWHITELIST = "/"
+
 do_deploy () {
         install -d ${DEPLOYDIR}
         install -m 0644 ${S}/out/${BL32_BIN} ${DEPLOYDIR}

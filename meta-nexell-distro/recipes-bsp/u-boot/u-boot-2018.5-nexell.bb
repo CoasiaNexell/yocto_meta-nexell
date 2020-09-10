@@ -25,6 +25,8 @@ EXTERNALSRC_SYMLINKS = ""
 KBUILD_OUTPUT = "${B}"
 OE_TERMINAL_EXPORTS += "KBUILD_OUTPUT"
 
+SSTATE_DUPWHITELIST = "/"
+
 do_configure_prepend () {
     if [ "${EXTERNALSRC}" != "${EXTERNALSRC_BUILD}" ]; then
 	oe_runmake -C ${S} distclean
