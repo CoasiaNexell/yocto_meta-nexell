@@ -16,6 +16,8 @@ SRC_URI = " file://secure-bl1-ivector.txt "
 
 SECURE_BL1_IVECTOR = "${WORKDIR}/secure-bl1-ivector.txt"
 
+SSTATE_DUPWHITELIST = "/"
+
 do_install() {
 	install -d ${D}/${datadir}/${PN}
 	install -m 0644 ${S}/${BL1_BIN} ${D}/${datadir}/${PN}

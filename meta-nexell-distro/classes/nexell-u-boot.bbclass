@@ -1,6 +1,6 @@
 # uboot append commands
 
-require recipes-bsp/u-boot/u-boot.inc
+require recipes-bsp/u-boot/u-boot-nxp3220.inc
 
 # skip clean build
 do_configure () {
