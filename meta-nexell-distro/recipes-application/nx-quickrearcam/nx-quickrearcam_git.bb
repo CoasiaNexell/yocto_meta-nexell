@@ -11,7 +11,11 @@ PR = "r0"
 
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_apps_NxQuickRearCam;protocol=https;branch=master"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/apps/nx_quickrearcam"
+
+SRC_URI = "file://${SRC_PATH}"
 
 DEPENDS = "nx-drm-allocator nx-v4l2 nx-scaler nx-video-api libdrm"
 
@@ -20,6 +24,13 @@ S = "${WORKDIR}/git"
 inherit autotools pkgconfig gettext
 
 TARGET_CC_ARCH += "${LDFLAGS}"
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_compile() {
  	cd ${S}

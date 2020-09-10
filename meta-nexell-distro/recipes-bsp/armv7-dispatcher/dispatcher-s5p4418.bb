@@ -4,6 +4,13 @@ EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
 
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
+
 do_compile () {
     cd ${S}
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} ${DISPATCHER_BUILD_CONFIG} QUICKBOOT=${QUICKBOOT_ENABLE} -j 1

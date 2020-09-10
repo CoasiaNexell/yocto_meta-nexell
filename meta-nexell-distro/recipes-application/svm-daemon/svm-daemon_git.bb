@@ -11,11 +11,22 @@ PR = "r0"
 
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/solution_svm_daemon;protocol=https;branch=master"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/apps/svm_daemon"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
 inherit autotools pkgconfig gettext
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_compile() {
 	:

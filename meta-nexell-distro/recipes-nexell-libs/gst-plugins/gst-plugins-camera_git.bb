@@ -6,7 +6,11 @@ LIC_FILES_CHKSUM = "file://Makefile.am;md5=ce23c541b32b443603093d2be5f59a24"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_library_gst-plugin-camera;protocol=https;branch=nexell"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/library/gst-plugins-camera"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -34,6 +38,13 @@ EXTRA_OEMAKE = " \
                -I${STAGING_LIBDIR}/gstreamer-${GST_API_VERSION}/include' \
     'libgstnxcamerasrc_la_LDFLAGS = -L${STAGING_LIBDIR} -L${STAGING_LIBDIR}/${GST_PLUGIN_PATH} -L${EXTRAPATH_LIB}' \
     "
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
     cd ${S}

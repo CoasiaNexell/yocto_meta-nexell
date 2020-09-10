@@ -6,7 +6,11 @@ LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_library_nx-gst-meta;protocol=https;branch=nexell"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/library/nx-gst-meta"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -20,6 +24,13 @@ inherit autotools pkgconfig
 EXTRA_OEMAKE += " \
      'libnxgstmeta_la_CFLAGS=$(GST_CFLAGS) -I${STAGING_INCDIR}' \
 "
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
     cd ${S}

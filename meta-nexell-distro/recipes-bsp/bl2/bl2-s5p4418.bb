@@ -4,7 +4,11 @@ LIC_FILES_CHKSUM = "file://pyrope_bl2.lds;md5=c81ae199c8ac9bc25a4389a9c6b387b6"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/bl2_s5p4418;protocol=https;branch=nexell"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/secure/bl2-s5p4418"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -15,6 +19,13 @@ TOOLCHAIN_ARCH32_EABI = "${RECIPE_SYSROOT}${datadir}/arm-eabi-4.8-toolchain/bin/
 EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_compile () {
     cd ${S}

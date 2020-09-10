@@ -4,7 +4,11 @@ LIC_FILES_CHKSUM = "file://README;md5=c48cff868868eb40f73e510f7bae7710"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/bl1_s5p4418;protocol=https;branch=nexell"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/bl1/bl1-s5p4418"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -16,6 +20,13 @@ BL1_TOOLCHAIN = "${BSP_VENDOR_DIR}/toolchain/arm-eabi-4.8/bin/arm-eabi-"
 EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_compile () {
 	oe_runmake CROSS_COMPILE=${BL1_TOOLCHAIN} ${BL1_BUILD_CONFIG} QUICKBOOT=${QUICKBOOT_ENABLE} -j 1

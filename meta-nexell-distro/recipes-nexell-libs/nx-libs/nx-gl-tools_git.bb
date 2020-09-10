@@ -7,7 +7,11 @@ LICENSE = "CLOSED"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_library_nx-gl-tools.git;protocol=https;branch=master"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/library/nx-gl-tools"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -28,6 +32,13 @@ EXTRA_OEMAKE += " \
 "
 
 LDFLAGS_append = " -lEGL -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux/${ARCH_TYPE_NUM} -lnxgpusurf"
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
 	cd ${S}

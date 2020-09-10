@@ -32,11 +32,24 @@ PV = "1.0.0"
 PR = "r0"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-S = "${WORKDIR}/sdk"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/solutions/allgo-connectivity-sdk"
+
+SRC_URI = "file://${SRC_PATH}"
+
+S = "${WORKDIR}/git"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
 export TARGET_MACHINE = "${MACHINE}"
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_install() {
 	echo "Installing allgo connectivity SDK..."

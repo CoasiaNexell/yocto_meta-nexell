@@ -3,7 +3,12 @@ DESCRIPTION = "libdirectfb nexell"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_library_libdirectfb-nexell;protocol=https;branch=nexell"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/library/libdirectfb-nexell"
+
+SRC_URI = "file://${SRC_PATH}"
+
 SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
@@ -30,6 +35,13 @@ EXTRA_OEMAKE = " \
     'CFLAGS+=-I${STAGING_KERNEL_DIR}/include/uapi/drm' \
     'MODULEDIR=${GFXDRIVERS_MODULEDIR}' \
 "
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 # Fix build error when EXTERNALSRC equal EXTERNALSRC_BUILD
 # Error : source directory already configured

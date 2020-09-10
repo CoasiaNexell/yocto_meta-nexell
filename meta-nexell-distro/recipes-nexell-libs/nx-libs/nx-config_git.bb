@@ -5,7 +5,11 @@ LICENSE = "CLOSED"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_library_nx_config.git;protocol=https;branch=master"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/library/nx-config"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -27,6 +31,13 @@ EXTRA_OEMAKE += " \
 "
 
 LDFLAGS_append += " -lxml2"
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
 	cd ${S}

@@ -4,9 +4,11 @@ SECTION = "devel"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = " \
-	git://github.com/NexellCorp/linux_sdk_displayaudio.git \
-"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/solutions/displayaudio-sdk"
+
+SRC_URI = "file://${SRC_PATH}"
 
 DEPENDS = " \
 	libxml2 \
@@ -36,7 +38,7 @@ PV = "1.4.0"
 PR = "r0"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-S = "${WORKDIR}/sdk"
+S = "${WORKDIR}/git"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
@@ -51,6 +53,13 @@ CFLAGS_prepend = "${D_SDK_INC}"
 CXXFLAGS_prepend = "${D_SDK_INC}"
 CFLAGS_append = "  -Wno-format-security "
 CXXFLAGS_append = "  -Wno-format-security "
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_install() {
 	echo "Installing daudio SDK..."

@@ -3,10 +3,13 @@ DESCRIPTION = "nx_vip_test"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
-SRC_URI = " \
-	file://nx_vip_test \
-	"
-S = "${WORKDIR}/nx_vip_test"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/apps/nx_vip_test"
+
+SRC_URI = "file://${SRC_PATH}"
+
+S = "${WORKDIR}/git"
 
 PV = "NEXELL"
 PR = "0.1"
@@ -20,6 +23,13 @@ inherit autotools pkgconfig
 EXTRA_OECONF = " \
 	'--prefix=${STAGING_DIR_HOST}' \
 	"
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
 	cd ${S}

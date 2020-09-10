@@ -10,7 +10,11 @@ LIC_FILES_CHKSUM = "file://Makefile;md5=d5743c4d7fa2b466a875bac2c6176aa1"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_apps_testsuite;protocol=https;branch=nexell"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/apps/testsuite"
+
+SRC_URI = "file://${SRC_PATH}"
 
 DEPENDS = "nx-drm-allocator nx-renderer nx-scaler nx-gst-meta nx-v4l2 libdrm-nx libv4l jpeg"
 
@@ -27,6 +31,13 @@ EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
     "
 TARGET_CC_ARCH += "${LDFLAGS}"
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
     #video_api_test

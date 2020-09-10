@@ -6,7 +6,11 @@ LIC_FILES_CHKSUM = "file://Makefile.am;md5=d4e4d3ffd18ad8cf7d8b31e70366a8ca"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_library_gst-plugins-scaler;protocol=https;branch=nexell"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_VENDOR_DIR}/library/gst-plugins-scaler"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -34,6 +38,13 @@ EXTRA_OEMAKE = " \
                -I${STAGING_LIBDIR}/gstreamer-${GST_API_VERSION}/include' \
     'libgstnxscaler_la_LDFLAGS = -L${STAGING_LIBDIR} -L${EXTRAPATH_LIB}' \
     "
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
     cd ${S}
