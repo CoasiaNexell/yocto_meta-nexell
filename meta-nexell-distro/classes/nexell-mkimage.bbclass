@@ -1,5 +1,33 @@
 inherit nexell-secure
 
+# to copy image
+# =================================================
+# for all
+# =================================================
+make_output_dir() {
+    if [ ! -d ${BSP_OUTPUT_DIR_PATH} ];then
+        if [ ${BSP_TARGET_SOCNAME} = "nxp3220" ];then
+            mkdir -p ${BSP_OUTPUT_DIR_PATH}
+            chmod 777 ${BSP_OUTPUT_DIR_PATH}
+        else
+            mkdir -p ${BSP_OUTPUT_DIR_PATH}/tools
+            chmod 777 ${BSP_OUTPUT_DIR_PATH}
+            chmod 777 ${BSP_OUTPUT_DIR_PATH}/tools
+        fi
+    fi
+}
+
+copy_file_to_output() {
+	local in_file=$1
+
+	make_output_dir
+
+	#if [ -f ${in_file} ]; then
+	if ls ${in_file} 1> /dev/null 2>&1; then
+		cp -af ${in_file} ${BSP_OUTPUT_DIR_PATH}
+	fi
+}
+
 # to make images
 # =================================================
 # for nxp3220
@@ -15,6 +43,9 @@ make_ext4_image() {
 
 	# change to sparse image "-s" optioin
 	make_ext4fs -L ${label} -s -b 4k -l ${size} ${output} ${dir}
+
+	# copy image to output dir
+	copy_file_to_output ${output}
 }
 
 PART_BOOT_LABEL ?= "boot"
@@ -99,6 +130,9 @@ make_rootfs_image() {
 
 		# change to sparse image
 		ext2simg ${root_name}.ext4 ${root_img}
+
+		# copy image to output dir
+		copy_file_to_output ${root_img}
 	fi
 }
 
@@ -353,24 +387,6 @@ make_ubi_image() {
 # =================================================
 # for s5p4418/s5p6818
 # =================================================
-make_output_dir() {
-    if [ ! -d ${BSP_OUTPUT_DIR_PATH} ];then
-        mkdir -p ${BSP_OUTPUT_DIR_PATH}/tools
-        chmod 777 ${BSP_OUTPUT_DIR_PATH}
-		chmod 777 ${BSP_OUTPUT_DIR_PATH}/tools
-    fi
-}
-
-copy_file_to_output() {
-	local in_file=$1
-
-	make_output_dir
-
-	if [ -f ${in_file} ]; then
-        cp -af ${in_file} ${BSP_OUTPUT_DIR_PATH}
-    fi
-}
-
 copy_board_partmap() {
     local out_dir=$1
     if [ ${BSP_TARGET_IMAGE_TYPE} = "ubuntu" ]; then
@@ -457,26 +473,43 @@ copy_fusing_tools() {
     echo "\033[40;33m ================================================= \033[0m"
 
     local out_dir=$1
-    # step1 : copy scripts & tools
-    #if [ ! -d ${out_dir}/tools ];then
-        # flashing tool copy
-        mkdir -p ${out_dir}/tools
-
-        if [ ${BSP_TARGET_SOCNAME} = "nxp3220" ];then
-            echo "to do"
-        else
-            cp -af ${NEXELL_FUSING_TOOLS_PATH}/standalone-fastboot-download.sh ${out_dir}/tools
-            cp -af ${NEXELL_FUSING_TOOLS_PATH}/standalone-uboot-by-usb-download.sh ${out_dir}/tools
-            cp -af ${NEXELL_FUSING_TOOLS_PATH}/usb-downloader ${out_dir}/tools
-        fi
-    #fi
-
-    # step2 : copy bl1 image & partition info files
-    copy_board_partmap ${out_dir}/tools
 
     if [ ${BSP_TARGET_SOCNAME} = "nxp3220" ];then
-        echo "to do"
+        # step1 : copy scripts
+        cp -af ${NEXELL_TOOLS_SCRIPTS_PATH}/partmap_*.sh ${out_dir}
+        cp -af ${NEXELL_TOOLS_SCRIPTS_PATH}/usb-down.sh ${out_dir}
+        cp -af ${NEXELL_TOOLS_SCRIPTS_PATH}/configs/udown.bootloader*.sh ${out_dir}
+
+        # step2 : copy bin
+        cp -af ${NEXELL_TOOLS_BIN_PATH}/linux-usbdownloader ${out_dir}
+        cp -af ${NEXELL_TOOLS_BIN_PATH}/simg2dev ${out_dir}
+
+        # step3 : copy files
+        if ls ${NEXELL_TOOLS_FILES_PATH}/partmap_*.txt 1> /dev/null 2>&1; then
+            cp -af ${NEXELL_TOOLS_FILES_PATH}/partmap_*.txt ${out_dir}
+        fi
+        if ls ${NEXELL_TOOLS_FILES_PATH}/linux-partmap_*.txt 1> /dev/null 2>&1; then
+            cp -af ${NEXELL_TOOLS_FILES_PATH}/linux-partmap_*.txt ${out_dir}
+        fi
+        if ls ${NEXELL_TOOLS_FILES_PATH}/secure-bl*.txt 1> /dev/null 2>&1; then
+            cp -af ${NEXELL_TOOLS_FILES_PATH}/secure-bl*.txt ${out_dir}
+        fi
+        if ls ${NEXELL_TOOLS_FILES_PATH}/secure-jtag-hash.txt 1> /dev/null 2>&1; then
+            cp -af ${NEXELL_TOOLS_FILES_PATH}/secure-jtag-hash.txt ${out_dir}
+        fi
+        if ls ${NEXELL_TOOLS_FILES_PATH}/efuse_cfg-*.txt 1> /dev/null 2>&1; then
+            cp -af ${NEXELL_TOOLS_FILES_PATH}/efuse_cfg-*.txt ${out_dir}
+        fi
     else
+        # step1 : copy scripts & tools
+        mkdir -p ${out_dir}/tools
+        cp -af ${NEXELL_FUSING_TOOLS_PATH}/standalone-fastboot-download.sh ${out_dir}/tools
+        cp -af ${NEXELL_FUSING_TOOLS_PATH}/standalone-uboot-by-usb-download.sh ${out_dir}/tools
+        cp -af ${NEXELL_FUSING_TOOLS_PATH}/usb-downloader ${out_dir}/tools
+
+        # step2 : copy partition info & images
+        copy_board_partmap ${out_dir}/tools
+
         if ls ${out_dir}/bl1-*.bin 1> /dev/null 2>&1; then
             cp -af ${out_dir}/bl1-*.bin ${out_dir}/tools
         else
@@ -488,9 +521,9 @@ copy_fusing_tools() {
         if [ -f ${out_dir}/partition.txt ]; then
             cp -af ${out_dir}/partition.txt ${out_dir}/tools
         fi
-    fi
 
-    touch ${out_dir}/YOCTO.${BSP_OUTPUT_DIR_NAME}.INFO.DoNotChange
+        touch ${out_dir}/YOCTO.${BSP_OUTPUT_DIR_NAME}.INFO.DoNotChange
+    fi
 }
 
 make_2ndboot_image() {

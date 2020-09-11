@@ -41,3 +41,10 @@ addtask misc_image after do_image_complete before do_build
 
 # always run task
 do_misc_image[nostamp] = "1"
+
+image_postprocess_copy_results_function() {
+
+	copy_fusing_tools ${BSP_OUTPUT_DIR_PATH}
+}
+
+IMAGE_POSTPROCESS_COMMAND += "image_postprocess_copy_results_function;"

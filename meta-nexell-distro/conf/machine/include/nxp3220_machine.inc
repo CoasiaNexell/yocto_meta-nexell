@@ -49,3 +49,7 @@ BL32_LOADADDR ?= "0x5F000000"
 BL32_BIN ?= "bl32.bin"
 BL32_SOURCE ?= "${BSP_VENDOR_DIR}/secure/bl32-nxp3220"
 BL32_NSIH ?= "${BL32_SOURCE}/reference-nsih/nsih_general.txt"
+
+# for output image
+BSP_OUTPUT_DIR_NAME ?= "result-${BSP_TARGET_MACHINE}-${BSP_TARGET_IMAGE_TYPE}"
+BSP_OUTPUT_DIR_PATH ?= "${BSP_ROOT_DIR}/out/${BSP_OUTPUT_DIR_NAME}"

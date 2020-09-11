@@ -18,6 +18,8 @@ PARALLEL_MAKE = "-j 1"
 
 SSTATE_DUPWHITELIST = "/"
 
+inherit nexell-mkimage
+
 do_deploy () {
 	install -d ${DEPLOYDIR}
 	install -m 0644 ${S}/out/${BL2_BIN} ${DEPLOYDIR}
@@ -33,6 +35,9 @@ do_deploy () {
 
 	cp ${DEPLOYDIR}/${BL2_BIN}.raw ${DEPLOYDIR}/bl2.bin.raw;
 
+	# copy image to output dir
+	copy_file_to_output ${DEPLOYDIR}/bl2.bin.raw
+
 	if ${@bb.utils.contains('BINARY_FEATURES','nand.ecc','true','false',d)}; then
 		if [ -z ${FLASH_PAGE_SIZE} ]; then
 			echo "ERROR: NOT Defined 'FLASH_PAGE_SIZE'"
@@ -43,6 +48,9 @@ do_deploy () {
 		do_bingen_ecc ${DEPLOYDIR}/${BL2_BIN}.raw ${FLASH_PAGE_SIZE}
 
 		cp ${DEPLOYDIR}/${BL2_BIN}.raw.ecc ${DEPLOYDIR}/bl2.bin.raw.ecc;
+
+		# copy image to output dir
+		copy_file_to_output ${DEPLOYDIR}/bl2.bin.raw.ecc
 	fi
 }
 

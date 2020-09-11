@@ -57,6 +57,9 @@ do_deploy () {
 		# (Binary + NSIH) + ECC : $BIN.raw.ecc
 		do_bingen_ecc ${DEPLOYDIR}/${BL1_BIN}.raw ${FLASH_PAGE_SIZE}
 	fi
+
+	# copy files to output dir
+	copy_file_to_output ${DEPLOYDIR}/secure-bootkey.pem.pub.hash.txt
 }
 
 addtask deploy before do_build after do_compile

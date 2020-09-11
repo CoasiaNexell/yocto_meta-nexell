@@ -27,6 +27,8 @@ OE_TERMINAL_EXPORTS += "KBUILD_OUTPUT"
 
 SSTATE_DUPWHITELIST = "/"
 
+inherit nexell-mkimage
+
 do_configure_prepend () {
     if [ "${EXTERNALSRC}" != "${EXTERNALSRC_BUILD}" ]; then
 	oe_runmake -C ${S} distclean
@@ -101,6 +103,12 @@ do_deploy_append () {
 	if [ -f ${B}/params_env.bin ]; then
 		install -m 0644 ${B}/params_env.bin ${DEPLOYDIR}
 	fi
+
+	# copy files to output dir
+	copy_file_to_output ${DEPLOYDIR}/${UBOOT_BIN}
+	copy_file_to_output ${DEPLOYDIR}/u-boot-${NEXELL_BOARD_SOCNAME}-*.bin
+	copy_file_to_output ${B}/params_env.txt
+	copy_file_to_output ${B}/params_env.bin
 }
 
 # To ensure that the board config has changed, always run the config command

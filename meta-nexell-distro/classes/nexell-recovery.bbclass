@@ -37,6 +37,9 @@ make_recovery_boot_image() {
 		fi
 
 		make_ext4_image ${PART_BOOT_LABEL} ${PART_BOOT_SIZE} ${boot_dir} ${boot_img}
+
+		# copy image to output dir
+		copy_file_to_output ${boot_img}
 	fi
 
 	if echo "$(file -b ${boot_img})" | grep -q -iE "UBI"; then
@@ -113,6 +116,13 @@ make_swupdate_image() {
 	echo "SWU: ${swutool} -f ${swudesc} -d ${DEPLOY_DIR_IMAGE} ${option}"
 
 	${swutool} -f ${swudesc} -d ${DEPLOY_DIR_IMAGE} ${option}
+
+	# copy files to output dir
+	copy_file_to_output ${swutool}
+	copy_file_to_output ${DEPLOY_DIR_IMAGE}/swu_hash.py
+	copy_file_to_output ${DEPLOY_DIR_IMAGE}/*sw-description*
+	copy_file_to_output ${DEPLOY_DIR_IMAGE}/*.swu
+	copy_file_to_output ${DEPLOY_DIR_IMAGE}/swu.*.key
 }
 
 make_recovery_image() {
