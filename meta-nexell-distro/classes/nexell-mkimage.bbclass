@@ -382,6 +382,9 @@ make_ubi_image() {
 	mkfs.ubifs -r $root -o $ubi_fs -m $page_size -e $LEB -c $max_block_count -F
 
 	ubinize -o $ubi_image -m $page_size -p $block_size -s $sub_page_size $ubi_ini
+
+	# copy image to output dir
+	copy_file_to_output ${ubi_image}
 }
 
 # =================================================
