@@ -1,0 +1,32 @@
+From a9f9859b0d182ec8ba488f3c4b256c769697069b Mon Sep 17 00:00:00 2001
+From: "chungho.shin" <chungho.shin@coasianexell.com>
+Date: Fri, 11 Sep 2020 15:35:50 +0900
+Subject: [PATCH 1/1] [Yocto Dunfell] AV_CODEC_FLAG_TRUNCATED modification
+
+This patch is for changing from CODEC_FLAG_TRUNCATED
+to AV_CODEC_FLAG_TRUNCATED.
+
+As upgrading from sumo to dunfell, this was changed.
+
+Signed-off-by: chungho.shin <chungho.shin@coasianexell.com>
+Change-Id: I46a01f218c4ec654b2eadd8e48aba2bf6154a382
+---
+ src/MediaExtractor.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/MediaExtractor.cpp b/src/MediaExtractor.cpp
+index b6b953c..9182610 100644
+--- a/src/MediaExtractor.cpp
++++ b/src/MediaExtractor.cpp
+@@ -445,7 +445,7 @@ bool CMediaReader::OpenFile(const char *fileName)
+ 	int i;
+ 
+ 	fmt_ctx = avformat_alloc_context();
+-	fmt_ctx->flags |= CODEC_FLAG_TRUNCATED;
++	fmt_ctx->flags |= AV_CODEC_FLAG_TRUNCATED;
+ 
+ 	if ( avformat_open_input(&fmt_ctx, fileName, iformat, NULL) < 0 )
+ 	{
+-- 
+2.17.1
+

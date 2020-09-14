@@ -8,6 +8,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 SRC_PATH = "${BSP_VENDOR_DIR}/apps/nx_video_api_test"
 
 SRC_URI = "file://${SRC_PATH}"
+SRC_URI_append = " file://0001-Yocto-Dunfell-AV_CODEC_FLAG_TRUNCATED-modification.patch"
 
 S = "${WORKDIR}/git"
 
@@ -34,11 +35,25 @@ EXTRA_OECONF = " \
 #      "
 
 do_myp() {
+    cd ${SRC_PATH}
+    if [ -e PATCH_DONE_BY_YOCTO ];then
+        ${_PATCH_FILE_REVERT_BY_GEN_}
+        rm PATCH_DONE_BY_YOCTO
+    fi
+    ${_PATCH_FILE_BY_GEN_}
+    touch PATCH_DONE_BY_YOCTO
     rm -rf ${S}
-    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    cp -a ${SRC_PATH} ${S}
     rm -rf ${WORKDIR}/home
 }
 addtask myp before do_patch after do_unpack
+
+_PATCH_FILE_BY_GEN_="patch -p1 < ${WORKDIR}/0001-Yocto-Dunfell-AV_CODEC_FLAG_TRUNCATED-modification.patch -f;"
+_PATCH_FILE_REVERT_BY_GEN_="patch -R -p1 < ${WORKDIR}/0001-Yocto-Dunfell-AV_CODEC_FLAG_TRUNCATED-modification.patch -f;"
+
+do_patch() {
+    :
+}
 
 do_configure() {
 	cd ${S}
