@@ -1,5 +1,7 @@
 DEPENDS += "openssl-native"
 
+inherit nexell-mkimage
+
 # BIN -> BIN.raw (Binary + NSIH)
 do_bingen_raw () {
         local index=$1 binary=$2 nsih=$3
@@ -13,6 +15,9 @@ do_bingen_raw () {
 
         ${TOOL_BINGEN} -k $index -n $nsih -i $binary \
 		-b $bootkey -u $userkey -l $loadaddr -s $loadaddr -t $opt;
+
+	# copy image to output dir
+	copy_file_to_output ${binary}.raw
 }
 
 # BIN -> BIN.enc (Encrypted Binary)
@@ -43,4 +48,7 @@ do_bingen_ecc () {
 	fi
 
         ${TOOL_BINECC} -p $psize -i $binary;
+
+	# copy image to output dir
+	copy_file_to_output ${binary}.ecc
 }

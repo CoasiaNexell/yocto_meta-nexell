@@ -136,3 +136,10 @@ SWU_PROGRESS_PSPLASH ?= "false"
 #
 # for bluethooth
 BSA_SERVICE_COMMAND ?= "/usr/bin/bsa_server -d /dev/ttyS0 -p /etc/bluetooth/BCM434545.hcd -all=0"
+
+
+# for tools path
+NEXELL_TOOLS_PATH = "${BSP_ROOT_DIR}/nxp3220_tools"
+NEXELL_TOOLS_SCRIPTS_PATH = "${NEXELL_TOOLS_PATH}/scripts"
+NEXELL_TOOLS_BIN_PATH = "${NEXELL_TOOLS_PATH}/bin"
+NEXELL_TOOLS_FILES_PATH = "${NEXELL_TOOLS_PATH}/files"
