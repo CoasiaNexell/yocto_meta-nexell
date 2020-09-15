@@ -113,7 +113,7 @@ FLASH_DEVICE_SIZE ?= ""
 SWU_TOOL_IMAGE_GEN = "swu_image.sh"
 SWU_SUPPORT_MAKE_SWU_IMAGE ?= "true"
 
-PREFERRED_VERSION_swupdate ?= "2019.11"
+# PREFERRED_VERSION_swupdate ?= "2019.11"
 SWU_DAEMON_SERVICES_REPLACE ?= "true"
 SWU_RECOVERY_ROOTFS_IMAGE ?= "nexell-recoveryimg-${MACHINE_ARCH}.cpio.gz.u-boot"
 
