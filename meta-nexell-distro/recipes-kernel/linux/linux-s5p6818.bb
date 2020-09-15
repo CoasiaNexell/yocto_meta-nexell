@@ -12,9 +12,9 @@ LINUX_VERSION ?= "4.4.83"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_kernel-4.4.x;protocol=https;branch=nexell;depth=5 \
-		file://0001-Yocto-unaccess-changed.patch \
-"
+SRC_PATH = "${BSP_VENDOR_DIR}/kernel/kernel-4.4.x"
+SRC_URI = "file://${SRC_PATH}"
+SRC_URI_append = " file://0001-Yocto-unaccess-changed.patch "
 
 S = "${BSP_VENDOR_DIR}/kernel/kernel-4.4.x"
 B = "${WORKDIR}/${BP}"
@@ -22,14 +22,32 @@ B = "${WORKDIR}/${BP}"
 EXTERNALSRC_pn-linux-s5p6818 = "${S}"
 EXTERNALSRC_BUILD_pn-linux-s5p6818 = "${B}"
 
+KCONFIG_MODE="--alldefconfig"
+ARM_ARCH = "arm64"
+
 DEPENDS += "optee-build"
 
 export KBUILD_OUTPUT = "${B}"
 OE_TERMINAL_EXPORTS += "KBUILD_OUTPUT"
 LINUX_VERSION_EXTENSION ?= "-s5p6818"
 
-KCONFIG_MODE="--alldefconfig"
+do_patch() {
+    :
+}
 
+do_mypatch() {
+    cd ${S}
+    if [ -e PATCH_DONE_BY_YOCTO ];then
+        ${_PATCH_FILE_REVERT_BY_GEN_}
+        rm PATCH_DONE_BY_YOCTO
+    fi
+    ${_PATCH_FILE_BY_GEN_}
+    touch PATCH_DONE_BY_YOCTO
+}
+addtask mypatch before do_compile after do_configure
+
+_PATCH_FILE_BY_GEN_="patch -p1 < ${WORKDIR}/0001-Yocto-unaccess-changed.patch -f;"
+_PATCH_FILE_REVERT_BY_GEN_="patch -R -p1 < ${WORKDIR}/0001-Yocto-unaccess-changed.patch -f;"
 
 do_configure_prepend () {
     if [ "${EXTERNALSRC}" != "${EXTERNALSRC_BUILD}" ]; then
