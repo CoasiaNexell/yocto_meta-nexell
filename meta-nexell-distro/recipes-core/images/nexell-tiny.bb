@@ -1,3 +1,4 @@
+inherit post-process-tiny
 inherit post-process
 include recipes-core/images/core-image-minimal.bb
 
