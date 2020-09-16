@@ -29,10 +29,7 @@ DEPENDS = " \
 	gstreamer1.0-plugins-base \
 "
 
-inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
-		   bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'nexell-sdk-qt5.8.x-env', \
-           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', 'nexell-sdk-qt5.9.x-env', \
-           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.14', 'nexell-sdk-qt5.14.x-env', '', d), d), d), d) }
+inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.14', 'nexell-sdk-qt5.14.x-env', '', d)}
 
 PV = "1.4.0"
 PR = "r0"
