@@ -392,11 +392,7 @@ make_ubi_image() {
 # =================================================
 copy_board_partmap() {
     local out_dir=$1
-    if [ ${BSP_TARGET_IMAGE_TYPE} = "ubuntu" ]; then
-        cp -af ${NEXELL_BOARD_PARTMAP_PATH}/partmap_emmc_${BSP_TARGET_MACHINE}-ubuntu.txt ${out_dir}/partmap_emmc.txt
-    else
-        cp -af ${NEXELL_BOARD_PARTMAP_PATH}/partmap_emmc_${BSP_TARGET_MACHINE}.txt ${out_dir}/partmap_emmc.txt
-    fi
+    cp -af ${NEXELL_BOARD_PARTMAP_PATH}/partmap_emmc_${BSP_TARGET_MACHINE}.txt ${out_dir}/partmap_emmc.txt
 }
 
 copy_kernel_image() {
@@ -409,12 +405,6 @@ copy_kernel_image() {
     local src_path=$1 dst_path=$2
 
     copy_file_to_output ${src_path}/boot.img
-
-    if [ ${BSP_TARGET_IMAGE_TYPE} = "ubuntu" ];then
-        if [ -d ${TOPDIR}/tmp/work/linux-kernel-selftests ]; then
-            cp -a ${TOPDIR}/tmp/work/selftests ${TOPDIR}/tmp/work/extra-rootfs-support/usr/bin/
-        fi
-    fi
 }
 
 copy_rootfs_image() {
@@ -426,43 +416,11 @@ copy_rootfs_image() {
     echo "\033[40;33m ================================================= \033[0m"
 	local src_path=$1 dst_path=$2
 
-    if [ ${BSP_TARGET_IMAGE_TYPE} = "ubuntu" ];then
-        rm -rf ${dst_path}/*.ext4
-        rm -rf ${dst_path}/rootfs.img
-
-        echo "\033[40;33m  >>>>   download ubuntu image        \033[0m"
-        wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION}${UBUNTU_ROOTFS} -P ${dst_path}
-        mv ${RESULT_PATH}/${UBUNTU_ROOTFS} ${dst_path}/rootfs.tar.gz
-
-        echo "\033[40;33m  >>>>   copy_extra-rootfs-support to result dir        \033[0m"
-        sudo cp -a ${TOPDIR}/tmp/work/extra-rootfs-support ${dst_path}
-
-        # s5p6818 binary use armhf version, so kselftest used armhf version too.
-        # kselftest do not build. using prebuilt binary
-        if [ ${NEXELL_BOARD_SOCNAME} = "s5p6818" ]; then
-            echo "\033[40;33m  >>>>   extract kselftests        \033[0m"
-            sudo rm -rf ${dst_path}/extra-rootfs-support/usr/bin/kselftests
-            sudo rm -rf ${dst_path}/kselftests.*
-            wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_KSELFTESTS} -P ${dst_path}
-            sudo tar --overwrite -xvzf ${dst_path}/kselftests.tar.gz -C ${dst_path}/extra-rootfs-support/usr/bin/
-
-            echo -e "\033[40;33m  >>>>   extract testsuites        \033[0m"
-            sudo rm -rf ${dst_path}/testsuite.*
-            wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_NX_TESTSUITE} -P ${dst_path}
-            sudo tar --overwrite -xvzf ${dst_path}/testsuite.tar.gz -C ${dst_path}/extra-rootfs-support/usr/
-
-            echo -e "\033[40;33m  >>>>   extract nexell libraries   \033[0m"
-            sudo rm -rf ${dst_path}/nxlibs.*
-            wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_NX_LIBS} -P ${dst_path}
-            sudo tar --overwrite -xvzf ${dst_path}/nxlibs.tar.gz -C ${dst_path}/extra-rootfs-support/usr/
-        fi
-    else
-        if [ -f ${src_path}/${IMAGE_BASENAME}-${MACHINE}.tar.bz2 ]; then
-            cp ${src_path}/${IMAGE_BASENAME}-${MACHINE}.tar.bz2 ${dst_path}
-        fi
-        if [ -f ${src_path}/${IMAGE_BASENAME}-${MACHINE}.ext4 ]; then
-            cp ${src_path}/${IMAGE_BASENAME}-${MACHINE}.ext4 ${dst_path}
-        fi
+    if [ -f ${src_path}/${IMAGE_BASENAME}-${MACHINE}.tar.bz2 ]; then
+        cp ${src_path}/${IMAGE_BASENAME}-${MACHINE}.tar.bz2 ${dst_path}
+    fi
+    if [ -f ${src_path}/${IMAGE_BASENAME}-${MACHINE}.ext4 ]; then
+        cp ${src_path}/${IMAGE_BASENAME}-${MACHINE}.ext4 ${dst_path}
     fi
 
     cp ${NEXELL_FUSING_TOOLS_PATH}/partition.txt ${dst_path}
