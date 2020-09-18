@@ -121,15 +121,18 @@ make_rootfs_image() {
 			return
 		fi
 
-		local fsname=$(readlink -f ${root_name}.ext4)
-		local fssize=$(wc -c < ${fsname})
-		echo "DEBUG: Resize ROOTS minimun size : ${fssize}:${fsname}"
+		# Change image generation tool from ext2simg to make_ext4fs
+		#local fsname=$(readlink -f ${root_name}.ext4)
+		#local fssize=$(wc -c < ${fsname})
+		#echo "DEBUG: Resize ROOTS minimun size : ${fssize}:${fsname}"
 
-		resize2fs ${root_name}.ext4 ${root_size};
-		e2fsck -y -f ${root_name}.ext4;
+		##resize2fs ${root_name}.ext4 ${root_size};
+		#e2fsck -y -f ${root_name}.ext4;
 
-		# change to sparse image
-		ext2simg ${root_name}.ext4 ${root_img}
+		## change to sparse image
+		#ext2simg ${root_name}.ext4 ${root_img}
+
+		make_ext4fs -s -b 4k -l ${root_size} ${root_img} ${IMAGE_ROOTFS}
 
 		# copy image to output dir
 		copy_file_to_output ${root_img}
