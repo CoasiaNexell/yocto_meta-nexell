@@ -26,36 +26,66 @@ EXTRA_OECONF = " \
     "
 
 EXTRA_OEMAKE = " \
-	'libnxfilter_la_CPPFLAGS = \
-		-I${STAGING_INCDIR} \
-		-I../../include \
-		-I${STAGING_INCDIR}/drm \
-		-I./BaseFilter \
-		-I./BaseInterface \
-		-I./BaseEngine' \
+    'libnxfilter_la_CPPFLAGS = \
+        -I${STAGING_INCDIR} \
+        -I../../include \
+        -I${STAGING_INCDIR}/drm \
+        -I./BaseFilter \
+        -I./BaseInterface \
+        -I./BaseEngine' \
     'libnxfilter_la_LDFLAGS = -L${STAGING_LIBDIR} -version-info 1:0:0' \
-	'libnxfilterhelper_la_CPPFLAGS = \
-		-I${STAGING_INCDIR} \
-		-I../libnxfilter \
-		-I${STAGING_INCDIR}/drm \
-		-I../libnxfilter/BaseFilter \
-		-I../libnxfilter/BaseInterface \
-		-I../libnxfilter/BaseEngine' \
+    'libnxfilter_la_LDFLAGS += \
+        -lavcodec \
+        -lavformat \
+        -lavutil \
+        -lswresample \
+        -ljpeg \
+        -lasound \
+        -ldrm \
+        -lnx_video_api \
+        -lnx_scaler \
+        -lpthread'\
+    'libnxfilterhelper_la_CPPFLAGS = \
+        -I${STAGING_INCDIR} \
+        -I../libnxfilter \
+        -I${STAGING_INCDIR}/drm \
+        -I../libnxfilter/BaseFilter \
+        -I../libnxfilter/BaseInterface \
+        -I../libnxfilter/BaseEngine' \
     'libnxfilterhelper_la_LDFLAGS = -L${STAGING_LIBDIR}  -version-info 1:0:0' \
-	'libnxmpmanager_la_CPPFLAGS = \
-		-I${STAGING_INCDIR} \
-		-I../../include -I../libnxfilter \
-		-I${STAGING_INCDIR}/drm \
-		-I../libnxfilter/BaseFilter \
-		-I../libnxfilter/BaseInterface \
-		-I../libnxfilter/BaseEngine \
-		-I../libnxfilterhelper' \
+    'libnxmpmanager_la_CPPFLAGS = \
+        -I${STAGING_INCDIR} \
+        -I../../include -I../libnxfilter \
+        -I${STAGING_INCDIR}/drm \
+        -I../libnxfilter/BaseFilter \
+        -I../libnxfilter/BaseInterface \
+        -I../libnxfilter/BaseEngine \
+        -I../libnxfilterhelper' \
     'libnxmpmanager_la_LDFLAGS = -L${STAGING_LIBDIR} -version-info 1:0:0' \
+    'libnxmpmanager_la_LDFLAGS += \
+        '\
+    'NxPlayerConsole_CFLAGS ='\
+    'NxPlayerConsole_CPPFLAGS = \
+        $(WARN_CFLAGS)	\
+        -I.				\
+        -I../../include	\
+        -I${STAGING_INCDIR}	\
+        -I${STAGING_INCDIR}/libdrm' \
+    'NxPlayerConsole_LDFLAGS = -L${STAGING_LIBDIR}'\
+    'NxPlayerConsole_LDFLAGS += \
+        -lavcodec \
+        -lavformat \
+        -lavutil \
+        -lswresample \
+        -ldrm \
+        -lnx_video_api \
+        -lnx_scaler \
+        -lpthread'\
     "
 
 do_myp() {
     rm -rf ${S}
-    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    cp -a ${SRC_PATH} ${S}
     rm -rf ${WORKDIR}/home
 }
 addtask myp before do_patch after do_unpack
@@ -77,15 +107,15 @@ do_install() {
     install -d ${D}${libdir}
     install -d ${D}${includedir}
 
-	# header files
+    # header files
     install -m 0644 ${S}/include/NX_IRgbRender.h ${D}${includedir}/NX_IRgbRender.h
     install -m 0644 ${S}/include/NX_MoviePlay.h ${D}${includedir}/NX_MoviePlay.h
 
     install -m 0755 ${S}/src/libnxfilter/.libs/libnxfilter.so.1.0.0 ${D}${libdir}/
     install -m 0755 ${S}/src/libnxfilterhelper/.libs/libnxfilterhelper.so.1.0.0 ${D}${libdir}/
-	install -m 0755 ${S}/src/libnxmpmanager/.libs/libnxmpmanager.so.1.0.0 ${D}${libdir}/
+    install -m 0755 ${S}/src/libnxmpmanager/.libs/libnxmpmanager.so.1.0.0 ${D}${libdir}/
 
-	# libraries
+    # libraries
     cd ${D}${libdir}
     ln -sf libnxfilter.so.1.0.0 libnxfilter.so.1
     ln -sf libnxfilter.so.1 libnxfilter.so
@@ -93,11 +123,15 @@ do_install() {
     ln -sf libnxfilterhelper.so.1.0.0 libnxfilterhelper.so.1
     ln -sf libnxfilterhelper.so.1 libnxfilterhelper.so
 	
-	ln -sf libnxmpmanager.so.1.0.0 libnxmpmanager.so.1
+    ln -sf libnxmpmanager.so.1.0.0 libnxmpmanager.so.1
     ln -sf libnxmpmanager.so.1 libnxmpmanager.so
+
+    # For dunfell test
+    #rm -rf ${BSP_VENDOR_DIR}/apps/QT/NxVideoPlayer/libnxplayer/lib/32bit/*
+    #cp -af ${D}${libdir}/libnx* ${BSP_VENDOR_DIR}/apps/QT/NxVideoPlayer/libnxplayer/lib/32bit/
 }
 
 INSANE_SKIP_${PN} = "dev-so invalid-packageconfig"
-FILES_${PN} = "${libdir} ${includedir}"
+FILES_${PN} = "${libdir}"
 FILES_${PN}-dev = "${includedir}"
 FILES_SOLIBSDEV = ""
