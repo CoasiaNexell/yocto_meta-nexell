@@ -83,8 +83,10 @@ function path_setup()
 function cleanup_dirs()
 {
     if [ ! -d ${RESULT_PATH} ];then
-	mkdir -p ${RESULT_PATH}
+	    mkdir -p ${RESULT_PATH}
         chmod 777 ${RESULT_PATH}
+        mkdir -p ${RESULT_PATH}/tools
+        chmod 777 ${RESULT_PATH}/tools
     else
 	rm -rf ${RESULT_PATH}/boot
 	rm -rf ${RESULT_PATH}/root
@@ -93,36 +95,43 @@ function cleanup_dirs()
 
 function copy_bin_files()
 {
-    if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
-        if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-	    cp ${TMP_DEPLOY_PATH}/bl1-raptor.bin ${RESULT_PATH}
-        elif [ "${BOARD_NAME}" == "avn-ref" ]; then
-            cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
-        elif [ "${BOARD_NAME}" == "svt-ref" ]; then
-            cp ${TMP_DEPLOY_PATH}/bl1-svt.bin ${RESULT_PATH}
-        fi
-        cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
-        cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
-        cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
-    else
-        if [ "${BOARD_NAME}" == "zh-dragon" ]; then
-            cp ${TMP_DEPLOY_PATH}/bl1-zh_dragon.bin ${RESULT_PATH}
-        elif [ "${IMAGE_TYPE}" == "smartvoice" -o "${IMAGE_TYPE}" == "smartvoiceui" ]; then
-            cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}_voice.bin ${RESULT_PATH}
+    echo -e "\033[40;33m  >>>>   copy_bin_files        \033[0m"
+    if [ "${USE_CONVERT_IMAGE_SCRIPT}" == "true" ]; then
+        if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
+            if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-raptor.bin ${RESULT_PATH}
+            elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+                cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
+            elif [ "${BOARD_NAME}" == "svt-ref" ]; then
+                cp ${TMP_DEPLOY_PATH}/bl1-svt.bin ${RESULT_PATH}
+            fi
+            cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
+            cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
+            cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
         else
-            cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
+            if [ "${BOARD_NAME}" == "zh-dragon" ]; then
+                cp ${TMP_DEPLOY_PATH}/bl1-zh_dragon.bin ${RESULT_PATH}
+            elif [ "${IMAGE_TYPE}" == "smartvoice" -o "${IMAGE_TYPE}" == "smartvoiceui" ]; then
+                cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}_voice.bin ${RESULT_PATH}
+            else
+                cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
+            fi
+            cp ${TMP_DEPLOY_PATH}/armv7_dispatcher.bin ${RESULT_PATH}
+            cp ${TMP_DEPLOY_PATH}/pyrope-bl2.bin ${RESULT_PATH}
         fi
-        cp ${TMP_DEPLOY_PATH}/armv7_dispatcher.bin ${RESULT_PATH}
-        cp ${TMP_DEPLOY_PATH}/pyrope-bl2.bin ${RESULT_PATH}
+        cp ${TMP_DEPLOY_PATH}/bl1-emmcboot.bin ${RESULT_PATH}
+        cp ${TMP_DEPLOY_PATH}/u-boot.bin ${RESULT_PATH}
+        cp ${TMP_DEPLOY_PATH}/default_envs.txt ${RESULT_PATH}
+    else
+        cp -af ${TMP_DEPLOY_PATH}/bl1-*.bin ${RESULT_PATH}
+        cp -af ${TMP_DEPLOY_PATH}/params.bin ${RESULT_PATH}
     fi
-    cp ${TMP_DEPLOY_PATH}/bl1-emmcboot.bin ${RESULT_PATH}
-    cp ${TMP_DEPLOY_PATH}/u-boot.bin ${RESULT_PATH}
-    cp ${TMP_DEPLOY_PATH}/default_envs.txt ${RESULT_PATH}
 }
 
 function copy_img_files()
 {
-    cp ${TMP_DEPLOY_PATH}/*.img ${RESULT_PATH}
+    echo -e "\033[40;33m  >>>>   copy_img_files        \033[0m"
+    cp -af ${TMP_DEPLOY_PATH}/*.img ${RESULT_PATH}
 }
 
 function copy_kernel_image()
@@ -144,16 +153,20 @@ function copy_kernel_image()
 function copy_dtb_file()
 {
     echo -e "\033[40;33m  >>>>   copy_dtb_file            \033[0m"
-    local deployed_dtb_file_name=${KERNEL_BIN_NAME[${BOARD_SOCNAME}]}-${BOARD_SOCNAME}*.dtb
+    #local deployed_dtb_file_name=${KERNEL_BIN_NAME[${BOARD_SOCNAME}]}-${BOARD_SOCNAME}*.dtb
 
     rm -rf ${RESULT_PATH}/*.dtb
 
-    for i in `ls ${TMP_DEPLOY_PATH}/$deployed_dtb_file_name`
-    do
-       filenameOnly="${i##*/}"
-       dtbName=${filenameOnly#*-}
-       cp $i ${RESULT_PATH}/$dtbName
-    done
+    cp -af ${TMP_DEPLOY_PATH}/boot/*.dtb ${RESULT_PATH}
+
+    # for i in `ls ${TMP_DEPLOY_PATH}/$deployed_dtb_file_name`
+    # do
+    #    filenameOnly="${i##*/}"
+    #    dtbName=${filenameOnly#*-}
+    #    echo -e "\033[40;33m  dtbName=$dtbName            \033[0m"
+    #    echo -e "\033[40;33m  i=$i            \033[0m"
+    #    cp $i ${RESULT_PATH}/$dtbName
+    # done
 }
 
 function copy_ramdisk_image()
@@ -234,14 +247,30 @@ function post_process()
     cp ${META_NEXELL_PATH}/tools/convert_tools/nsih-dummy.txt ${RESULT_PATH}
 }
 
+function copy_partition_files()
+{
+    if [ "${IMAGE_TYPE}" == "ubuntu" ]; then
+        cp ${META_NEXELL_PATH}/tools/configs/board_partmap/partmap_emmc_${MACHINE_NAME}-ubuntu.txt ${RESULT_PATH}/tools/partmap_emmc.txt
+    else
+        cp ${META_NEXELL_PATH}/tools/configs/board_partmap/partmap_emmc_${MACHINE_NAME}.txt ${RESULT_PATH}/tools/partmap_emmc.txt
+    fi
+
+    cp -af ${TMP_DEPLOY_PATH}/partition.txt ${RESULT_PATH}/tools
+
+}
+
+function copy_tools_files() {
+    cp -af ${META_NEXELL_PATH}/tools/fusing_tools/standalone-fastboot-download.sh ${RESULT_PATH}/tools/
+    cp -af ${META_NEXELL_PATH}/tools/fusing_tools/standalone-uboot-by-usb-download.sh ${RESULT_PATH}/tools/
+    cp -af ${META_NEXELL_PATH}/tools/fusing_tools/usb-downloader ${RESULT_PATH}/tools/
+}
+
 check_usage
 split_args
 path_setup
 cleanup_dirs
 copy_bin_files
-if [ "${POST_PROCESS_ENABLE}" != "true" ]; then
-copy_img_files
-fi
+if [ "${USE_CONVERT_IMAGE_SCRIPT}" == "true" ]; then
 copy_kernel_image
 copy_dtb_file
 copy_ramdisk_image
@@ -249,9 +278,10 @@ if [ ${BUILD_ALL} == "true" ];then
     copy_rootfs_image
 fi
 copy_partmap_file
-
-if [ "${POST_PROCESS_ENABLE}" != "true" ]; then
-touch ${RESULT_PATH}/YOCTO.${RESULT_DIR}.INFO.DoNotChange
-else
 post_process
+else
+copy_img_files
+copy_partition_files
+copy_tools_files
+touch ${RESULT_PATH}/YOCTO.${RESULT_DIR}.INFO.DoNotChange
 fi
