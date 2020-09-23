@@ -89,16 +89,16 @@ declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
 #------------------------------------
 # dev_portnum define
 declare -A user_partition_size
-user_partition_size["avn-ref"]="6G"
-user_partition_size["navi-ref"]="6G"
+user_partition_size["avn-ref"]="4G"
+user_partition_size["navi-ref"]="4G"
 user_partition_size["svt-ref"]="6G"
 user_partition_size["zh-dragon"]="1G"
-user_partition_size["daudio-ref"]="6G"
+user_partition_size["daudio-ref"]="4G"
 user_partition_size["daudio-covi"]="0"
 user_partition_size["smart-voice"]="1G"
 user_partition_size["ff-voice"]="1G"
-user_partition_size["convergence-svmc"]="6G"
-user_partition_size["convergence-daudio"]="6G"
+user_partition_size["convergence-svmc"]="4G"
+user_partition_size["convergence-daudio"]="4G"
 user_partition_size["navi-ref-ubuntu"]="2G"
 user_partition_size["avn-ref-ubuntu"]="2G"
 user_partition_size["convergence-svmc-ubuntu"]="2G"
@@ -836,23 +836,6 @@ function make_modules() {
     ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -b 4096 -L modules -l ${MODULES_PATITION_SIZE} modules.img modules
 }
 
-function useage() {
-    echo -e "\n\033[0;34m ------------------------------------------------------------------------------------------ \033[0m\n"
-    echo -e "\033[0;33m # FASTBOOT Download # \033[0m"
-    echo -e "\033[0;33m    <FULL>                    \033[0m"
-    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh \033[0m"
-    echo -e "\033[0;33m    <Kernel Only>             \033[0m"
-    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh -t kernel \033[0m"
-    echo -e "\033[0;33m    <rootfs Only>             \033[0m"
-    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh -t rootfs \033[0m"
-    echo -e "\033[0;33m    <More detail...>           \033[0m"
-    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-fastboot-download.sh -h        \033[0m\n"
-
-    echo -e "\033[0;33m # USB BOOT # \033[0m"
-    echo -e "\033[0;36m    Run : \$ ${result_dir}/tools/standalone-uboot-by-usb-download.sh \033[0m\n"
-    echo -e "\033[0;34m -------------------------------------------------------------------------------------------- \033[0m\n"
-}
-
 echo -e "\n\033[0;34m ------------------------------------------------------------------ \033[0m"
 echo -e "\033[0;36m                      Convert images Running                        \033[0m"
 echo -e "\033[0;34m ------------------------------------------------------------------ \033[0m"
@@ -865,9 +848,5 @@ mkparams
 mkbootimg
 mem_addr_setup
 make_sparse_rootfs_img
-if [ "${POST_PROCESS_ENABLE}" == "true" ]; then
 post_process
-else
-useage
-fi
 #make_modules

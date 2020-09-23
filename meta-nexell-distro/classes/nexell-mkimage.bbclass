@@ -426,7 +426,10 @@ copy_rootfs_image() {
         cp ${src_path}/${IMAGE_BASENAME}-${MACHINE}.ext4 ${dst_path}
     fi
 
-    cp ${NEXELL_FUSING_TOOLS_PATH}/partition.txt ${dst_path}
+    if [ -f ${src_path}/partition.txt ]; then
+        mkdir -p ${dst_path}/tools
+        cp ${src_path}/partition.txt ${dst_path}/tools
+    fi
 }
 
 copy_fusing_tools() {
@@ -474,17 +477,6 @@ copy_fusing_tools() {
         # step2 : copy partition info & images
         copy_board_partmap ${out_dir}/tools
 
-        if ls ${out_dir}/bl1-*.bin 1> /dev/null 2>&1; then
-            cp -af ${out_dir}/bl1-*.bin ${out_dir}/tools
-        else
-            echo "bl1-*.bin do not exists"
-        fi
-        if [ -f ${out_dir}/partmap_emmc.txt ]; then
-            cp -af ${out_dir}/partmap_emmc.txt ${out_dir}/tools
-        fi
-        if [ -f ${out_dir}/partition.txt ]; then
-            cp -af ${out_dir}/partition.txt ${out_dir}/tools
-        fi
 
         touch ${out_dir}/YOCTO.${BSP_OUTPUT_DIR_NAME}.INFO.DoNotChange
     fi
@@ -663,6 +655,8 @@ make_sparse_rootfs_img() {
         copy_file_to_output ${dst_path}/svmdata.img
     fi
 
+    cp ${NEXELL_FUSING_TOOLS_PATH}/partition.txt ${dst_path}
+
     # copy image to output directory
     copy_file_to_output ${dst_path}/rootfs.img
     copy_file_to_output ${dst_path}/userdata.img
@@ -698,7 +692,7 @@ make_fip_loader_usb_image() {
     rm -rf ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN}
     rm -rf ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
 
-            # ===========================================
+    # ===========================================
     # For usb download, create usb download image
     # ===========================================
     # setp 1
