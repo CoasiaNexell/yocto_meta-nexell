@@ -16,20 +16,9 @@ S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-bad glib-2.0 gdk-pixbuf"
+DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-bad glib-2.0 gdk-pixbuf nx-renderer nx-video-api"
 
 inherit autotools pkgconfig
-
-#Nexell code : for /usr/include search QA issue: compile-host-path QA issue avoid
-EXTRA_OECONF = " \
-     '--prefix=${STAGING_DIR_HOST}' \
-     "
-
-EXTRA_OEMAKE = " \
-     'libnxgstvplayer_la_CFLAGS = $(GST_CFLAGS) -I${STAGING_INCDIR} -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
-     'libnxgstvplayer_la_CPPFLAGS = $(GST_CFLAGS) -I${STAGING_INCDIR} -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
-     'libnxgstvplayer_la_LDFLAGS = -L${STAGING_LIBDIR} -version-info 1:0:0' \
-     "
 
 do_myp() {
     rm -rf ${S}
@@ -38,36 +27,64 @@ do_myp() {
 }
 addtask myp before do_patch after do_unpack
 
+#Nexell code : for /usr/include search QA issue: compile-host-path QA issue avoid
+EXTRA_OECONF = " \
+     '--prefix=${STAGING_DIR_HOST}' \
+     "
+
+EXTRA_OEMAKE = " \
+    'libnxgstvplayer_la_CFLAGS = \
+        $(GST_CFLAGS) \
+        -I${STAGING_INCDIR} \
+        -I${STAGING_LIBDIR}/glib-2.0/include \
+        -I${STAGING_INCDIR}/glib-2.0 \
+        -I${STAGING_INCDIR}/gstreamer-1.0 \
+        -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
+    'libnxgstvplayer_la_CPPFLAGS = \
+        $(GST_CFLAGS) \
+        -I${STAGING_INCDIR} \
+        -I${STAGING_LIBDIR}/glib-2.0/include \
+        -I${STAGING_INCDIR}/glib-2.0 \
+        -I${STAGING_INCDIR}/gstreamer-1.0 \
+        -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
+    'libnxgstvplayer_la_LDFLAGS = \
+        -lglib-2.0 \
+        -lgstmpegts-1.0 \
+        -lgstreamer-1.0 \
+        -lgstpbutils-1.0 \
+        -lgdk_pixbuf-2.0' \
+    "
+
 do_configure() {
-	cd ${S}
-	NOCONFIGURE=true ./autogen.sh
-	oe_runconf
+     cd ${S}
+     NOCONFIGURE=true ./autogen.sh
+     oe_runconf
 }
 
 do_compile() {
-	cd ${S}
-	oe_runmake clean
-	oe_runmake
+     cd ${S}
+     oe_runmake clean
+     oe_runmake
 }
 
 do_install() {
-	install -d ${D}${libdir}
-	install -d ${D}${includedir}
+     install -d ${D}${libdir}
+     install -d ${D}${includedir}
 
-	cd ${S}
-	# header files
-	install -m 0644 ${S}/include/NX_GstIface.h ${D}${includedir}/NX_GstIface.h
-	install -m 0644 ${S}/include/NX_GstTypes.h ${D}${includedir}/NX_GstTypes.h
-	install -m 0644 ${S}/include/NX_Log.h ${D}${includedir}/NX_Log.h
+     cd ${S}
+     # header files
+     install -m 0644 ${S}/include/NX_GstIface.h ${D}${includedir}/NX_GstIface.h
+     install -m 0644 ${S}/include/NX_GstTypes.h ${D}${includedir}/NX_GstTypes.h
 
-	# libraries
-	install -m 0755 ${S}/src/.libs/libnxgstvplayer.so.1.0.0 ${D}${libdir}/
+     # libraries
+     install -m 0755 ${S}/src/.libs/libnxgstvplayer.so.0.0.0 ${D}${libdir}/
 
-	cd ${D}${libdir}
-	ln -sf libnxgstvplayer.so.1.0.0 libnxgstvplayer.so.1
-	ln -sf libnxgstvplayer.so.1 libnxgstvplayer.so
+     cd ${D}${libdir}
+     ln -sf libnxgstvplayer.so.0.0.0 libnxgstvplayer.so.0
+     ln -sf libnxgstvplayer.so.0 libnxgstvplayer.so
 }
 
-INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files"
-FILES_${PN} = "${libdir}"
-ALLOW_EMPTY_${PN} = "1"
+INSANE_SKIP_${PN} = "dev-so invalid-packageconfig"
+FILES_${PN} = "${libdir} ${includedir}"
+FILES_${PN}-dev = "${includedir}"
+FILES_SOLIBSDEV = ""
