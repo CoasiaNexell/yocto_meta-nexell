@@ -192,12 +192,18 @@ do_deploy () {
         # make image for usb
         # 1:${soc_name} |  2:${in_img} | 3:${out_img} | 4:${load_addr} | 5:${jump_addr} | 6:${extra_opts} | 7:${dev_id}
         make_3rdboot_image ${NEXELL_BOARD_SOCNAME} \
-            ${S}/optee_build/result/fip-nonsecure.bin \
-            ${DEPLOY_DIR_IMAGE}/fip-nonsecure.img \
-            ${MEM_NON_SECURE_LOAD_ADDR} \
-            ${MEM_NON_SECURE_JUMP_ADDR} \
+            ${S}/optee_build/result/fip-loader.bin \
+            ${DEPLOY_DIR_IMAGE}/fip-loader-usb.img \
+            ${MEM_LOAD_ADDR} \
+            ${MEM_JUMP_ADDR} \
             "${usb_extra_opts}" \
             ${NEXELL_DEVID_USB}
+
+        dd if=${DEPLOY_DIR_IMAGE}/fip-secure.img >> ${DEPLOY_DIR_IMAGE}/fip-loader-usb.img
+        dd if=${DEPLOY_DIR_IMAGE}/fip-nonsecure.img >> ${DEPLOY_DIR_IMAGE}/fip-loader-usb.img
+
+        # copy 3ndboot image to output directory
+        copy_file_to_output ${DEPLOY_DIR_IMAGE}/fip-loader-usb.img
     fi
 }
 

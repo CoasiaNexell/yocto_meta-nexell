@@ -46,6 +46,7 @@ DISPATCHER_EMMCBOOT ?= 'bl_mon.img'
 DISPATCHER_EMMC_LOAD_ADDR ?= "0xffff0200"
 DISPATCHER_EMMC_JUMP_ADDR ?= "0xffff0200"
 DISPATCHER_EXTRA_OPTS ?= '-m 0x40200 -b 3 -p ${NEXELL_DEV_PORTNUM} -m 0x1E0200 -b 3 -p ${NEXELL_DEV_PORTNUM} -m 0x60200 -b 3 -p ${NEXELL_DEV_PORTNUM}'
+# offset : 35840 ( 35Kbyte : size of BL2_EMMCBOOT )
 DISPATCHER_FIP_NONSECURE_USB_BIN_OFFSET='35840'
 
 # ------------------------------------------------------------
@@ -56,6 +57,7 @@ UBOOT_BIN ?= 'u-boot.bin'
 UBOOT_EMMCBOOT ?= 'bootloader.img'
 UBOOT_EMMC_LOAD_ADDR ?= "0x43c00000"
 UBOOT_EMMC_JUMP_ADDR ?= "0x43c00000"
+# offset : 35840 ( 35Kbyte : size of BL2_EMMCBOOT ) + 28672 (28Kbyte : size of BL2_EMMCBOOT)
 UBBOT_FIP_NONSECURE_USB_BIN_OFFSET ?= '64512'
 
 # ------------------------------------------------------------

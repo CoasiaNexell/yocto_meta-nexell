@@ -670,19 +670,56 @@ make_sparse_rootfs_img() {
     copy_rootfs_image ${dst_path} ${BSP_OUTPUT_DIR_PATH}
 }
 
-make_fip_image() {
+# =================================================
+# s5p4418 only
+# =================================================
+make_fip_loader_usb_image() {
+    export PATH=$PATH:/usr/bin
     echo "\033[40;33m ================================================= \033[0m"
-    echo "\033[40;33m make_fip_image \033[0m"
+    echo "\033[40;33m make_fip_loader_usb_image \033[0m"
     echo "\033[40;33m ------------------------------------------------- \033[0m"
-    echo "\033[40;33m in_img : '$1' \033[0m"
-    echo "\033[40;33m out_img : '$2' \033[0m"
-    echo "\033[40;33m seek_val : '$3' \033[0m"
-    echo "\033[40;33m bs_val : '$4' \033[0m"
     echo "\033[40;33m ================================================= \033[0m"
 
-    local in_img=$1 out_img=$2 seek_val=$3 bs_val=$4
-    dd if=${in_img} of=${out_img} seek=${seek_val} bs=${bs_val}
+    if [ ! -e "${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT}" ]; then
+        echo "WARNING: NOT FOUND IMAGE: ${BL2_EMMCBOOT}"
+        return
+    fi
 
-    # copy image to output directory
-    copy_file_to_output ${out_img}
+    if [ ! -e "${DEPLOY_DIR_IMAGE}/${DISPATCHER_EMMCBOOT}" ]; then
+        echo "WARNING: NOT FOUND IMAGE: ${DISPATCHER_EMMCBOOT}"
+        return
+    fi
+
+    if [ ! -e "${DEPLOY_DIR_IMAGE}/${UBOOT_EMMCBOOT}" ]; then
+        echo "WARNING: NOT FOUND IMAGE: ${UBOOT_EMMCBOOT}"
+        return
+    fi
+
+    rm -rf ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN}
+    rm -rf ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
+
+            # ===========================================
+    # For usb download, create usb download image
+    # ===========================================
+    # setp 1
+    dd if=${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} of=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} seek=0 bs=1
+
+    # step 2
+    dd if=${DEPLOY_DIR_IMAGE}/${DISPATCHER_EMMCBOOT} of=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} seek=${DISPATCHER_FIP_NONSECURE_USB_BIN_OFFSET} bs=1
+
+    # step 3
+    dd if=${DEPLOY_DIR_IMAGE}/${UBOOT_EMMCBOOT} of=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} seek=${UBBOT_FIP_NONSECURE_USB_BIN_OFFSET} bs=1
+
+    # step3. nsih-dummy.txt + fileSize + load/start address => nsih-usbdownload.txt
+    do_nsihtxtmod ${DEPLOY_DIR_IMAGE} ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} ${NEXELL_NSIHDUMMYFILE} ${NSIH_LOAD_START_ADDRESS} ${NSIH_LOAD_START_ADDRESS}
+
+    # step4. nsih-usbdownload.bin
+    do_nishbingen ${DEPLOY_DIR_IMAGE}
+
+    # step5, create fip-loader-usb.img
+    cp ${DEPLOY_DIR_IMAGE}/"nsih-usbdownload.bin" ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
+    dd if=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} >> ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
+
+    # copy image to results path
+    copy_file_to_output ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
 }
