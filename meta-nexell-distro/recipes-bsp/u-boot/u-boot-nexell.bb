@@ -36,30 +36,8 @@ do_deploy () {
             ${UBOOT_EMMC_LOAD_ADDR} \
             ${UBOOT_EMMC_JUMP_ADDR}
 
-        # make fip image
-        # 1:${in_img} |  2:${out_img} | 3:${seek_val} | 4:${bs_val}
-        make_fip_image ${DEPLOY_DIR_IMAGE}/${UBOOT_EMMCBOOT} \
-            ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} \
-            ${UBBOT_FIP_NONSECURE_USB_BIN_OFFSET} \
-            "1"
-
-        # ===========================================
-        # For usb download, create usb download image
-        # ===========================================
-        # step1. nsih-dummy.txt + fileSize + load/start address => nsih-usbdownload.txt
-        # 1:${src_dir} |  2:${in_img} | 3:${dumy_file} | 4:${load_add} | 5:${start_add}
-        do_nsihtxtmod ${DEPLOY_DIR_IMAGE} ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} ${NEXELL_NSIHDUMMYFILE} ${NSIH_LOAD_START_ADDRESS} ${NSIH_LOAD_START_ADDRESS}
-
-        # step2. nsih-usbdownload.bin
-        # 1:${src_dir}
-        do_nishbingen ${DEPLOY_DIR_IMAGE}
-
-        # step3, create fip-loader-usb.img
-        cp ${DEPLOY_DIR_IMAGE}/"nsih-usbdownload.bin" ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
-        dd if=${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} >> ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
-
-        # copy image to results path
-        copy_file_to_output ${DEPLOY_DIR_IMAGE}/${FIP_LOADER_USB_IMG}
+        # make fip loader image for usb
+        make_fip_loader_usb_image
     fi
 
     # make env image

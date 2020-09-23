@@ -51,6 +51,8 @@ do_deploy () {
 
     # copy image to output dir
     copy_file_to_output ${S}/out/${BL1_EMMCBOOT}
+    # for USB Downloader
+    copy_file_to_output ${S}/out/${BL1_BIN}
 }
 
 addtask deploy after do_install

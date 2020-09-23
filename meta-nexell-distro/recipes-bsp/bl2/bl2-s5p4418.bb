@@ -48,12 +48,8 @@ do_deploy () {
             ${BL2_EMMC_JUMP_ADDR} \
             '${BL2_EXTRA_OPTS}'
 
-    # make fip image
-    # 1:${in_img} |  2:${out_img} | 3:${seek_val} | 4:${bs_val}
-    make_fip_image ${DEPLOY_DIR_IMAGE}/${BL2_EMMCBOOT} \
-        ${DEPLOY_DIR_IMAGE}/${FIP_NONSECURE_USB_BIN} \
-        "0" \
-        "1"
+    # make fip loader image for usb
+    make_fip_loader_usb_image
 }
 
 addtask deploy after do_install
