@@ -15,7 +15,8 @@ postprocess_common_function() {
     echo "net_raw:x:3004:root" >> etc/group
 
     # data partition add
-    echo "/dev/mmcblk0p4 /data         ext4     noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+    echo "/dev/mmcblk0p6 /data         ext4     noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+    echo "/dev/mmcblk0*" >> etc/udev/mount.blacklist
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_common_function;"

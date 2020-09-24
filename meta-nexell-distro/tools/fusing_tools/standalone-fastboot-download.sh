@@ -34,6 +34,7 @@ UPDATE_BOOTLOADER=false
 UPDATE_ENV=false
 UPDATE_BOOT=false
 UPDATE_MODULES=false
+UPDATE_MISC=false
 UPDATE_SVMDATA=false
 UPDATE_ROOT=false
 UPDATE_SYSTEM=false
@@ -47,13 +48,14 @@ IMAGE_TYPE=
 
 function usage()
 {
-	echo "Usage: $0 [-t bl1] [-t bl2] [-t dispatcher] [-t uboot] [-t env] [-t kernel] [-t rootfs]"
+	echo "Usage: $0 [-t bl1] [-t bl2] [-t dispatcher] [-t uboot] [-t env] [-t kernel] [-t rootfs] [-t misc]"
 	echo " -t bl1\t: if you want to update only bl1, specify this, default no"
         echo " -t bl2\t: if you want to update only bl2, specify this, default no ** s5p4418 only **"
         echo " -t armv7-dispatcher\t: if you want to update only armv7-dispatcher, specify this, default no ** s5p4418 only **"
 	echo " -t uboot\t: if you want to update only bootloader, specify this, default no"
 	echo " -t env\t: if you want to update only env, specify this, default no"
 	echo " -t kernel\t: if you want to update only boot partition, specify this, default no"
+	echo " -t misc\t: if you want to update only misc partition, specify this, default no"
 	echo " -t rootfs\t: if you want to update only root partition, specify this, default no"
 	echo " -t user\t: if you want to update only root partition, specify this, default no"
 }
@@ -80,6 +82,7 @@ function parse_args()
                     uboot  ) UPDATE_ALL=false; UPDATE_BOOTLOADER=true ;;
                     env    ) UPDATE_ALL=false; UPDATE_ENV=true ;;
                     kernel ) UPDATE_ALL=false; UPDATE_BOOT=true ;;
+                    misc   ) UPDATE_ALL=false; UPDATE_MISC=true ;;
                     rootfs ) UPDATE_ALL=false; UPDATE_ROOT=true ;;
                     user   ) UPDATE_ALL=false; UPDATE_DATA=true ;;
 		    *      ) usage; exit 1 ;;
@@ -141,6 +144,9 @@ function print_args()
 		fi
 		if [ ${UPDATE_SVMDATA} == "true" ]; then
 			vmsg -e "Update:\t\t\tsvmdata"
+		fi
+		if [ ${UPDATE_MISC} == "true" ]; then
+			vmsg -e "Update:\t\t\tmisc"
 		fi
 		if [ ${UPDATE_ROOT} == "true" ]; then
 			vmsg -e "Update:\t\t\troot"
@@ -265,6 +271,15 @@ function update_svmdata()
 	fi
 }
 
+function update_misc()
+{
+	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_MISC} == "true" ]; then
+		local file=${1}
+		vmsg "update misc: ${file}"
+		flash misc ${file}
+	fi
+}
+
 function update_root()
 {
 	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_ROOT} == "true" ]; then
@@ -322,6 +337,7 @@ update_boot ${RESULT_DIR}/boot.img
 if [ "${MACHINE_NAME}" == "s5p4418-convergence-daudio-qt" ]; then
 update_svmdata ${RESULT_DIR}/svmdata.img
 fi
+update_misc ${RESULT_DIR}/misc.img
 update_root ${RESULT_DIR}/rootfs.img
 update_data ${RESULT_DIR}/userdata.img
 

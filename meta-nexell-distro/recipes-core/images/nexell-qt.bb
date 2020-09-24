@@ -74,5 +74,6 @@ IMAGE_INSTALL_append = " \
 	${TOUCH_IMAGE_INSTALL} \
 	${ETC_TOOLS} \
 	${ETC_LIBS} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'packagegroup-nxp4330-swupdate', '', d)} \
 	${NEXELL_CUSTOMIZE_INSTALL} \
 "

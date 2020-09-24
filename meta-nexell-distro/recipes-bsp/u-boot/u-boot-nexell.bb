@@ -17,6 +17,13 @@ do_install() {
     ${TARGET_PREFIX}objcopy -O binary --only-section=.rodata.default_environment `find . -name "copy_env_common.o"`
     tr '\0' '\n' < copy_env_common.o > default_envs.txt
     cp default_envs.txt default_envs.txt.orig
+	#bootargs replase
+	if [ -n "${UBOOT_BOOTARGS}" ]; then
+		sed -i -e 's/bootargs=.*/bootargs='"${UBOOT_BOOTARGS}"'/g' default_envs.txt
+	fi
+	if [ -n "${UBOOT_RECOVERYBOOT_ARGS}" ]; then
+		sed -i -e 's/recoveryboot=.*/recoveryboot='"${UBOOT_RECOVERYBOOT_ARGS}"'/g' default_envs.txt
+	fi
 }
 
 inherit nexell-mkimage
