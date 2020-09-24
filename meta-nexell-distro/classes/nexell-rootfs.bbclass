@@ -17,11 +17,8 @@ postprocess_rootfs() {
 
     # data/misc partition add to fstab for ext4
     if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
-	if [ ! -z "${PART_DATA_SIZE}" ] && [ ! -z "${PART_DATA_NODE}" ]; then
+        if [ ! -z "${PART_DATA_SIZE}" ] && [ ! -z "${PART_DATA_NODE}" ]; then
             echo "${PART_DATA_NODE} /data ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
-        fi
-	if [ ! -z "${PART_MISC_SIZE}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
-            echo "${PART_MISC_NODE} /misc ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
         fi
     fi
 
