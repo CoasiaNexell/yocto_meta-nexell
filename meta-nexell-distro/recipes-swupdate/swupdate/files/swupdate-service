@@ -66,12 +66,13 @@ do_start() {
 	pid=`pidofproc $NAME` || status=$?
 	case $status in
 	0)
-		echo "$DESC already running ($pid)." > $LOGFILE
+		echo "$DESC already running <<< swupdate >>> ($pid)." > $LOGFILE
 		exit 1
 		;;
 	*)
-		echo "Starting $DESC ..." > $LOGFILE
-		exec $EXEC_COMMAND > $LOGFILE  &
+		echo "Starting <<< swupdate >>> $DESC ..." > $LOGFILE
+		exec $EXEC_COMMAND > $LOGFILE
+		wait;
 		exit 0
 		;;
 	esac

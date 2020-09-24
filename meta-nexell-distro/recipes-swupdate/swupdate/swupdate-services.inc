@@ -4,12 +4,13 @@ FILESEXTRAPATHS_append := ":${THISDIR}/files"
 SRC_URI_append = " \
 	file://swupdate.rules \
 	file://swupdate-progress \
+	file://swupdate-service \
 	"
 
 PACKAGES =+ "${PN}-services"
 FILES_${PN}-services = " \
 	${sysconfdir}/udev/rules.d/swupdate.rules \
-	${sysconfdir}/init.d/swupdate \
+	${sysconfdir}/init.d/swupdate-service \
 	${systemd_unitdir}/systemd/swupdate-progress.service \
 	"
 
@@ -42,9 +43,9 @@ do_install () {
 		# Install swupdae daemon.
 		# excuted by the 'swupdate.rules'. swupdate daemon will be mount external card,
 		# and update system with swu image in external card
-		install -m 755 ${WORKDIR}/swupdate ${D}${sysconfdir}/init.d
+		install -m 755 ${WORKDIR}/swupdate-service ${D}${sysconfdir}/init.d
 		sed -i -e "s,^EXEC_COMMAND.*,EXEC_COMMAND=\"${SWU_SERVICE_SWUPDATE_ROOT}\",g" \
-			${D}${sysconfdir}/init.d/swupdate
+			${D}${sysconfdir}/init.d/swupdate-service
 
 		# Install swupdate-progress service for systemd.
 		if [ ! -z "${SWU_SERVICE_PROGRESS_ROOT}" ]; then

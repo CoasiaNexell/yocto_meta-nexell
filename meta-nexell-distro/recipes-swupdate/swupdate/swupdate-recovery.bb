@@ -6,7 +6,7 @@ RDEPENDS_${PN} = "swupdate"
 FILESEXTRAPATHS_append := ":${THISDIR}/files"
 SRC_URI = " \
 	file://swupdate.rules \
-	file://swupdate \
+	file://swupdate-service \
 	file://swupdate-progress \
 	"
 
@@ -16,7 +16,7 @@ SRC_URI_append = " \
 
 # remove package 'swupdate-services'
 # this macro remove FILES_swupdate-sevice package in swupdate_%.bbappend
-PACKAGE_EXCLUDE += "swupdate-sercices"
+PACKAGE_EXCLUDE += "swupdate-services"
 
 do_install () {
 	install -d ${D}${sysconfdir}/udev/rules.d
@@ -37,9 +37,9 @@ do_install () {
 		# Install swupdae daemon.
 		# excuted by the 'swupdate.rules'. swupdate daemon will be mount external card,
 		# and update system with swu image in external card
-		install -m 755 ${WORKDIR}/swupdate ${D}${sysconfdir}/init.d
+		install -m 755 ${WORKDIR}/swupdate-service ${D}${sysconfdir}/init.d
 		sed -i -e "s,^EXEC_COMMAND.*,EXEC_COMMAND=\"${SWU_SERVICE_SWUPDATE_RECOVERY}\",g" \
-			${D}${sysconfdir}/init.d/swupdate
+			${D}${sysconfdir}/init.d/swupdate-service
 
 		# Install swupdate-progress service for sysV.
 		if [ ! -z "${SWU_SERVICE_PROGRESS_RECOVERY}" ]; then
