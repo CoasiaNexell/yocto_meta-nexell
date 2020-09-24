@@ -42,7 +42,7 @@ PACKAGE_INSTALL += " \
     ${@ 'psplash' if d.getVar('SWU_PROGRESS_PSPLASH') else ''} \
     udev \
     udev-extraconf \
-    nexell-init											
+    nexell-init \
     util-linux-agetty \
     "
 
