@@ -33,6 +33,12 @@ UBOOT_DEFCONFIG ?= "s5p6818_${NEXELL_BOARD_NAME}_defconfig"
 UBOOT_BIN ?= 'u-boot.bin'
 
 # ------------------------------------------------------------
+# Nexell USB image Configuration
+# ------------------------------------------------------------
+FIP_NONSECURE_USB_BIN ?= 'fip-nonsecure-usb.bin'
+FIP_LOADER_USB_IMG ?= 'fip-loader-usb.img'
+
+# ------------------------------------------------------------
 # Nexell Kernel Configuration
 # ------------------------------------------------------------
 KBUILD_DEFCONFIG ?= "s5p6818_${NEXELL_BOARD_NAME}_defconfig"
