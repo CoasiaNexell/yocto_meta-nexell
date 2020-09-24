@@ -77,3 +77,10 @@ IMAGE_INSTALL_append = " \
 	${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'packagegroup-nxp4330-swupdate', '', d)} \
 	${NEXELL_CUSTOMIZE_INSTALL} \
 "
+
+postprocess_rootfs_image () {
+    local rootdir=${IMAGE_ROOTFS}
+    mkdir -p ${rootdir}/misc
+}
+
+ROOTFS_POSTPROCESS_COMMAND += "postprocess_rootfs_image;"
