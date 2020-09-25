@@ -47,7 +47,8 @@ EXTRA_OEMAKE = " \
         -I${STAGING_INCDIR}/glib-2.0 \
         -I${STAGING_INCDIR}/gstreamer-1.0 \
         -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
-    'libnxgstvplayer_la_LDFLAGS = \
+    'libnxgstvplayer_la_LDFLAGS = -L${STAGING_LIBDIR} -version-number 0:9:0' \
+    'libnxgstvplayer_la_LDFLAGS += \
         -lglib-2.0 \
         -lgstmpegts-1.0 \
         -lgstreamer-1.0 \
