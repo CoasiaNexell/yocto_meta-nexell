@@ -47,7 +47,8 @@ EXTRA_OEMAKE = " \
         -I${STAGING_INCDIR}/glib-2.0 \
         -I${STAGING_INCDIR}/gstreamer-1.0 \
         -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
-    'libnxgstvplayer_la_LDFLAGS = \
+    'libnxgstvplayer_la_LDFLAGS = -L${STAGING_LIBDIR} -version-number 0:9:0' \
+    'libnxgstvplayer_la_LDFLAGS += \
         -lglib-2.0 \
         -lgstmpegts-1.0 \
         -lgstreamer-1.0 \
@@ -72,16 +73,12 @@ do_install() {
      install -d ${D}${includedir}
 
      cd ${S}
-     # header files
+     # libraries & header files
+     oe_runmake install DESTDIR=${D}
      install -m 0644 ${S}/include/NX_GstIface.h ${D}${includedir}/NX_GstIface.h
      install -m 0644 ${S}/include/NX_GstTypes.h ${D}${includedir}/NX_GstTypes.h
 
-     # libraries
-     install -m 0755 ${S}/src/.libs/libnxgstvplayer.so.0.0.0 ${D}${libdir}/
-
-     cd ${D}${libdir}
-     ln -sf libnxgstvplayer.so.0.0.0 libnxgstvplayer.so.0
-     ln -sf libnxgstvplayer.so.0 libnxgstvplayer.so
+     cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
 }
 
 INSANE_SKIP_${PN} = "dev-so invalid-packageconfig"
