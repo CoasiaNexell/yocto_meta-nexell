@@ -1,6 +1,6 @@
 software =
 {
-	version = "1.0";
+	version = "2.0";
 	hardware-compatibility: [ "1.0", "2.0" ];
 
 	scripts: (
@@ -34,7 +34,7 @@ software =
 			type = "raw";
 			offset = "0x200";				/* must be string */
 			sha256 = "@bl1-emmcboot.bin";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
@@ -44,7 +44,7 @@ software =
 			type = "raw";
 			offset = "0x10200";			/* must be string */
 			sha256 = "@loader-emmc.img";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
@@ -54,7 +54,7 @@ software =
 			type = "raw";
 			offset = "0x40200";			/* must be string */
 			sha256 = "@bl_mon.img";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
@@ -64,7 +64,7 @@ software =
 			type = "raw";
 			offset = "0x1E0200";			/* must be string */
 			sha256 = "@bootloader.img";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
@@ -74,7 +74,7 @@ software =
 			type = "raw";
 			offset = "0x2E0200";			/* must be string */
 			sha256 = "@params.bin";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
@@ -84,7 +84,7 @@ software =
 			type = "android-sparse";
 			offset = "0x400000";			/* must be string */
 			sha256 = "@boot.img";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
@@ -94,7 +94,7 @@ software =
 			type = "android-sparse";
 			offset = "0x6400000";			/* must be string */
 			sha256 = "@rootfs.img";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
@@ -104,7 +104,7 @@ software =
 			type = "android-sparse";
 			offset = "0xC6400000";			/* must be string */
 			sha256 = "@userdata.img";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		}
 	);
@@ -128,7 +128,7 @@ software =
 			device = "/dev/mmcblk0p3";
 			path = "etc/sw-versions";		/* update file: /tmp/datadst/<path>" */
 			sha256 = "@misc/etc/sw-versions";
-			version = "1.0";			/* compare with name '/misc/etc/sw-versions' */
+			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
