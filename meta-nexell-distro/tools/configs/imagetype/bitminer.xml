@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<imagetype_config>
+    <common>
+        <feature text='USE_VT="1"'/>
+        <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
+        <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
+        <feature text='DISTRO_FEATURES_append = " systemd"'/>
+    </common>
+    <s5p6818>
+        <feature text='SERIAL_CONSOLE = "115200 ttySAC3"'/>
+    </s5p6818>
+</imagetype_config>

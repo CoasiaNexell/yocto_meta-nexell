@@ -36,6 +36,13 @@ PORT_SD=0
 DEVIDS=("usb" "spi" "nand" "sdmmc" "sdfs" "uart")
 PORTS=("emmc" "sd")
 
+MEM_256MB_LOAD_ADDR=0x4fcc0000
+MEM_256MB_JUMP_ADDR=0x4fd00800
+MEM_256MB_SECURE_LOAD_ADDR=0x4fb00000
+MEM_256MB_SECURE_JUMP_ADDR=0x00000000
+MEM_256MB_NON_SECURE_LOAD_ADDR=0x4df00000
+MEM_256MB_NON_SECURE_JUMP_ADDR=0x00000000
+
 MEM_512MB_LOAD_ADDR=0x5fcc0000
 MEM_512MB_JUMP_ADDR=0x5fd00800
 MEM_512MB_SECURE_LOAD_ADDR=0x5fb00000
@@ -63,6 +70,14 @@ MEM_SECURE_LOAD_ADDR=
 MEM_SECURE_JUMP_ADDR=
 MEM_NON_SECURE_LOAD_ADDR=
 MEM_NON_SECURE_JUMP_ADDR=
+
+declare -a mem_256MB_addrs=( $MEM_256MB_LOAD_ADDR \
+                             $MEM_256MB_JUMP_ADDR \
+                             $MEM_256MB_SECURE_LOAD_ADDR \
+                             $MEM_256MB_SECURE_JUMP_ADDR \
+                             $MEM_256MB_NON_SECURE_LOAD_ADDR \
+                             $MEM_256MB_NON_SECURE_JUMP_ADDR \
+                           )
 
 declare -a mem_512MB_addrs=( $MEM_512MB_LOAD_ADDR \
                              $MEM_512MB_JUMP_ADDR \
@@ -103,6 +118,7 @@ user_partition_size["navi-ref-ubuntu"]="2G"
 user_partition_size["avn-ref-ubuntu"]="2G"
 user_partition_size["convergence-svmc-ubuntu"]="2G"
 user_partition_size["svt-ref"]="1G"
+user_partition_size["bitminer-ref"]="3G"
 #------------------------------------
 # dev_portnum define
 declare -A targets_dev_portnum
@@ -116,6 +132,7 @@ targets_dev_portnum["smart-voice"]=0
 targets_dev_portnum["ff-voice"]=0
 targets_dev_portnum["convergence-svmc"]=0
 targets_dev_portnum["convergence-daudio"]=0
+targets_dev_portnum["bitminer-ref"]=2
 #------------------------------------
 # NSIH header address
 declare -A targets_load_start_address
@@ -149,6 +166,8 @@ boot_partition_size["s5p6818"]=67108864 #64MB
 mem_addrs=("${mem_2G_addrs[@]}")
 # RAM 512MB USE
 #mem_addrs=("${mem_512MB_addrs[@]}")
+# RAM 256MB USE
+#mem_addrs=("${mem_256MB_addrs[@]}")
 #------------------------------------
 
 # aes key
@@ -238,6 +257,9 @@ function convert_env_setup()
 		if [ ${BOARD_NAME} == 'svt-ref' ]; then
 			#OPTEE_PLAT_DRAM_SIZE=1024
 			mem_addrs=("${mem_1G_addrs[@]}")
+		fi
+		if [ ${BOARD_NAME} == 'bitminer-ref' ]; then
+			mem_addrs=("${mem_256MB_addrs[@]}")
 		fi
 	else
 		ARM_ARCH="arm"
@@ -341,32 +363,32 @@ function make_2ndboot_for_emmc()
     local aes_key=${1}
 
     if [ "${chip_name}" == "s5p6818" ]; then
-	if [ ${SECURE_BOOT} == "true" ]; then
-	    aes_key=${1}
-	    echo -e "Yocto build not support aes encrypt! Something wrong!"
-	    exit 1
-        fi
-	gen_img=bl1-emmcboot.bin
-	aes_in_img=${gen_img}
-	aes_out_img=bl1-emmcboot.img
+        if [ ${SECURE_BOOT} == "true" ]; then
+            aes_key=${1}
+            echo -e "Yocto build not support aes encrypt! Something wrong!"
+            exit 1
+            fi
+        gen_img=bl1-emmcboot.bin
+        aes_in_img=${gen_img}
+        aes_out_img=bl1-emmcboot.img
     elif [ "${chip_name}" == "s5p4418" ]; then
-	gen_img=bl1-emmcboot.bin
+        gen_img=bl1-emmcboot.bin
     else
-	gen_img=bl1-emmcboot.img
+        gen_img=bl1-emmcboot.img
     fi
 
     # SECURE
     if [ "${chip_name}" == "s5p6818" ]; then
-	if [ ${SECURE_BOOT} == "true" ]; then
-            gen_hash_rsa ${gen_img} "" ${PRIVATE_KEY}
-            dd if=${gen_img}.pub of=${gen_img} ibs=256 count=1 obs=512 seek=1 conv=notrunc
-            # AES encrypt
-	    echo "SECURE BOOT not support Yocto build.\nIf you need to secure build, please contact us."
-	    exit 1
-	    aes_encrypt ${aes_out_img} ${aes_in_img} ${aes_key}
-	else
-	    cp ${gen_img} ${aes_out_img}
-       fi
+        if [ ${SECURE_BOOT} == "true" ]; then
+                gen_hash_rsa ${gen_img} "" ${PRIVATE_KEY}
+                dd if=${gen_img}.pub of=${gen_img} ibs=256 count=1 obs=512 seek=1 conv=notrunc
+                # AES encrypt
+            echo "SECURE BOOT not support Yocto build.\nIf you need to secure build, please contact us."
+            exit 1
+            aes_encrypt ${aes_out_img} ${aes_in_img} ${aes_key}
+        else
+            cp ${gen_img} ${aes_out_img}
+        fi
     fi
 }
 
@@ -445,7 +467,7 @@ function post_process()
         gen_nonsecure ${result_dir} fip-nonsecure.bin ${PRIVATE_KEY}
         gen_loader_usb ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
     else
-	make_2ndboot_for_emmc
+        make_2ndboot_for_emmc
         # 1:${soc} |  2:${in} | 3:${load_addr} | 4:${jump_addr} | 5:${out} | 6:${extra_opts}
         local dev_portnum=${targets_dev_portnum[${BOARD_NAME}]}
 

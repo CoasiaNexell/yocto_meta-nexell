@@ -27,7 +27,7 @@ inherit deploy
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
-    install -m 0644 ${S}/out/${BL1_BIN} ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/${BL1_BIN} ${DEPLOY_DIR_IMAGE}/${BL1_FINAL_BIN}
     install -m 0644 ${S}/out/${BL1_EMMCBOOT} ${DEPLOY_DIR_IMAGE}
 }
 
