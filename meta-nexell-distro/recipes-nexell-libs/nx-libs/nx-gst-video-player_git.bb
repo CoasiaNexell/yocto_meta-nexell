@@ -33,26 +33,16 @@ EXTRA_OECONF = " \
      "
 
 EXTRA_OEMAKE = " \
-    'libnxgstvplayer_la_CFLAGS = \
-        $(GST_CFLAGS) \
-        -I${STAGING_INCDIR} \
-        -I${STAGING_LIBDIR}/glib-2.0/include \
-        -I${STAGING_INCDIR}/glib-2.0 \
-        -I${STAGING_INCDIR}/gstreamer-1.0 \
-        -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
     'libnxgstvplayer_la_CPPFLAGS = \
+        $(WARN_CFLAGS) \
         $(GST_CFLAGS) \
+        -I./include \
         -I${STAGING_INCDIR} \
-        -I${STAGING_LIBDIR}/glib-2.0/include \
-        -I${STAGING_INCDIR}/glib-2.0 \
-        -I${STAGING_INCDIR}/gstreamer-1.0 \
         -I${STAGING_INCDIR}/gdk-pixbuf-2.0' \
     'libnxgstvplayer_la_LDFLAGS = -L${STAGING_LIBDIR} -version-number 0:9:0' \
     'libnxgstvplayer_la_LDFLAGS += \
-        -lglib-2.0 \
+        $(GST_LIBS) \
         -lgstmpegts-1.0 \
-        -lgstreamer-1.0 \
-        -lgstpbutils-1.0 \
         -lgdk_pixbuf-2.0' \
     "
 
