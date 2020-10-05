@@ -14,8 +14,15 @@ postprocess_common_function() {
     echo "inet:x:3003:root"    >> etc/group
     echo "net_raw:x:3004:root" >> etc/group
 
-    # data partition add
-    echo "/dev/mmcblk0p6 /data         ext4     noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+    if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
+	    if [ ! -z "${PART_DATA_SIZE}" ] && [ ! -z "${PART_DATA_NODE}" ]; then
+            echo "${PART_DATA_NODE} /data ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+        fi
+	    if [ ! -z "${PART_MISC_SIZE}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
+            echo "${PART_MISC_NODE} /misc ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+        fi
+    fi
+
     echo "/dev/mmcblk0*" >> etc/udev/mount.blacklist
 }
 

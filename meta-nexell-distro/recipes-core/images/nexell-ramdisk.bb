@@ -36,14 +36,15 @@ do_recovery_image[nostamp] = "1"
 DEPENDS_append = " update-rc.d-native"
 
 PACKAGE_INSTALL += " \
-    swupdate \
-    swupdate-tools \
-    swupdate-recovery \
-    ${@ 'psplash' if d.getVar('SWU_PROGRESS_PSPLASH') else ''} \
-    udev \
-    udev-extraconf \
-    nexell-init \
-    util-linux-agetty \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'swupdate', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'swupdate-tools', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'swupdate-recovery', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', \
+        bb.utils.contains('SWU_PROGRESS_PSPLASH', 'true', 'psplash', '', d), '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'udev', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'udev-extraconf', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'nexell-init', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'util-linux-agetty', '', d)} \
     "
 
 postprocess_recovery_image () {
@@ -66,4 +67,5 @@ postprocess_recovery_image () {
     fi
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "postprocess_recovery_image;"
+ROOTFS_POSTPROCESS_COMMAND += "${@bb.utils.contains('DISTRO_FEATURES', 'swupdate', 'postprocess_recovery_image;', '', d)}"
+
