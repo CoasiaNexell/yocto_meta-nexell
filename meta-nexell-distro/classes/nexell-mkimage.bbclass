@@ -657,33 +657,37 @@ make_sparse_rootfs_img() {
 
     cp ${NEXELL_FUSING_TOOLS_PATH}/partition.txt ${dst_path}
 
-    # make misc/etc directory
-    rm -rf ${dst_path}/misc
-    mkdir -p ${dst_path}/misc/etc
+	if ${@bb.utils.contains('DISTRO_FEATURES','swupdate','true','false',d)}; then
+        # make misc/etc directory
+        rm -rf ${dst_path}/misc
+        mkdir -p ${dst_path}/misc/etc
 
-    cp ${NEXELL_TOOLS_PATH}/configs/swu_config/swu.private.key ${dst_path}/misc/etc
-    cp ${NEXELL_TOOLS_PATH}/configs/swu_config/swu.public.key ${dst_path}/misc/etc
-    cp ${NEXELL_TOOLS_PATH}/configs/swu_config/hwrevision ${dst_path}/misc/etc
-    cp ${NEXELL_TOOLS_PATH}/configs/swu_config/sw-versions ${dst_path}/misc/etc
-    cp ${NEXELL_TOOLS_PATH}/configs/swu_config/swu-sw-description_emmc ${dst_path}
-    cp ${NEXELL_TOOLS_PATH}/swu_image.sh ${dst_path}
-    cp ${NEXELL_TOOLS_PATH}/swu_hash.py ${dst_path}
-    cp ${NEXELL_TOOLS_PATH}/swu-script-postinstall.sh ${dst_path}
-    cp ${NEXELL_TOOLS_PATH}/swu-script-preinstall.sh ${dst_path}
+        cp ${NEXELL_SWU_CONFIG}/swu.private.key ${dst_path}/misc/etc
+        cp ${NEXELL_SWU_CONFIG}/swu.public.key ${dst_path}/misc/etc
+        cp ${NEXELL_SWU_CONFIG}/hwrevision ${dst_path}/misc/etc
+        cp ${NEXELL_SWU_CONFIG}/sw-versions ${dst_path}/misc/etc
+        cp ${NEXELL_SWU_CONFIG}/sw-dsc ${dst_path}
+        cp ${NEXELL_TOOLS_PATH}/swu_image.sh ${dst_path}
+        cp ${NEXELL_TOOLS_PATH}/swu_hash.py ${dst_path}
+        cp ${NEXELL_TOOLS_PATH}/swu-script-postinstall.sh ${dst_path}
+        cp ${NEXELL_TOOLS_PATH}/swu-script-preinstall.sh ${dst_path}
 
-    # make misc.img
-    ${NEXELL_TOOL_MAKE_EXT4FS} -s -l 16777216 -b 4K -a misc ${dst_path}/misc.img ${dst_path}/misc
-    echo "misc partition size : 16777216 byte"
+        # make misc.img
+        ${NEXELL_TOOL_MAKE_EXT4FS} -s -l 16777216 -b 4K -a misc ${dst_path}/misc.img ${dst_path}/misc
+        echo "misc partition size : 16777216 byte"
 
-    # make update.swu
-    ${NEXELL_TOOL_SWU_IMAGE} -f ${dst_path}/swu-sw-description_emmc \
-    -p nxp4330 -k ${dst_path}/misc/etc/swu.private.key \
-    -o ${dst_path}/update.swu -d ${dst_path}
+        # make update.swu
+        ${NEXELL_TOOL_SWU_IMAGE} -f ${dst_path}/sw-dsc \
+        -p nxp4330 -k ${dst_path}/misc/etc/swu.private.key \
+        -o ${dst_path}/update.swu -d ${dst_path}
+
+        copy_file_to_output ${dst_path}/misc.img
+        copy_file_to_output ${dst_path}/update.swu
+	fi
+
     # copy image to output directory
     copy_file_to_output ${dst_path}/rootfs.img
     copy_file_to_output ${dst_path}/userdata.img
-    copy_file_to_output ${dst_path}/misc.img
-    copy_file_to_output ${dst_path}/update.swu
 
     copy_rootfs_image ${dst_path} ${BSP_OUTPUT_DIR_PATH}
 }
