@@ -25,20 +25,18 @@ CGMINER_INSTALL = " \
 "
 
 WEB_INSTALL = " \
-    u-boot-nexell \
     screen \
     libmodbus \
-    modbus-tcp-server \
     lighttpd \
 "
-
-NEXELL_KERNEL_TEST_IMAGE_INSTALL = " \
-    can-utils \
-"
+#WEB_INSTALL += " \
+#    modbus-tcp-server \
+#"
 
 IMAGE_INSTALL_append = " \
     kernel-modules \
     ${SYSTEMD_INSTALL} \
     ${DEVEL_TOOLS} \
+    ${WEB_INSTALL} \
 "
 
