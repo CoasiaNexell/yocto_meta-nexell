@@ -24,6 +24,11 @@ CGMINER_INSTALL = " \
     cgminer-gekko \
 "
 
+# The python3 needed for SPI interface verification.
+CGMINER_DEBUG = " \
+    python3 \
+"
+
 WEB_INSTALL = " \
     screen \
     libmodbus \
@@ -38,5 +43,6 @@ IMAGE_INSTALL_append = " \
     ${SYSTEMD_INSTALL} \
     ${DEVEL_TOOLS} \
     ${WEB_INSTALL} \
+    ${CGMINER_DEBUG} \
 "
 
