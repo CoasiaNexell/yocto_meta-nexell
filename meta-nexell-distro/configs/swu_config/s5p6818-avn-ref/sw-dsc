@@ -38,32 +38,32 @@ software =
 			install-if-different = true;
 		},
 		{
-			name = "bl2";
-			filename = "loader-emmc.img";
+			name = "fip-loader-emmc";
+			filename = "fip-loader-emmc.img"
 			device = "/dev/mmcblk0";		/* partition */
 			type = "raw";
 			offset = "0x10200";			/* must be string */
-			sha256 = "@loader-emmc.img";
+			sha256 = "@fip-loader-emmc.img";
 			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
-			name = "bl32";
-			filename = "bl_mon.img";
+			name = "fip-secure";
+			filename = "fip-secure.img";
 			device = "/dev/mmcblk0";		/* partition */
 			type = "raw";
-			offset = "0x40200";			/* must be string */
-			sha256 = "@bl_mon.img";
+			offset = "0x60200";			/* must be string */
+			sha256 = "@fip-secure.img";
 			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},
 		{
-			name = "bootloader";
-			filename = "bootloader.img";
+			name = "fip-nonsecure";
+			filename = "fip-nonsecure.img";
 			device = "/dev/mmcblk0";		/* partition */
 			type = "raw";
 			offset = "0x1E0200";			/* must be string */
-			sha256 = "@bootloader.img";
+			sha256 = "@fip-nonsecure.img";
 			version = "2.0";			/* compare with name '/misc/etc/sw-versions' */
 			install-if-different = true;
 		},

@@ -673,8 +673,8 @@ make_sparse_rootfs_img() {
         cp ${NEXELL_TOOLS_PATH}/swu-script-preinstall.sh ${dst_path}
 
         # make misc.img
-        ${NEXELL_TOOL_MAKE_EXT4FS} -s -l 16777216 -b 4K -a misc ${dst_path}/misc.img ${dst_path}/misc
-        echo "misc partition size : 16777216 byte"
+        ${NEXELL_TOOL_MAKE_EXT4FS} -s -l 6291456 -b 4K -a misc ${dst_path}/misc.img ${dst_path}/misc
+        echo "misc partition size : 6291456 byte"
 
         # make update.swu
         ${NEXELL_TOOL_SWU_IMAGE} -f ${dst_path}/sw-dsc \
