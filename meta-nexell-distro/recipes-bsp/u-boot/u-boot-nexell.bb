@@ -24,8 +24,6 @@ do_install() {
 	if [ -n "${UBOOT_RECOVERYBOOT_ARGS}" ]; then
 		sed -i -e 's/recoveryboot=.*/recoveryboot='"${UBOOT_RECOVERYBOOT_ARGS}"'/g' default_envs.txt
 	fi
-    sed -i -e 's/autorecovery_cmd=.*/autorecovery_cmd='"${UBOOT_AUTORECOVERY_ARGS}"'/g' default_envs.txt
-    sed -i -e 's/splashimage=.*/splashimage='"${UBOOT_SPLASHIMAGE_ARGS}"'/g' default_envs.txt
 }
 
 inherit nexell-mkimage
