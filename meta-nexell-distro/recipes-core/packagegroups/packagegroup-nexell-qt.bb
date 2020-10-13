@@ -172,6 +172,7 @@ NEXELL_LIBS = " \
 
 NEXELL_APPS = "\
     nx-video-api-test \
+    spidevtest \
 "
 
 UTILS_INSTALL = " \
