@@ -78,6 +78,9 @@ IMAGE_INSTALL_append = " \
 	${NEXELL_CUSTOMIZE_INSTALL} \
 "
 
+# for populate_sdk to create a valid toolchain
+inherit populate_sdk_qt5
+
 postprocess_rootfs_image () {
     local rootdir=${IMAGE_ROOTFS}
     mkdir -p ${rootdir}/misc
