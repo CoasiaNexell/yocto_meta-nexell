@@ -37,122 +37,6 @@ QT5_ESSENTIAL_IMAGES = " \
     qtgraphicaleffects-qmlplugins \
 "
 
-QT5_4_ESSENTIAL_IMAGES = " \
-    qtimageformats-plugins \
-    qtdeclarative-plugins \
-    qtsystems-qmlplugins \
-"
-QT5_4_EXTRA_IMAGES = " \
-    maliit-framework-qt5 \
-    maliit-plugins-qt5 \
-"
-QT5_4_EXAMPLE_IMAGES = " \
-    qtsmarthome \
-    qt5-demo-extrafiles \
-    qtconnectivity-examples \
-    qtdeclarative-examples \
-    qtbase-examples \
-    qtsystems-examples \
-    qtmultimedia-examples \
-    qtlocation-examples \
-    qtscript-examples \
-    qtquickcontrols-examples \
-    qtquickcontrols-qmlplugins \
-    qt3d-examples \
-    cinematicexperience \
-"
-
-QT5_6_ESSENTIAL_IMAGES = " \
-    qtscript \
-    qtquick1 \
-    qtquick1-plugins \
-    qtquick1-qmlplugins \
-    liberation-fonts \
-    qtbase-examples \
-    qtsystems-examples \
-    qtmultimedia-examples \
-    qtscript-examples \
-    qtquickcontrols-examples \
-    qt3d-examples \
-    cinematicexperience \
-"
-QT5_8_ESSENTIAL_IMAGES = " \
-    qtbase \
-    qtbase-plugins \
-    qtdeclarative-qmlplugins \
-    qtlocation-plugins \
-    qtlocation-qmlplugins \
-    qtmultimedia-plugins \
-    qtmultimedia-qmlplugins \
-    qt3d-qmlplugins \
-    qtwebkit-qmlplugins \
-    qtquick1-plugins \
-    qtquick1-qmlplugins \
-    qtquickcontrols-qmlplugins \
-    qtquickcontrols2-qmlplugins \
-    qtgraphicaleffects-qmlplugins \
-    qtvirtualkeyboard-plugins \
-    qtvirtualkeyboard-qmlplugins \
-    liberation-fonts \
-    cinematicexperience \
-"
-QT5_9_ESSENTIAL_IMAGES = " \
-    qtbase \
-    qtbase-plugins \
-    qtdeclarative-qmlplugins \
-    qtlocation-plugins \
-    qtlocation-qmlplugins \
-    qtmultimedia-plugins \
-    qtmultimedia-qmlplugins \
-    qt3d-qmlplugins \
-    qtwebkit-qmlplugins \
-    qtquick1-plugins \
-    qtquick1-qmlplugins \
-    qtquickcontrols-qmlplugins \
-    qtquickcontrols2-qmlplugins \
-    qtgraphicaleffects-qmlplugins \
-    qtvirtualkeyboard-plugins \
-    qtvirtualkeyboard-qmlplugins \
-    liberation-fonts \
-    cinematicexperience \
-"
-
-
-QT5_10_ESSENTIAL_IMAGES = " \
-    qtsmarthome \
-    qtquick1-plugins \
-    qtquick1-qmlplugins \
-    qtquickcontrols2-qmlplugins \
-    qtvirtualkeyboard-plugins \
-    qtvirtualkeyboard-qmlplugins \
-    liberation-fonts \
-"
-
-QT5_11_ESSENTIAL_IMAGES = " \
-    qtscript \
-    liberation-fonts \
-    qtbase-examples \
-    qtsystems-examples \
-    qtmultimedia-examples \
-    qtscript-examples \
-    qtquickcontrols-examples \
-    qt3d-examples \
-    cinematicexperience \
-       qtdeclarative \
-       qtdeclarative-qmlplugins \
-       qtdeclarative-tools \
-       qtdeclarative-examples \
-    qtlocation-plugins \
-    qtlocation-qmlplugins \
-    qtmultimedia-plugins \
-    qtmultimedia-qmlplugins \
-    qt3d-qmlplugins \
-    qtwebkit-qmlplugins \
-    qtquickcontrols-qmlplugins \
-    qtquickcontrols2-qmlplugins \
-    qtgraphicaleffects-qmlplugins \
-"
-
 QT5_14_ESSENTIAL_IMAGES = " \
     qtscript \
     liberation-fonts \
@@ -236,16 +120,7 @@ RDEPENDS_${PN} = " \
     ${GSTREAMER10} \
     ${QT5_ESSENTIAL_IMAGES} \
     ${QT_WAYLAND} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_ESSENTIAL_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXTRA_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXAMPLE_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT_ALSA_LIB_IMAGE_INSTALL}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', '${QT5_6_ESSENTIAL_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', '${QT5_9_ESSENTIAL_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.10', '${QT5_10_ESSENTIAL_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.11', '${QT5_11_ESSENTIAL_IMAGES}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.14', '${QT5_14_ESSENTIAL_IMAGES}', '', d)}  \
+    ${QT5_14_ESSENTIAL_IMAGES} \
     ${NEXELL_LIBS} \
     ${NEXELL_APPS} \
     ${UTILS_INSTALL} \
