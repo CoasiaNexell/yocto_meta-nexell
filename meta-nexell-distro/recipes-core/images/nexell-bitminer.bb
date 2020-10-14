@@ -29,6 +29,10 @@ CGMINER_DEBUG = " \
     python3 \
 "
 
+SPITEST_TOOLS = " \
+    spidevtest \
+"
+
 WEB_INSTALL = " \
     screen \
     libmodbus \
@@ -44,5 +48,6 @@ IMAGE_INSTALL_append = " \
     ${DEVEL_TOOLS} \
     ${WEB_INSTALL} \
     ${CGMINER_DEBUG} \
+    ${SPITEST_TOOLS} \
 "
 
