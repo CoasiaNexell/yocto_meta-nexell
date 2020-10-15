@@ -21,7 +21,7 @@ DEVEL_TOOLS = " \
 "
 
 CGMINER_INSTALL = " \
-    cgminer-gekko \
+    cgminer \
 "
 
 # The python3 needed for SPI interface verification.
@@ -49,5 +49,6 @@ IMAGE_INSTALL_append = " \
     ${WEB_INSTALL} \
     ${CGMINER_DEBUG} \
     ${SPITEST_TOOLS} \
+    ${CGMINER_INSTALL} \
 "
 
