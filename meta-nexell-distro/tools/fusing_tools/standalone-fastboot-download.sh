@@ -337,7 +337,7 @@ update_boot ${RESULT_DIR}/boot.img
 if [ "${MACHINE_NAME}" == "s5p4418-convergence-daudio-qt" ]; then
 update_svmdata ${RESULT_DIR}/svmdata.img
 fi
-if [ "${MACHINE_NAME}" == "s5p4418-convergence-svmc-qt" ] || [ "${MACHINE_NAME}" == "s5p4418-navi-ref-qt" ] || [ "${MACHINE_NAME}" == "s5p6818-avn-ref-qt" ]; then
+if [ "${MACHINE_NAME}" == "s5p4418-convergence-svmc-qt" ] || [ "${MACHINE_NAME}" == "s5p4418-navi-ref-qt" ] || [ "${MACHINE_NAME}" == "s5p6818-avn-ref-qt" ] || [ "${MACHINE_NAME}" == "s5p6818-convergence-svmc-qt" ]; then
 update_misc ${RESULT_DIR}/misc.img
 fi
 update_root ${RESULT_DIR}/rootfs.img
