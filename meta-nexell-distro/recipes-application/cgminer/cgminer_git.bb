@@ -7,7 +7,13 @@ DEPENDS = "ncurses curl libusb jansson"
 
 inherit autotools pkgconfig
 
-SRC_URI = "git://github.com/CoasiaNexell/linux_apps_cgminer;protocol=https;branch=btc08"
+PV = "1.0+EXTERNAL_SRC"
+
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+SRC_PATH = "${BSP_TOP_PATH}/apps/cgminer"
+
+SRC_URI = "file://${SRC_PATH}"
 
 S = "${WORKDIR}/git"
 
@@ -22,6 +28,13 @@ EXTRA_OECONF = " \
 	     "
 
 CFLAGS_prepend = "-I . -I ${S} -I ${S}/compat/jansson-2.9/src `pkg-config libusb-1.0 --cflags`"
+
+do_myp() {
+    rm -rf ${S}
+    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    rm -rf ${WORKDIR}/home
+}
+addtask myp before do_patch after do_unpack
 
 do_configure() {
 	cd ${S}
