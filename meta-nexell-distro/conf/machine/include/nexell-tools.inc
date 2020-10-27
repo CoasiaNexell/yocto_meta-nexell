@@ -30,3 +30,6 @@ NEXELL_TOOL_EXT2SIMG = "${NEXELL_CONVERT_TOOLS_PATH}/ext2simg"
 
 # For swu image
 NEXELL_TOOL_SWU_IMAGE = "${NEXELL_TOOLS_PATH}/swu_image.sh"
+
+# For daudio sdk
+NEXELL_SDK_HEADER_FILE = "${BSP_ROOT_DIR}/layers/meta-nexell/meta-nexell-distro/recipes-solutions/nexell-sdk/files"
