@@ -51,6 +51,7 @@ do_install () {
 }
 
 do_deploy() {
+	install -d ${DEPLOY_DIR_IMAGE}
 	if [ ! -z "${SWU_SUPPORT_MAKE_SWU_IMAGE}" ] && [ "${SWU_SUPPORT_MAKE_SWU_IMAGE}" = "true" ]; then
 		install -m 0755 ${WORKDIR}/${SWU_TOOL_IMAGE_GEN} ${DEPLOY_DIR_IMAGE}
 	fi
