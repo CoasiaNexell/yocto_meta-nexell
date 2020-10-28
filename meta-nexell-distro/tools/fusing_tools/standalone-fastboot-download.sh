@@ -96,7 +96,7 @@ function parse_args()
     local temp="${array[-1]}"
 
     MACHINE_NAME=${temp#*-}
-    BOARD_SOCNAME=${MACHINE_NAME%-*-*-*}
+    BOARD_SOCNAME=${MACHINE_NAME%-*-*-*-*}
     IMAGE_TYPE=${MACHINE_NAME#*-*-*-}
     BOARD_NAME=${MACHINE_NAME#*-}
     BOARD_PREFIX=${BOARD_NAME%-*}

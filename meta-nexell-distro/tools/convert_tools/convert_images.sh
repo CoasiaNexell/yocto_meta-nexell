@@ -103,6 +103,8 @@ user_partition_size["navi-ref-ubuntu"]="2G"
 user_partition_size["avn-ref-ubuntu"]="2G"
 user_partition_size["convergence-svmc-ubuntu"]="2G"
 user_partition_size["svt-ref"]="1G"
+user_partition_size["vapor-gang"]="6G"
+
 #------------------------------------
 # dev_portnum define
 declare -A targets_dev_portnum
@@ -411,6 +413,8 @@ function make_sparse_rootfs_img()
     fi
     rm -rf userdata
     mkdir -p userdata
+
+    echo "${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l ${partition_size} -b 4K -a user userdata.img ./userdata"
 
     ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l ${partition_size} -b 4K -a user userdata.img ./userdata
     echo "userdata partition size : ${partition_size}byte"

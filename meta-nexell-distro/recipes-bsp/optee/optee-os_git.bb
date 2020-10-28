@@ -11,7 +11,7 @@ SRC_URI = "git://github.com/CoasiaNexell/secure_optee_optee-os;protocol=https;br
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st|s5p6818-svt-ref)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st|s5p6818-svt-ref|s5p6818-vapor-gang)"
 
 S = "${WORKDIR}/git"
 
