@@ -114,9 +114,14 @@ UTILS_INSTALL = " \
     lsof \
 "
 
+WESTON_CONF = " \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', '', \
+	   bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-daudio', '', 'weston-conf', d), d)} \
+"
+
 RDEPENDS_${PN} = " \
     nexell-drm-mali-qt \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', '', 'weston-conf', d)} \
+    ${WESTON_CONF} \
     ${GSTREAMER10} \
     ${QT5_ESSENTIAL_IMAGES} \
     ${QT_WAYLAND} \

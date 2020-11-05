@@ -63,12 +63,17 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 	nexell-qt5-touchsetup \
 "
 
+WESTON_INIT = " \
+	${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', '', \
+	   bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-daudio', '', 'weston-init', d), d)} \
+"
+
 IMAGE_INSTALL_append = " \
 	kernel-modules \
 	${SYSTEMD_INSTALL} \
 	${DEVEL_TOOLS} \
 	packagegroup-nexell-qt \
-	${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', '', 'weston-init', d)} \
+    ${WESTON_INIT} \
 	rtl-8188eus-${ARCH_TYPE_NUM} \
 	testsuite \
 	${TOUCH_IMAGE_INSTALL} \
