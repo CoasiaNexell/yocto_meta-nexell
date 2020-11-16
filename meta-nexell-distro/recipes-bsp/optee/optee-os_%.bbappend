@@ -1,6 +1,6 @@
 ### Nexell - For Yocto build with using local source
 
-EXTERNALSRC = "${BSP_VENDOR_DIR}/secure/optee/optee_os"
+EXTERNALSRC = "${BSP_VENDOR_DIR}/firmware/optee/optee_os"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 
 S = "${WORKDIR}/${EXTERNALSRC}"

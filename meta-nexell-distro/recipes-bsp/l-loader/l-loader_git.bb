@@ -8,7 +8,7 @@ SRCREV = "${AUTOREV}"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
-SRC_PATH = "${BSP_VENDOR_DIR}/secure/l-loader"
+SRC_PATH = "${BSP_VENDOR_DIR}/firmware/l-loader"
 
 SRC_URI = "file://${SRC_PATH}"
 

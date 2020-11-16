@@ -60,7 +60,7 @@ image_postprocess_qt_function() {
 			${NEXELL_USER_PARTITION_SIZE} \
 			${DEPLOY_DIR_IMAGE}
 
-	copy_fusing_tools ${BSP_OUTPUT_DIR_PATH}
+	copy_fusing_tools ${BSP_OUTPUT_DIR}
 }
 
 IMAGE_POSTPROCESS_COMMAND += "image_postprocess_qt_function;"

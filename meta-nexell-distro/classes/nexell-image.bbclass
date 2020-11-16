@@ -44,7 +44,7 @@ do_misc_image[nostamp] = "1"
 
 image_postprocess_copy_results_function() {
 
-	copy_fusing_tools ${BSP_OUTPUT_DIR_PATH}
+	copy_fusing_tools ${BSP_OUTPUT_DIR}
 }
 
 IMAGE_POSTPROCESS_COMMAND += "image_postprocess_copy_results_function;"

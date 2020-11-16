@@ -8,7 +8,7 @@ inherit externalsrc
 inherit nexell-bingen
 
 
-BL2_SOURCE = "${BSP_VENDOR_DIR}/secure/bl2-nxp3220"
+BL2_SOURCE = "${BSP_VENDOR_DIR}/firmware/bl2-nxp3220"
 EXTERNALSRC = "${BL2_SOURCE}"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""

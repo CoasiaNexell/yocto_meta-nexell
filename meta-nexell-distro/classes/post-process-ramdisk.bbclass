@@ -7,7 +7,7 @@ image_postprocess_ramdisk_function() {
     # 3:${arm_arch}
     # output : ${DEPLOY_DIR_IMAGE}/boot/uInitrd
     make_ramdisk_image ${ARM_ARCH} \
-            ${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${BSP_TARGET_MACHINE}.cpio.gz \
+            ${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.cpio.gz \
             ${DEPLOY_DIR_IMAGE}
 }
 

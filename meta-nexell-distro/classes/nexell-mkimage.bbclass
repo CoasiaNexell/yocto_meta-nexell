@@ -5,14 +5,14 @@ inherit nexell-secure
 # for all
 # =================================================
 make_output_dir() {
-    if [ ! -d ${BSP_OUTPUT_DIR_PATH} ];then
+    if [ ! -d ${BSP_OUTPUT_DIR} ];then
         if [ ${BSP_TARGET_SOCNAME} = "nxp3220" ];then
-            mkdir -p ${BSP_OUTPUT_DIR_PATH}
-            chmod 777 ${BSP_OUTPUT_DIR_PATH}
+            mkdir -p ${BSP_OUTPUT_DIR}
+            chmod 777 ${BSP_OUTPUT_DIR}
         else
-            mkdir -p ${BSP_OUTPUT_DIR_PATH}/tools
-            chmod 777 ${BSP_OUTPUT_DIR_PATH}
-            chmod 777 ${BSP_OUTPUT_DIR_PATH}/tools
+            mkdir -p ${BSP_OUTPUT_DIR}/tools
+            chmod 777 ${BSP_OUTPUT_DIR}
+            chmod 777 ${BSP_OUTPUT_DIR}/tools
         fi
     fi
 }
@@ -24,7 +24,7 @@ copy_file_to_output() {
 
 	#if [ -f ${in_file} ]; then
 	if ls ${in_file} 1> /dev/null 2>&1; then
-		cp -af ${in_file} ${BSP_OUTPUT_DIR_PATH}
+		cp -af ${in_file} ${BSP_OUTPUT_DIR}
 	fi
 }
 
@@ -395,7 +395,7 @@ make_ubi_image() {
 # =================================================
 copy_board_partmap() {
     local out_dir=$1
-    cp -af ${NEXELL_BOARD_PARTMAP_PATH}/partmap_emmc_${BSP_TARGET_MACHINE}.txt ${out_dir}/partmap_emmc.txt
+    copy_files ${NEXELL_BOARD_PARTMAP_PATH} $out_dir "_${BSP_TARGET_MACHINE}" "true"
 }
 
 copy_kernel_image() {
@@ -432,6 +432,43 @@ copy_rootfs_image() {
     fi
 }
 
+copy_files() {
+    echo "\033[40;33m ================================================= \033[0m"
+    echo "\033[40;33m copy_files \033[0m"
+    echo "\033[40;33m ------------------------------------------------- \033[0m"
+	echo "\033[40;33m in_dir : '$1' \033[0m"
+    echo "\033[40;33m out_dir : '$2' \033[0m"
+    echo "\033[40;33m comp_str : '$3' \033[0m"
+    echo "\033[40;33m is_exclude : '$4' \033[0m"
+    echo "\033[40;33m ================================================= \033[0m"
+
+    local in_dir=$1 out_dir=$2 comp_str=$3 is_exclude=$4
+
+    if [ -z "$comp_str" ]; then
+        cp -af $in_dir/* $out_dir
+        return
+    fi
+
+    for file in $in_dir/*
+    do
+        filename=${file##*/}
+        #extension="${file_name##*.}"
+        echo "\033[40;33m filename=$filename \033[0m"
+        echo "\033[40;33m comp_str=$comp_str \033[0m"
+        echo "\033[40;33m is_exclude=$is_exclude \033[0m"
+
+        if echo "$filename" | grep -q "$comp_str"; then
+    		if [ "$is_exclude" = "true" ] ; then
+                newfilename=$(echo "$filename" | sed "s/$comp_str//g")
+                echo "newfilename=$newfilename"
+		    	cp -af $file $out_dir/$newfilename
+		    else
+			    cp -af $file $out_dir
+		    fi
+	    fi
+    done
+}
+
 copy_fusing_tools() {
     echo "\033[40;33m ================================================= \033[0m"
     echo "\033[40;33m copy_fusing_tools \033[0m"
@@ -452,21 +489,12 @@ copy_fusing_tools() {
         cp -af ${NEXELL_TOOLS_BIN_PATH}/simg2dev ${out_dir}
 
         # step3 : copy files
-        if ls ${NEXELL_TOOLS_FILES_PATH}/partmap_*.txt 1> /dev/null 2>&1; then
-            cp -af ${NEXELL_TOOLS_FILES_PATH}/partmap_*.txt ${out_dir}
-        fi
-        if ls ${NEXELL_TOOLS_FILES_PATH}/linux-partmap_*.txt 1> /dev/null 2>&1; then
-            cp -af ${NEXELL_TOOLS_FILES_PATH}/linux-partmap_*.txt ${out_dir}
-        fi
-        if ls ${NEXELL_TOOLS_FILES_PATH}/secure-bl*.txt 1> /dev/null 2>&1; then
-            cp -af ${NEXELL_TOOLS_FILES_PATH}/secure-bl*.txt ${out_dir}
-        fi
-        if ls ${NEXELL_TOOLS_FILES_PATH}/secure-jtag-hash.txt 1> /dev/null 2>&1; then
-            cp -af ${NEXELL_TOOLS_FILES_PATH}/secure-jtag-hash.txt ${out_dir}
-        fi
-        if ls ${NEXELL_TOOLS_FILES_PATH}/efuse_cfg-*.txt 1> /dev/null 2>&1; then
-            cp -af ${NEXELL_TOOLS_FILES_PATH}/efuse_cfg-*.txt ${out_dir}
-        fi
+        # copy partmap
+        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "_${BSP_TARGET_SOCNAME}" "true"
+        # copy secure files
+        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "secure-bl"
+        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "secure-jtag-hash.txt"
+        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "efuse_cfg-"
     else
         # step1 : copy scripts & tools
         mkdir -p ${out_dir}/tools
@@ -477,8 +505,8 @@ copy_fusing_tools() {
         # step2 : copy partition info & images
         copy_board_partmap ${out_dir}/tools
 
-
-        touch ${out_dir}/YOCTO.${BSP_OUTPUT_DIR_NAME}.INFO.DoNotChange
+        output_dir_name="${out_dir##*/}"
+        touch ${out_dir}/YOCTO.${output_dir_name}.INFO.DoNotChange
     fi
 }
 
@@ -610,13 +638,13 @@ make_bootimg() {
 
     # copy kernel image
     cp -aL ${src_path}/${NEXELL_KERNEL_IMAGE_NAME} ${dst_path}/boot
-    cp ${NEXELL_BOOTLOGO_PATH}/logo.bmp ${dst_path}/boot/
+    cp ${NEXELL_BOOT_LOGO} ${dst_path}/boot/
 
     # make boot.img
     ${NEXELL_TOOL_MAKE_EXT4FS} -s -l ${NEXELL_BOOT_PARTITION_SIZE} ${dst_path}/boot.img ${dst_path}/boot/
 
     # copy to result directory
-	copy_kernel_image ${dst_path} ${BSP_OUTPUT_DIR_PATH}
+	copy_kernel_image ${dst_path} ${BSP_OUTPUT_DIR}
 }
 
 make_sparse_rootfs_img() {
@@ -689,7 +717,7 @@ make_sparse_rootfs_img() {
     copy_file_to_output ${dst_path}/rootfs.img
     copy_file_to_output ${dst_path}/userdata.img
 
-    copy_rootfs_image ${dst_path} ${BSP_OUTPUT_DIR_PATH}
+    copy_rootfs_image ${dst_path} ${BSP_OUTPUT_DIR}
 }
 
 # =================================================

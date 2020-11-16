@@ -6,7 +6,7 @@ SRCREV = "${AUTOREV}"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
-SRC_PATH = "${BSP_VENDOR_DIR}/secure/armv7-dispatcher"
+SRC_PATH = "${BSP_VENDOR_DIR}/firmware/armv7-dispatcher"
 
 SRC_URI = "file://${SRC_PATH}"
 

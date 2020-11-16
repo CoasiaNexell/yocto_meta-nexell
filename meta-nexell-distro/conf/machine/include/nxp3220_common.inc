@@ -70,22 +70,22 @@ FLASH_DEVICE_SIZE ?= ""
 # -Set swupdate output image name, default nxp3220-1.0.swu
 #  SWU_UPDATE_SWU_IMAGE = "nxp3220-1.0.swu"
 # -Set sw-description file
-#  SWU_SWDESCRIPTION = "${BSP_TOOLS_DIR}/files/sw-description"
+#  SWU_SWDESCRIPTION = "${SWU_FILES_PATH}/sw-description"
 # -Set script files in sw-description
-#  SWU_SCRIPT_FILES = "${BSP_TOOLS_DIR}/files/swu-script.sh"
+#  SWU_SCRIPT_FILES = "${SWU_FILES_PATH}/swu-script.sh"
 #
 # -Install versions to /etc/hwrevision, /etc/sw-versions:
 #  SWU_HW_REVISION_TARGET = "nxp3220 2.0"
-#  SWU_SW_VERSION_FILE = "${BSP_TOOLS_DIR}/files/sw-version_n.x"
+#  SWU_SW_VERSION_FILE = "${SWU_FILES_PATH}/sw-version_n.x"
 #
 # Signing options for image:
 # -Enable signing with password
 #  SWU_SIGN_ENABLE = "true"  <- sha256 with no password
 #  SWU_SIGN_PASSWORD = "nxp3220" <- aes256 with password
 # -Set private key file to signing swuimage
-#  SWU_SIGN_PRIVATE_KEY = "${BSP_TOOLS_DIR}/files/swu.private.key"
+#  SWU_SIGN_PRIVATE_KEY = "${SWU_FILES_PATH}/swu.private.key"
 # -Install public key file to /etc/swu.public.key
-#  SWU_SIGN_PUBLIC_KEY = "${BSP_TOOLS_DIR}/files/swu.public.key"
+#  SWU_SIGN_PUBLIC_KEY = "${SWU_FILES_PATH}/swu.public.key"
 #
 # Replace services with 'recipes-bbappend/swupdate/files/swupdate, ...'
 #  SWU_DAEMON_SERVICES_REPLACE = "true"
@@ -118,13 +118,13 @@ SWU_DAEMON_SERVICES_REPLACE ?= "true"
 SWU_RECOVERY_ROOTFS_IMAGE ?= "nexell-recoveryimg-${MACHINE_ARCH}.cpio.gz.u-boot"
 
 SWU_UPDATE_SWU_IMAGE ?= "nxp3220-image-2.0.swu"
-SWU_SWDESCRIPTION ?= "${BSP_TOOLS_DIR}/files/swu-sw-description_emmc"
-SWU_SCRIPT_FILES ?= "${BSP_TOOLS_DIR}/files/swu-script-preinstall.sh ${BSP_TOOLS_DIR}/files/swu-script-postinstall.sh"
+SWU_SWDESCRIPTION ?= "${SWU_FILES_PATH}/swu-sw-description_emmc"
+SWU_SCRIPT_FILES ?= "${SWU_FILES_PATH}/swu-script-preinstall.sh ${SWU_FILES_PATH}/swu-script-postinstall.sh"
 SWU_HW_REVISION_TARGET ?= "nxp3220 2.0"
-SWU_SW_VERSION_FILE ?= "${BSP_TOOLS_DIR}/files/swu-sw-versions_2.0"
+SWU_SW_VERSION_FILE ?= "${SWU_FILES_PATH}/swu-sw-versions_2.0"
 SWU_SIGN_PASSWORD ?= "nxp3220"
-SWU_SIGN_PRIVATE_KEY ?= "${BSP_TOOLS_DIR}/files/swu.private.key"
-SWU_SIGN_PUBLIC_KEY ?= "${BSP_TOOLS_DIR}/files/swu.public.key"
+SWU_SIGN_PRIVATE_KEY ?= "${SWU_FILES_PATH}/swu.private.key"
+SWU_SIGN_PUBLIC_KEY ?= "${SWU_FILES_PATH}/swu.public.key"
 
 SWU_SERVICE_SWUPDATE_RECOVERY ?= "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /swu/*.swu -v -l6"
 SWU_SERVICE_PROGRESS_RECOVERY ?= "/usr/bin/swupdate-progress -r -w"
@@ -139,7 +139,11 @@ BSA_SERVICE_COMMAND ?= "/usr/bin/bsa_server -d /dev/ttyS0 -p /etc/bluetooth/BCM4
 
 
 # for tools path
-NEXELL_TOOLS_PATH = "${BSP_ROOT_DIR}/nxp3220_tools"
-NEXELL_TOOLS_SCRIPTS_PATH = "${NEXELL_TOOLS_PATH}/scripts"
-NEXELL_TOOLS_BIN_PATH = "${NEXELL_TOOLS_PATH}/bin"
-NEXELL_TOOLS_FILES_PATH = "${NEXELL_TOOLS_PATH}/files"
+NEXELL_TOOLS_PATH = "${BSP_TOOLS_DIR}"
+NEXELL_TOOLS_SCRIPTS_PATH = "${BSP_TOOLS_DIR}/scripts"
+NEXELL_TOOLS_BIN_PATH = "${BSP_TOOLS_DIR}/bin"
+
+# for swu_config & board_partmap
+NEXELL_SWU_CONFIG = "${BSP_FILES_DIR}/swu/${BSP_TARGET_SOCNAME}"
+NEXELL_PARTMAP_FILES_PATH = "${BSP_FILES_DIR}/partmap"
+NEXELL_SECURE_FILES_PATH = "${BSP_FILES_DIR}/secure"

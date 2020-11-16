@@ -6,7 +6,7 @@ SRCREV = "${AUTOREV}"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
-SRC_PATH = "${BSP_VENDOR_DIR}/secure/bl2-s5p4418"
+SRC_PATH = "${BSP_VENDOR_DIR}/firmware/bl2-s5p4418"
 
 SRC_URI = "file://${SRC_PATH}"
 

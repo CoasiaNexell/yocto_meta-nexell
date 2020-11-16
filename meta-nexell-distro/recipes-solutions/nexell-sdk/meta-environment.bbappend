@@ -1,4 +1,3 @@
-include nexell-tools.inc
 
 create_sdk_files() {
     # Setup site file for external use
