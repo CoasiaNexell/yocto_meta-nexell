@@ -490,11 +490,11 @@ copy_fusing_tools() {
 
         # step3 : copy files
         # copy partmap
-        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "_${BSP_TARGET_SOCNAME}" "true"
+        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "partmap_"
         # copy secure files
-        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "secure-bl"
-        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "secure-jtag-hash.txt"
-        copy_files ${NEXELL_PARTMAP_FILES_PATH} ${out_dir} "efuse_cfg-"
+        copy_files ${NEXELL_SECURE_FILES_PATH} ${out_dir} "secure-bl"
+        copy_files ${NEXELL_SECURE_FILES_PATH} ${out_dir} "secure-jtag-hash.txt"
+        copy_files ${NEXELL_SECURE_FILES_PATH} ${out_dir} "efuse_cfg-"
     else
         # step1 : copy scripts & tools
         mkdir -p ${out_dir}/tools
@@ -695,10 +695,10 @@ make_sparse_rootfs_img() {
         cp ${NEXELL_SWU_CONFIG}/hwrevision ${dst_path}/misc/etc
         cp ${NEXELL_SWU_CONFIG}/sw-versions ${dst_path}/misc/etc
         cp ${NEXELL_SWU_CONFIG}/sw-dsc ${dst_path}
-        cp ${NEXELL_TOOLS_PATH}/swu_image.sh ${dst_path}
-        cp ${NEXELL_TOOLS_PATH}/swu_hash.py ${dst_path}
-        cp ${NEXELL_TOOLS_PATH}/swu-script-postinstall.sh ${dst_path}
-        cp ${NEXELL_TOOLS_PATH}/swu-script-preinstall.sh ${dst_path}
+        cp ${NEXELL_SWU_SCRIPTS_PATH}/swu_image.sh ${dst_path}
+        cp ${NEXELL_SWU_SCRIPTS_PATH}/swu_hash.py ${dst_path}
+        cp ${NEXELL_SWU_SCRIPTS_PATH}/swu-script-postinstall.sh ${dst_path}
+        cp ${NEXELL_SWU_SCRIPTS_PATH}/swu-script-preinstall.sh ${dst_path}
 
         # make misc.img
         ${NEXELL_TOOL_MAKE_EXT4FS} -s -l 6291456 -b 4K -a misc ${dst_path}/misc.img ${dst_path}/misc

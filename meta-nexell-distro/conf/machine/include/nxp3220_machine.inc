@@ -53,4 +53,4 @@ BL32_SOURCE ?= "${BSP_VENDOR_DIR}/firmware/bl32-nxp3220"
 BL32_NSIH ?= "${BL32_SOURCE}/reference-nsih/nsih_general.txt"
 
 # for SWU
-SWU_FILES_PATH ?= "${BSP_FILES_DIR}/swu/${BSP_TARGET_SOCNAME}"
+SWU_FILES_PATH ?= "${BSP_FILES_DIR}/swu"
