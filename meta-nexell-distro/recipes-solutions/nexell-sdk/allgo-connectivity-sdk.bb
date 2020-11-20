@@ -40,7 +40,7 @@ S = "${WORKDIR}/git"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
-export TARGET_MACHINE = "${MACHINE}"
+export TARGET_MACHINE = "${BSP_TARGET_MACHINE}"
 
 do_myp() {
     rm -rf ${S}
