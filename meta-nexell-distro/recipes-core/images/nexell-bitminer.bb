@@ -18,6 +18,7 @@ DEVEL_TOOLS = " \
     iperf3 \
     ethtool \
     udev-extraconf \
+    vim \
 "
 
 CGMINER_INSTALL = " \
