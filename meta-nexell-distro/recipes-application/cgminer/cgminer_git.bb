@@ -31,7 +31,7 @@ CFLAGS_prepend = "-I . -I ${S} -I ${S}/compat/jansson-2.9/src `pkg-config libusb
 
 do_myp() {
     rm -rf ${S}
-    cp -a ${WORKDIR}/${SRC_PATH} ${S}
+    cp -a ${SRC_PATH} ${S}
     rm -rf ${WORKDIR}/home
 }
 addtask myp before do_patch after do_unpack
