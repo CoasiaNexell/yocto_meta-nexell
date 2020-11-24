@@ -15,6 +15,10 @@ SRC_PATH = "${BSP_TOP_PATH}/apps/cgminer"
 
 SRC_URI = "file://${SRC_PATH}"
 
+SRC_URI_append = " \
+	file://cgminer.conf \
+"
+
 S = "${WORKDIR}/git"
 
 SRCREV = "${AUTOREV}"
@@ -52,13 +56,15 @@ do_compile_append() {
 	${CC} api-example.c -o api-example
 }
 
-
 do_install() {
 	install -d ${D}${bindir}
+	install -d ${D}${sysconfdir}
+
 	install -m 0755 ${S}/cgminer ${D}${bindir}
 	install -m 0755 ${S}/api-example ${D}${bindir}/cgminer-api
+	install -m 0755 ${WORKDIR}/cgminer.conf ${D}${sysconfdir}/cgminer.conf
 }
 
-FILES_${PN} = "${bindir}"
+FILES_${PN} = "${bindir} ${sysconfdir}"
 INSANE_SKIP_${PN} = "ldflags"
 RDEPENDS_${PN} = "libgcc"
