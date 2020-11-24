@@ -52,13 +52,15 @@ do_compile_append() {
 	${CC} api-example.c -o api-example
 }
 
-
 do_install() {
 	install -d ${D}${bindir}
+	install -d ${D}${sysconfdir}/config
+
 	install -m 0755 ${S}/cgminer ${D}${bindir}
 	install -m 0755 ${S}/api-example ${D}${bindir}/cgminer-api
+	install -m 0755 ${S}/cgminer.conf ${D}${sysconfdir}/config/
 }
 
-FILES_${PN} = "${bindir}"
+FILES_${PN} = "${bindir} ${sysconfdir}/config"
 INSANE_SKIP_${PN} = "ldflags"
 RDEPENDS_${PN} = "libgcc"
