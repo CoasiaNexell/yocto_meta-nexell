@@ -19,6 +19,7 @@ DEVEL_TOOLS = " \
     ethtool \
     udev-extraconf \
     vim \
+    strace \
 "
 
 CGMINER_INSTALL = " \
