@@ -18,6 +18,7 @@ DEVEL_TOOLS = " \
     iperf3 \
     ethtool \
     udev-extraconf \
+    curl \
     vim \
 "
 
