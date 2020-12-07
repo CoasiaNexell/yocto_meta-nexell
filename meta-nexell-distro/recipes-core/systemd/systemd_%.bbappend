@@ -23,12 +23,10 @@ PACKAGECONFIG = " \
     logind \
     machined \
     myhostname \
-    networkd \
     nss \
     polkit \
     quotacheck \
     randomseed \
-    resolved \
     smack \
     sysusers \
     timedated \

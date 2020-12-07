@@ -23,6 +23,11 @@ DEVEL_TOOLS = " \
     strace \
 "
 
+NET_INSTALL = " \
+    connman \
+    connman-client \
+"
+
 CGMINER_INSTALL = " \
     cgminer \
 "
@@ -53,5 +58,6 @@ IMAGE_INSTALL_append = " \
     ${CGMINER_DEBUG} \
     ${SPITEST_TOOLS} \
     ${CGMINER_INSTALL} \
+    ${NET_INSTALL} \
 "
 
