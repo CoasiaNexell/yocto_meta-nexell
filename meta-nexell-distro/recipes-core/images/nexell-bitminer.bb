@@ -26,6 +26,8 @@ DEVEL_TOOLS = " \
 NET_INSTALL = " \
     connman \
     connman-client \
+    ntpdate \
+    ntp-utils \
 "
 
 CGMINER_INSTALL = " \
