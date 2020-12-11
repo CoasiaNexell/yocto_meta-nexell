@@ -21,6 +21,7 @@ DEVEL_TOOLS = " \
     curl \
     vim \
     strace \
+    tzdata \
 "
 
 NET_INSTALL = " \
