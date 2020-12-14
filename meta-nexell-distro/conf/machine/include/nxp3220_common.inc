@@ -113,7 +113,7 @@ FLASH_DEVICE_SIZE ?= ""
 SWU_TOOL_IMAGE_GEN = "swu_image.sh"
 SWU_SUPPORT_MAKE_SWU_IMAGE ?= "true"
 
-# PREFERRED_VERSION_swupdate ?= "2019.11"
+PREFERRED_VERSION_swupdate ?= "2019.11"
 SWU_DAEMON_SERVICES_REPLACE ?= "true"
 SWU_RECOVERY_ROOTFS_IMAGE ?= "nexell-recoveryimg-${MACHINE_ARCH}.cpio.gz.u-boot"
 
@@ -127,9 +127,11 @@ SWU_SIGN_PRIVATE_KEY ?= "${SWU_FILES_PATH}/swu.private.key"
 SWU_SIGN_PUBLIC_KEY ?= "${SWU_FILES_PATH}/swu.public.key"
 
 SWU_SERVICE_SWUPDATE_RECOVERY ?= "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /swu/*.swu -v -l6"
-SWU_SERVICE_PROGRESS_RECOVERY ?= "/usr/bin/swupdate-progress -r -w"
+SWU_SERVICE_PROGRESS_RECOVERY ?= "/usr/bin/swupdate-progress -r -w -p"
+SWU_SERVICE_SWUPDATE_ROOT = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /swu/*.swu -v -l6 -n"
+SWU_SERVICE_PROGRESS_ROOT = "/usr/bin/swupdate-progress -r -w -m recovery"
 
-SWU_PROGRESS_PSPLASH ?= "false"
+SWU_PROGRESS_PSPLASH ?= "true"
 
 #
 # Environments for devices
@@ -144,6 +146,6 @@ NEXELL_TOOLS_SCRIPTS_PATH = "${BSP_TOOLS_DIR}/scripts"
 NEXELL_TOOLS_BIN_PATH = "${BSP_TOOLS_DIR}/bin"
 
 # for swu_config & board_partmap
-NEXELL_SWU_CONFIG = "${BSP_FILES_DIR}/swu/${BSP_TARGET_SOCNAME}"
+NEXELL_SWU_CONFIG = "${BSP_FILES_DIR}/swu"
 NEXELL_PARTMAP_FILES_PATH = "${BSP_FILES_DIR}/partmap"
 NEXELL_SECURE_FILES_PATH = "${BSP_FILES_DIR}/secure"
