@@ -56,8 +56,7 @@ do_start() {
 		;;
 	*)
 		echo "Starting <<< swupdate-progress >>> $DESC ..."
-		exec $EXEC_COMMAND
-		wait;
+		exec $EXEC_COMMAND &
 		exit 0
 		;;
 	esac
