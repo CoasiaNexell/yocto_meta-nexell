@@ -119,10 +119,9 @@ make_swupdate_image() {
 
 	# copy files to output dir
 	copy_file_to_output ${swutool}
-	copy_file_to_output ${DEPLOY_DIR_IMAGE}/swu_hash.py
-	copy_file_to_output ${DEPLOY_DIR_IMAGE}/*sw-description*
-	copy_file_to_output ${DEPLOY_DIR_IMAGE}/*.swu
-	copy_file_to_output ${DEPLOY_DIR_IMAGE}/swu.*.key
+	copy_files ${DEPLOY_DIR_IMAGE} ${BSP_OUTPUT_DIR} "sw-description"
+	copy_file_to_output ${DEPLOY_DIR_IMAGE}/${SWU_UPDATE_SWU_IMAGE}
+	copy_files ${DEPLOY_DIR_IMAGE} ${BSP_OUTPUT_DIR} "swu.*.key"
 }
 
 make_recovery_image() {
