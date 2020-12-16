@@ -68,7 +68,7 @@ IMAGE_INSTALL_append = " \
 	${SYSTEMD_INSTALL} \
 	${DEVEL_TOOLS} \
 	packagegroup-nexell-qt \
-	${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', '', 'weston-init', d)} \
+	${@bb.utils.contains_any('DISTRO_FEATURES', 'nexell-daudio-ref nexell-convergence-daudio', '', 'weston-init', d)} \
 	rtl-8188eus-${ARCH_TYPE_NUM} \
 	testsuite \
 	${TOUCH_IMAGE_INSTALL} \

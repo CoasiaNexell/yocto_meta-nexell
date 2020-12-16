@@ -116,7 +116,7 @@ UTILS_INSTALL = " \
 
 RDEPENDS_${PN} = " \
     nexell-drm-mali-qt \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', '', 'weston-conf', d)} \
+    ${@bb.utils.contains_any('DISTRO_FEATURES', 'nexell-daudio-ref nexell-convergence-daudio', '', 'weston-conf', d)} \
     ${GSTREAMER10} \
     ${QT5_ESSENTIAL_IMAGES} \
     ${QT_WAYLAND} \
