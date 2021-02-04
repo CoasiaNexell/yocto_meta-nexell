@@ -40,8 +40,9 @@ CGMINER_DEBUG = " \
     python3 \
 "
 
-SPITEST_TOOLS = " \
+TEST_TOOLS = " \
     spidevtest \
+    btc08-test \
 "
 
 WEB_INSTALL = " \
@@ -59,7 +60,7 @@ IMAGE_INSTALL_append = " \
     ${DEVEL_TOOLS} \
     ${WEB_INSTALL} \
     ${CGMINER_DEBUG} \
-    ${SPITEST_TOOLS} \
+    ${TEST_TOOLS} \
     ${CGMINER_INSTALL} \
     ${NET_INSTALL} \
 "
