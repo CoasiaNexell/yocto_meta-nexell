@@ -23,6 +23,7 @@ BOARD_POSTFIX=
 
 META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
+BSP_TOP_DIR="$(realpath "$(dirname "$(realpath "$0")")/../../../..")"
 
 function check_usage()
 {
