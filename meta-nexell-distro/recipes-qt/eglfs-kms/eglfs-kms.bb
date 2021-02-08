@@ -6,6 +6,7 @@ SRC_URI = " \
 	file://eglfs_config-daudio_ref.json \
 	file://eglfs_config-navi_ref.json \
 	file://eglfs_config-conv_svmc.json \
+	file://eglfs_config-vapor_gang.json \
 	file://eglfs_config-convergence_daudio.json \
 "
 
@@ -16,9 +17,10 @@ PR = "0.1"
 
 EGLFS_CONF = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'eglfs_config-daudio_ref.json', \
 				bb.utils.contains('DISTRO_FEATURES', 'nexell-navi-ref', 'eglfs_config-navi_ref.json', \
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-vapor-gang', 'eglfs_config-vapor_gang.json', \
 				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'eglfs_config-conv_svmc.json', \
 				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-daudio', 'eglfs_config-convergence_daudio.json', \
-				'not_supported', d), d), d), d)}"
+				'not_supported', d), d), d), d), d)}"
 
 do_install() {
 	install -d ${D}${sysconfdir}/qboot
