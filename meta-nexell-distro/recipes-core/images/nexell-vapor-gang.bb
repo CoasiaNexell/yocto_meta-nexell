@@ -30,6 +30,13 @@ ETC_TOOLS = " \
 	dlt-daemon \
 "
 
+# for GangWriter Application
+APPLICATIONS = " \
+	libusb-compat \
+	libusb1 \
+	gang-writer \
+"
+
 ETC_LIBS = " \
 	icu \
 "
@@ -50,5 +57,6 @@ IMAGE_INSTALL_append = " \
 	${TOUCH_IMAGE_INSTALL} \
 	${ETC_TOOLS} \
 	${ETC_LIBS} \
+	${APPLICATIONS} \
 	${NEXELL_CUSTOMIZE_INSTALL} \
 "
