@@ -118,7 +118,7 @@ user_partition_size["navi-ref-ubuntu"]="2G"
 user_partition_size["avn-ref-ubuntu"]="2G"
 user_partition_size["convergence-svmc-ubuntu"]="2G"
 user_partition_size["svt-ref"]="1G"
-user_partition_size["bitminer-ref"]="3G"
+user_partition_size["bitminer-ref"]="2560M"
 #------------------------------------
 # dev_portnum define
 declare -A targets_dev_portnum
