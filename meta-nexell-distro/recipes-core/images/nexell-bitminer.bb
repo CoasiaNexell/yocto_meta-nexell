@@ -1,4 +1,4 @@
-inherit post-process
+inherit post-process-bitminer-ref
 include recipes-core/images/core-image-minimal.bb
 
 LICENSE = "MIT"
