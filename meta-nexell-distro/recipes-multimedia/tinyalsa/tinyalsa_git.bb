@@ -3,7 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://README.md;md5=7ea7f00d1daac577e75f5e833f5a27d6"
 
 #SRCREV = "04fa39f287336c19953939f9523e04d0074a7f29"
-SRC_URI = "git://github.com/tinyalsa/tinyalsa;protocol=git;tag=v1.0.2 \
+SRC_URI = "git://github.com/tinyalsa/tinyalsa;protocol=https;tag=v1.0.2 \
            file://0001-tinyalsa-v1.0.2-make-build-error-fixed.patch"
 
 S = "${WORKDIR}/git"
