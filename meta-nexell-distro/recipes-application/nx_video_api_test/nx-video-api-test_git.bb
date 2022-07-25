@@ -13,7 +13,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS = "ffmpeg nx-v4l2 nx-video-api nx-drm-allocator libdrm-nx"
+DEPENDS = "ffmpeg nx-v4l2 nx-video-api nx-drm-allocator libdrm-nx nx-gl-tools"
 
 inherit autotools pkgconfig
 

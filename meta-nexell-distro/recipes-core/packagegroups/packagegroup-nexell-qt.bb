@@ -164,6 +164,7 @@ NEXELL_LIBS = " \
     nx-renderer \
     nx-scaler \
     nx-v4l2 \
+    nx-gl-tools \
     nx-video-api \
     nx-uds \
     nx-config \

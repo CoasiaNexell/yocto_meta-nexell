@@ -27,6 +27,8 @@ ETC_TOOLS = " \
 	openssl \
 	curl \
 	procps \
+	lmbench \
+	valgrind \
 	dlt-daemon \
 "
 
