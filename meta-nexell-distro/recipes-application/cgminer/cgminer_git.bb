@@ -59,8 +59,13 @@ do_install() {
 	install -m 0755 ${S}/cgminer ${D}${bindir}
 	install -m 0755 ${S}/api-example ${D}${bindir}/cgminer-api
 	install -m 0755 ${S}/cgminer.conf ${D}${sysconfdir}/config/
+
+	install -m 0755 ${S}/cgminer_vtk.conf ${D}${sysconfdir}/config/
+	install -m 0755 ${S}/cgminer_hash.conf ${D}${sysconfdir}/config/
+	install -m 0755 ${S}/cgminer_vtk.sh ${D}${bindir}
+	install -m 0755 ${S}/cgminer_hash.sh ${D}${bindir}
 }
 
 FILES_${PN} = "${bindir} ${sysconfdir}/config"
 INSANE_SKIP_${PN} = "ldflags"
-RDEPENDS_${PN} = "libgcc"
+RDEPENDS_${PN} = "libgcc bash"
